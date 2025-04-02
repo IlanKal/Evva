@@ -1,6 +1,6 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../config/db";
-import { Event } from "./Event";
+import { Event } from "./event";
 
 export const Guest = sequelize.define("Guest", {
     guest_id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },

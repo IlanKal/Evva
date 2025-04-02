@@ -6,7 +6,7 @@ import { Photographer } from "./Photographer";
 import { Speaker } from "./Speaker";
 import { DJ } from "./DJ";
 import { User } from "./User";
-import { Event } from "./Event";
+import { Event } from "./event";
 import { EventSupplier } from "./EventSupplier";
 import { Guest } from "./Guest";
 
