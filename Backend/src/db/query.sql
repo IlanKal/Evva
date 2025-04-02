@@ -1,5 +1,6 @@
 USE EVVADB; 
 GO
+SELECT * FROM suppliers;
 
 IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'suppliers')
 BEGIN
