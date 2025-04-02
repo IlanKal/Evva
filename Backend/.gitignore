@@ -1,1 +1,4 @@
 node_modules
+server.ts
+db.ts
+event.ts

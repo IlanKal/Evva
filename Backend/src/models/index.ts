@@ -1,4 +1,4 @@
-import { sequelize } from "../config/database";
+import { sequelize } from "../config/db";
 import { Supplier } from "./Supplier";
 import { Location } from "./Location";
 import { Catering } from "./Catering";

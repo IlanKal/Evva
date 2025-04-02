@@ -1,5 +1,5 @@
 import { DataTypes } from "sequelize";
-import { sequelize } from "../config/database";
+import { sequelize } from "../config/db";
 import { Event } from "./Event";
 
 export const Guest = sequelize.define("Guest", {

@@ -1,5 +1,5 @@
 import { DataTypes } from "sequelize";
-import { sequelize } from "../config/database";
+import { sequelize } from "../config/db";
 import { Supplier } from "./Supplier";
 
 export const DJ = sequelize.define("DJ", {
