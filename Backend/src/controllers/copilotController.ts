@@ -1,26 +1,18 @@
 import { Request, Response } from "express";
-import { AzureOpenAI } from "azure-openai"; // ייבוא הספרייה
+import openai from "../config/copilot";
 
-// יצירת אובייקט של ה-Azure OpenAI Client
-const openAIClient = new AzureOpenAI({
-  apiKey: process.env.COPILOT_API_KEY, // ודא שה-API Key נמצא בקובץ .env
-  endpoint: process.env.COPILOT_ENDPOINT, // Endpoint של Azure Copilot
-});
-
-// פונקציה שמבצעת קריאה ל-API של Copilot
 export const testCopilotConnection = async (req: Request, res: Response) => {
   try {
-    // שליחה של בקשה ל-API של Copilot דרך ה-Azure OpenAI Client
-    const response = await openAIClient.completions.create({
-      model: "gpt-3.5-turbo", // או כל מודל אחר שברצונך להשתמש בו
-      prompt: "Hello, Copilot!",
-      max_tokens: 5,
+    const response = await openai.chat.completions.create({
+      messages: [{ role: "user", content: "Please tell me what is 2+2? write only final result!" }],
+      model: "gpt-35-turbo-instruct",
+      max_tokens: 50,
+
     });
 
-    // מחזירים את התשובה מה-API
-    res.json(response);
+    res.json(response.choices);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Failed to connect to Copilot API" });
+    console.error("Azure OpenAI Error:", error);
+    res.status(500).json({ error: "Failed to connect to Azure OpenAI" });
   }
 };

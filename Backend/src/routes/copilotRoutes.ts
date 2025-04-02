@@ -1,8 +1,8 @@
 import express from "express";
-import { testCopilotConnection } from "../controllers/copilotController"; // ייבוא הקונטרולר
+import { testCopilotConnection } from "../controllers/copilotController";
 
 const router = express.Router();
 
-router.post("/test-copilot", testCopilotConnection);
+router.get("/test-copilot", testCopilotConnection);
 
 export default router;
