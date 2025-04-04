@@ -1,12 +1,21 @@
-// import axios from "axios";
-// import dotenv from "dotenv";
+import OpenAI from "openai";
+import dotenv from "dotenv";
 
-// dotenv.config();
+dotenv.config();
 
-// export const copilotAPI = axios.create({
-//   baseURL: "https://api.copilot.microsoft.com",
-//   headers: {
-//     "Content-Type": "application/json",
-//     Authorization: `Bearer ${process.env.COPILOT_API_KEY}`,
-//   },
-// });
+const endpoint = process.env.AZURE_OPENAI_ENDPOINT;
+const apiKey = process.env.AZURE_OPENAI_API_KEY;
+
+
+if (!endpoint || !apiKey) {
+  throw new Error("Missing Azure OpenAI configuration in .env");
+}
+
+const openai = new OpenAI({
+  apiKey: apiKey,
+  baseURL: `${endpoint}/openai/deployments/gpt-35-turbo-instruct`,
+  defaultQuery: { 'api-version': '2025-01-01-preview' },
+  defaultHeaders: { 'api-key': apiKey },
+});
+
+export default openai;

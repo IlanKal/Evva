@@ -25,7 +25,7 @@ Backend for the Evva website, built with Node.js. The server connects to a datab
 3. Set up your .env file with the necessary environment variables.
 
 4. Start the server:
-    npm start
+    npx ts-node src/server.ts
     The server will be running at http://localhost:{{PORT}}.
 
 
