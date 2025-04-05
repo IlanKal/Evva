@@ -1,17 +1,25 @@
-import { DataTypes } from "sequelize";
-import { sequelize } from "../config/db";
-import { Event } from "./event";
-import { Supplier } from "./Supplier";
+import { DataTypes, Model } from 'sequelize';
+import { sequelize } from '../config/db';
 
-export const EventSupplier = sequelize.define("EventSupplier", {
-    event_id: { 
-        type: DataTypes.INTEGER, 
-        primaryKey: true,
-        references: { model: Event, key: "event_id" } 
+class EventSupplier extends Model {}
+
+EventSupplier.init(
+  {
+    event_id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
     },
-    supplier_id: { 
-        type: DataTypes.INTEGER, 
-        primaryKey: true, 
-        references: { model: Supplier, key: "supplier_id" } 
-    }
-});
+    supplier_id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+    },
+  },
+  {
+    sequelize,
+    modelName: 'EventSupplier',
+    tableName: 'event_suppliers',
+    timestamps: false,
+  }
+);
+
+export default EventSupplier;

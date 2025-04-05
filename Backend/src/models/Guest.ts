@@ -1,12 +1,30 @@
-import { DataTypes } from "sequelize";
-import { sequelize } from "../config/db";
-import { Event } from "./event";
+import { DataTypes, Model } from 'sequelize';
+import { sequelize } from '../config/db';
 
-export const Guest = sequelize.define("Guest", {
-    guest_id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-    event_id: { type: DataTypes.INTEGER, references: { model: Event, key: "event_id" } },
-    full_name: { type: DataTypes.STRING },
-    phone: { type: DataTypes.STRING },
-    email: { type: DataTypes.STRING },
-    rsvp: { type: DataTypes.BOOLEAN }
-});
+class Guest extends Model {}
+
+Guest.init(
+  {
+    guest_id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    event_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    full_name: DataTypes.STRING(255),
+    phone: DataTypes.STRING(20),
+    email: DataTypes.STRING(255),
+    rsvp: DataTypes.BOOLEAN,
+  },
+  {
+    sequelize,
+    modelName: 'Guest',
+    tableName: 'guests',
+    timestamps: false,
+  }
+);
+
+export default Guest;
