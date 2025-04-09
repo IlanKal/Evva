@@ -30,23 +30,23 @@ app.use("/api", eventRoutes);
 import eventSupplierRoutes from './routes/eventSupplierRoutes';
 app.use('/api', eventSupplierRoutes);
 
-import photographerRoutes from "./routes/photographerRoutes";
-app.use("/api", photographerRoutes);
-
-import registerRoutes from "./routes/registerSupplierRoutes";
-app.use("/api", registerRoutes);
-
 import guestRoutes from "./routes/guestRoutes";
 app.use("/api", guestRoutes);
 
-import locationRoutes from "./routes/locationRoutes";
+import photographerRoutes from "./routes/photographerRoutes"; // נשתמש לא לרישום אלא להצגה\חיפוש\עידכון של ספקים ספציפיים
+app.use("/api", photographerRoutes);
+
+import locationRoutes from "./routes/locationRoutes"; // נשתמש לא לרישום אלא להצגה\חיפוש\עידכון של ספקים ספציפיים
 app.use("/api", locationRoutes);
 
-import cateringRoutes from "./routes/cateringRoutes";
+import cateringRoutes from "./routes/cateringRoutes"; // נשתמש לא לרישום אלא להצגה\חיפוש\עידכון של ספקים ספציפיים
 app.use("/api", cateringRoutes);
 
-import speakerRoutes from "./routes/speakerRoutes";
+import speakerRoutes from "./routes/speakerRoutes"; // נשתמש לא לרישום אלא להצגה\חיפוש\עידכון של ספקים ספציפיים
 app.use("/api", speakerRoutes);
+
+import registerSupplierRoute from "./routes/registerSupplierRoutes"; //יוצר ספק חדש ומכניס גם לטבלת suppliers וגם לסוג הספציפי (DJ, צלם וכו')
+app.use("/api", registerSupplierRoute);
 
 // Start the server and connect to the database
 const startServer = async () => {
