@@ -1,54 +1,38 @@
 import { Request, Response } from "express";
-import Speaker from "../models/Speaker";
+import * as speakerService from "../services/speakerService";
 
-// GET all speakers
-export const getAllSpeakers = async (req: Request, res: Response) => {
+export const getAllSpeakers = async (_req: Request, res: Response): Promise<void> => {
   try {
-    const speakers = await Speaker.findAll();
+    const speakers = await speakerService.getAllSpeakers();
     res.json(speakers);
-  } catch (error) {
+  } catch {
     res.status(500).json({ error: "Failed to fetch speakers" });
   }
 };
 
-// GET speaker by ID
 export const getSpeakerById = async (req: Request, res: Response): Promise<void> => {
-  const speaker = await Speaker.findByPk(req.params.id);
-  if (!speaker) {
-    res.status(404).json({ error: "Speaker not found" });
-    return;
-  }
-  res.json(speaker);
-};
-
-// POST create speaker
-export const createSpeaker = async (req: Request, res: Response) => {
   try {
-    const newSpeaker = await Speaker.create(req.body);
-    res.status(201).json(newSpeaker);
-  } catch (error) {
-    res.status(500).json({ error: "Failed to create speaker" });
+    const speaker = await speakerService.getSpeakerById(req.params.id);
+    res.json(speaker);
+  } catch (error: any) {
+    res.status(404).json({ error: error.message || "Speaker not found" });
   }
 };
 
-// PUT update speaker
 export const updateSpeaker = async (req: Request, res: Response): Promise<void> => {
-  const speaker = await Speaker.findByPk(req.params.id);
-  if (!speaker) {
-    res.status(404).json({ error: "Speaker not found" });
-    return;
+  try {
+    const updated = await speakerService.updateSpeaker(req.params.id, req.body);
+    res.json(updated);
+  } catch (error: any) {
+    res.status(404).json({ error: error.message || "Failed to update speaker" });
   }
-  await speaker.update(req.body);
-  res.json(speaker);
 };
 
-// DELETE speaker
 export const deleteSpeaker = async (req: Request, res: Response): Promise<void> => {
-  const speaker = await Speaker.findByPk(req.params.id);
-  if (!speaker) {
-    res.status(404).json({ error: "Speaker not found" });
-    return;
+  try {
+    const result = await speakerService.deleteSpeaker(req.params.id);
+    res.json(result);
+  } catch (error: any) {
+    res.status(404).json({ error: error.message || "Failed to delete speaker" });
   }
-  await speaker.destroy();
-  res.json({ message: "Speaker deleted" });
 };

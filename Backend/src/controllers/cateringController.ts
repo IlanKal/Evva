@@ -1,54 +1,38 @@
 import { Request, Response } from "express";
-import Catering from "../models/Catering";
+import * as cateringService from "../services/cateringService";
 
-// GET all catering entries
-export const getAllCatering = async (req: Request, res: Response) => {
+export const getAllCaterings = async (_req: Request, res: Response): Promise<void> => {
   try {
-    const results = await Catering.findAll();
-    res.json(results);
-  } catch (error) {
-    res.status(500).json({ error: "Failed to fetch catering options" });
+    const caterings = await cateringService.getAllCaterings();
+    res.json(caterings);
+  } catch {
+    res.status(500).json({ error: "Failed to fetch caterings" });
   }
 };
 
-// GET by ID
 export const getCateringById = async (req: Request, res: Response): Promise<void> => {
-  const catering = await Catering.findByPk(req.params.id);
-  if (!catering) {
-    res.status(404).json({ error: "Catering not found" });
-    return;
-  }
-  res.json(catering);
-};
-
-// POST
-export const createCatering = async (req: Request, res: Response) => {
   try {
-    const newCatering = await Catering.create(req.body);
-    res.status(201).json(newCatering);
-  } catch (error) {
-    res.status(500).json({ error: "Failed to create catering" });
+    const catering = await cateringService.getCateringById(req.params.id);
+    res.json(catering);
+  } catch (error: any) {
+    res.status(404).json({ error: error.message || "Catering not found" });
   }
 };
 
-// PUT
 export const updateCatering = async (req: Request, res: Response): Promise<void> => {
-  const catering = await Catering.findByPk(req.params.id);
-  if (!catering) {
-    res.status(404).json({ error: "Catering not found" });
-    return;
+  try {
+    const updated = await cateringService.updateCatering(req.params.id, req.body);
+    res.json(updated);
+  } catch (error: any) {
+    res.status(404).json({ error: error.message || "Failed to update catering" });
   }
-  await catering.update(req.body);
-  res.json(catering);
 };
 
-// DELETE
 export const deleteCatering = async (req: Request, res: Response): Promise<void> => {
-  const catering = await Catering.findByPk(req.params.id);
-  if (!catering) {
-    res.status(404).json({ error: "Catering not found" });
-    return;
+  try {
+    const result = await cateringService.deleteCatering(req.params.id);
+    res.json(result);
+  } catch (error: any) {
+    res.status(404).json({ error: error.message || "Failed to delete catering" });
   }
-  await catering.destroy();
-  res.json({ message: "Catering deleted" });
 };

@@ -18,9 +18,6 @@ app.use("/api", copilotRoutes); // כל הנתיבים של Copilot יהיו ת�
 
 
 // Routes tabels DB
-import supplierRoutes from './routes/supplierRoutes';
-app.use("/api", supplierRoutes);
-
 import userRoutes from './routes/userRoutes';
 app.use("/api", userRoutes);
 
@@ -65,6 +62,14 @@ const startServer = async () => {
     process.exit(1);
   }
 };
+
+
+//אם אתה רוצה לראות את הפילטור אפשר מפה
+//import { filterRelevantSuppliers } from "./services/filterRelevantSuppliers";
+
+
+// פה את שולח לפונקציה את מספר הREQUEST
+//filterRelevantSuppliers(1);
 
 // Run the server
 startServer();

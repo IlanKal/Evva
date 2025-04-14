@@ -1,67 +1,59 @@
 import { Request, Response } from "express";
-import User from "../models/User";
+import * as userService from "../services/userService";
 
-// GET all users
-export const getAllUsers = async (req: Request, res: Response): Promise<void> => {
+export const getAllUsers = async (_req: Request, res: Response): Promise<void> => {
   try {
-    const users = await User.findAll();
+    const users = await userService.getAllUsers();
     res.json(users);
-  } catch (error) {
-    console.error("Error fetching users:", error);
+  } catch {
     res.status(500).json({ error: "Failed to fetch users" });
   }
 };
 
-// GET user by ID
 export const getUserById = async (req: Request, res: Response): Promise<void> => {
   try {
-    const user = await User.findByPk(req.params.id.trim());
+    const user = await userService.getUserById(req.params.id.trim());
     if (!user) {
       res.status(404).json({ error: "User not found" });
       return;
     }
     res.json(user);
-  } catch (error) {
+  } catch {
     res.status(500).json({ error: "Failed to fetch user" });
   }
 };
 
-// POST create new user
 export const createUser = async (req: Request, res: Response): Promise<void> => {
   try {
-    const newUser = await User.create(req.body);
+    const newUser = await userService.createUser(req.body);
     res.status(201).json(newUser);
-  } catch (error) {
+  } catch {
     res.status(500).json({ error: "Failed to create user" });
   }
 };
 
-// PUT update user
 export const updateUser = async (req: Request, res: Response): Promise<void> => {
   try {
-    const user = await User.findByPk(req.params.id.trim());
-    if (!user) {
+    const updated = await userService.updateUser(req.params.id.trim(), req.body);
+    if (!updated) {
       res.status(404).json({ error: "User not found" });
       return;
     }
-    await user.update(req.body);
-    res.json(user);
-  } catch (error) {
+    res.json(updated);
+  } catch {
     res.status(500).json({ error: "Failed to update user" });
   }
 };
 
-// DELETE user
 export const deleteUser = async (req: Request, res: Response): Promise<void> => {
   try {
-    const user = await User.findByPk(req.params.id.trim());
-    if (!user) {
+    const deleted = await userService.deleteUser(req.params.id.trim());
+    if (!deleted) {
       res.status(404).json({ error: "User not found" });
       return;
     }
-    await user.destroy();
     res.json({ message: "User deleted" });
-  } catch (error) {
+  } catch {
     res.status(500).json({ error: "Failed to delete user" });
   }
 };

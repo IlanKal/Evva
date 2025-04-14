@@ -1,12 +1,9 @@
 import { Request, Response } from "express";
-import EventSupplier from "../models/EventSupplier";
+import * as eventSupplierService from "../services/eventSupplierService";
 
-// Add supplier to event
-export const addSupplierToEvent = async (req: Request, res: Response) => {
-  const { event_id, supplier_id } = req.body;
-
+export const addSupplierToEvent = async (req: Request, res: Response): Promise<void> => {
   try {
-    const created = await EventSupplier.create({ event_id, supplier_id });
+    const created = await eventSupplierService.addSupplierToEvent(req.body.event_id, req.body.supplier_id);
     res.status(201).json(created);
   } catch (error) {
     console.error("❌ Error creating event-supplier relation:", error);
@@ -14,15 +11,9 @@ export const addSupplierToEvent = async (req: Request, res: Response) => {
   }
 };
 
-// Delete supplier from event
-export const removeSupplierFromEvent = async (req: Request, res: Response) => {
-  const { event_id, supplier_id } = req.body;
-
+export const removeSupplierFromEvent = async (req: Request, res: Response): Promise<void> => {
   try {
-    const deleted = await EventSupplier.destroy({
-      where: { event_id, supplier_id },
-    });
-
+    const deleted = await eventSupplierService.removeSupplierFromEvent(req.body.event_id, req.body.supplier_id);
     if (deleted) {
       res.json({ message: "Supplier removed from event" });
     } else {
@@ -34,18 +25,12 @@ export const removeSupplierFromEvent = async (req: Request, res: Response) => {
   }
 };
 
-// Get all suppliers for a specific event
-export const getSuppliersByEvent = async (req: Request, res: Response) => {
-    const { eventId } = req.params;
-  
-    try {
-      const eventSuppliers = await EventSupplier.findAll({
-        where: { event_id: eventId }
-      });
-  
-      res.json(eventSuppliers);
-    } catch (error) {
-      console.error("❌ Error fetching suppliers by event:", error);
-      res.status(500).json({ error: "Failed to fetch suppliers for event" });
-    }
-  };
+export const getSuppliersByEvent = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const suppliers = await eventSupplierService.getSuppliersByEvent(req.params.eventId);
+    res.json(suppliers);
+  } catch (error) {
+    console.error("❌ Error fetching suppliers by event:", error);
+    res.status(500).json({ error: "Failed to fetch suppliers for event" });
+  }
+};

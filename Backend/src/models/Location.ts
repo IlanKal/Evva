@@ -1,7 +1,27 @@
 import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../config/db';
 
-class Location extends Model {}
+interface LocationAttributes {
+  location_id?: number;
+  supplier_id: number;
+  address?: string;
+  city?: string;
+  capacity?: number;
+  price?: number;
+  parking?: boolean;
+  place_type?: string;
+}
+
+class Location extends Model<LocationAttributes> implements LocationAttributes {
+  public location_id!: number;
+  public supplier_id!: number;
+  public address?: string;
+  public city?: string;
+  public capacity?: number;
+  public price?: number;
+  public parking?: boolean;
+  public place_type?: string;
+}
 
 Location.init(
   {
