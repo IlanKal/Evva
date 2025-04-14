@@ -1,6 +1,5 @@
 import express from 'express';
 import eventRequestRoutes from './routes/eventRequestRoutes';
-import copilotRoutes from './routes/copilotRoutes';
 import supplierRoutes from './routes/supplierRoutes';
 import userRoutes from './routes/userRoutes';
 import eventRoutes from './routes/eventRoutes';
@@ -18,7 +17,6 @@ app.use(express.json());
 
 // רישום כל הנתיבים תחת /api
 app.use('/api', eventRequestRoutes);
-app.use('/api', copilotRoutes);
 app.use('/api', supplierRoutes);
 app.use('/api', userRoutes);
 app.use('/api', eventRoutes);
