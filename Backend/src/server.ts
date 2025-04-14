@@ -1,20 +1,11 @@
-import dotenv from "dotenv";
+import dotenv from 'dotenv';
 dotenv.config();
 
-import express from "express";
-import copilotRoutes from "./routes/copilotRoutes";
+import { sequelize } from './config/db';
+import { syncDatabase } from './models';
+import app from './app';
 
-
-import { sequelize } from "./config/db"; 
-import { syncDatabase } from "./models/index";
-
-const app = express();
 const PORT = process.env.PORT || 3000;
-
-app.use(express.json()); // חשוב כדי לפרש את הבקשות כ-JSON
-
-// חיבור נתיב ה-Copilot
-app.use("/api", copilotRoutes); // כל הנתיבים של Copilot יהיו תחת /api
 
 
 // Routes tabels DB
@@ -46,19 +37,20 @@ import registerSupplierRoute from "./routes/registerSupplierRoutes"; //יוצר 
 app.use("/api", registerSupplierRoute);
 
 // Start the server and connect to the database
+
 const startServer = async () => {
   try {
     await sequelize.authenticate();
-    console.log("✅ Connected to the database.");
+    console.log('✅ Connected to the database.');
 
-    await syncDatabase(); // Sync all models
-    console.log("✅ Models synced successfully.");
+    await syncDatabase();
+    console.log('✅ Models synced successfully.');
 
     app.listen(PORT, () => {
       console.log(`🚀 Server is running on http://localhost:${PORT}`);
     });
   } catch (error) {
-    console.error("❌ Error starting the server:", error);
+    console.error('❌ Error starting the server:', error);
     process.exit(1);
   }
 };
@@ -73,3 +65,4 @@ const startServer = async () => {
 
 // Run the server
 startServer();
+

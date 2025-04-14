@@ -56,7 +56,6 @@ EventRequest.init(
       validate:{ 
         isIn: [EVENT_TYPES as unknown as string[]],
       }
-
     },
     event_date: {
       type: DataTypes.DATEONLY,
@@ -97,10 +96,11 @@ EventRequest.init(
       type: DataTypes.TEXT,
     },
     status: {
-      //type: DataTypes.ENUM("pending", "in_progress", "completed"),
-      //defaultValue: "pending",
       type: DataTypes.STRING,
-      allowNull:true,
+      allowNull: true,
+      validate: {
+        isIn: [['draft', 'finalized']],
+      },
     },
   },
   {
@@ -108,6 +108,7 @@ EventRequest.init(
     modelName: "EventRequest",
     tableName: "event_requests",
     timestamps: false,
+
   }
 );
 
