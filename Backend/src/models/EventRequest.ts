@@ -18,8 +18,9 @@ interface EventRequestAttributes {
   lecturer_preferences?: object;
 
   additional_notes?: string;
-  status?: "pending" | "in_progress" | "completed";
+  status?: "draft" | "finalized" ;
 }
+
 class EventRequest extends Model<EventRequestAttributes> implements EventRequestAttributes {
   public request_id!: number;
   public user_id!: number;
@@ -34,9 +35,8 @@ class EventRequest extends Model<EventRequestAttributes> implements EventRequest
   public dj_preferences?: object;
   public location_preferences?: object;
   public lecturer_preferences?: object;
-
   public additional_notes?: string;
-  public status?: "pending" | "in_progress" | "completed";
+  public status?: "draft" | "finalized" ;
 }
 
 EventRequest.init(
