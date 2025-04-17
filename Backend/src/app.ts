@@ -9,12 +9,13 @@ import locationRoutes from './routes/locationRoutes';
 import cateringRoutes from './routes/cateringRoutes';
 import speakerRoutes from './routes/speakerRoutes';
 import registerSupplierRoute from './routes/registerSupplierRoutes';
+import authRoutes from './routes/auth.routes';
+import filterSuppliersRoutes from "./routes/filterSuppliersRoutes";
 
 const app = express();
 
 app.use(express.json());
 
-// רישום כל הנתיבים תחת /api
 app.use('/api', eventRequestRoutes);
 app.use('/api', userRoutes);
 app.use('/api', eventRoutes);
@@ -25,5 +26,7 @@ app.use('/api', locationRoutes);
 app.use('/api', cateringRoutes);
 app.use('/api', speakerRoutes);
 app.use('/api', registerSupplierRoute);
+app.use('/api/auth', authRoutes);
+app.use("/api", filterSuppliersRoutes);
 
 export default app;

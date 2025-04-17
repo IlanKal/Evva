@@ -3,7 +3,6 @@ import { sequelize } from "../config/db";
 import { Region, REGIONS } from "../constants/regions";
 import { Weekday } from "../constants/weekdays";
 
-// נגדיר ממשק לשדות
 interface SupplierAttributes {
   supplier_id?: number; // שדה אוטומטי
   name: string;
@@ -16,7 +15,7 @@ interface SupplierAttributes {
   image_url?: string;
   additional_info?: string;
   contact_info?: string;
-  
+  rating_count?: number;
 }
 
 class Supplier extends Model<SupplierAttributes> implements SupplierAttributes {
@@ -31,6 +30,8 @@ class Supplier extends Model<SupplierAttributes> implements SupplierAttributes {
   public image_url?: string;
   public additional_info?: string;
   public contact_info?: string;
+  public rating_count!: number;
+
 }
 
 Supplier.init(
@@ -64,6 +65,11 @@ Supplier.init(
     image_url: DataTypes.STRING(255),
     additional_info: DataTypes.TEXT,
     contact_info: DataTypes.TEXT,
+    rating_count: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
+    },
   },
   {
     sequelize,
