@@ -10,7 +10,7 @@ import cateringRoutes from './routes/cateringRoutes';
 import speakerRoutes from './routes/speakerRoutes';
 import registerSupplierRoute from './routes/registerSupplierRoutes';
 import authRoutes from './routes/auth.routes';
-import filterSuppliersRoutes from "./routes/filterSuppliersRoutes";
+import filterSuppliersRoutes from "./routes/filterSuppliersRoutד";
 
 const app = express();
 
