@@ -16,6 +16,7 @@ interface SupplierAttributes {
   image_url?: string;
   additional_info?: string;
   contact_info?: string;
+  
 }
 
 class Supplier extends Model<SupplierAttributes> implements SupplierAttributes {

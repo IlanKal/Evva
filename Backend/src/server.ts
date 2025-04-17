@@ -36,6 +36,10 @@ app.use("/api", speakerRoutes);
 import registerSupplierRoute from "./routes/registerSupplierRoutes"; //יוצר ספק חדש ומכניס גם לטבלת suppliers וגם לסוג הספציפי (DJ, צלם וכו')
 app.use("/api", registerSupplierRoute);
 
+import filterSuppliersRoutes from "./routes/filterSuppliersRoutes";
+app.use("/api", filterSuppliersRoutes);
+
+
 // Start the server and connect to the database
 
 const startServer = async () => {
