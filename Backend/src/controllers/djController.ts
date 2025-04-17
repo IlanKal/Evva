@@ -1,54 +1,38 @@
 import { Request, Response } from "express";
-import DJ from "../models/DJ";
+import * as djService from "../services/djService";
 
-// GET all DJs
-export const getAllDJs = async (req: Request, res: Response) => {
+export const getAllDJs = async (_req: Request, res: Response): Promise<void> => {
   try {
-    const djs = await DJ.findAll();
+    const djs = await djService.getAllDJs();
     res.json(djs);
-  } catch (error) {
+  } catch {
     res.status(500).json({ error: "Failed to fetch DJs" });
   }
 };
 
-// GET DJ by ID
 export const getDJById = async (req: Request, res: Response): Promise<void> => {
-  const dj = await DJ.findByPk(req.params.id);
-  if (!dj) {
-    res.status(404).json({ error: "DJ not found" });
-    return;
-  }
-  res.json(dj);
-};
-
-// POST create DJ
-export const createDJ = async (req: Request, res: Response) => {
   try {
-    const newDJ = await DJ.create(req.body);
-    res.status(201).json(newDJ);
-  } catch (error) {
-    res.status(500).json({ error: "Failed to create DJ" });
+    const dj = await djService.getDJById(req.params.id);
+    res.json(dj);
+  } catch (error: any) {
+    res.status(404).json({ error: error.message || "DJ not found" });
   }
 };
 
-// PUT update DJ
 export const updateDJ = async (req: Request, res: Response): Promise<void> => {
-  const dj = await DJ.findByPk(req.params.id);
-  if (!dj) {
-    res.status(404).json({ error: "DJ not found" });
-    return;
+  try {
+    const updated = await djService.updateDJ(req.params.id, req.body);
+    res.json(updated);
+  } catch (error: any) {
+    res.status(404).json({ error: error.message || "Failed to update DJ" });
   }
-  await dj.update(req.body);
-  res.json(dj);
 };
 
-// DELETE DJ
 export const deleteDJ = async (req: Request, res: Response): Promise<void> => {
-  const dj = await DJ.findByPk(req.params.id);
-  if (!dj) {
-    res.status(404).json({ error: "DJ not found" });
-    return;
+  try {
+    const result = await djService.deleteDJ(req.params.id);
+    res.json(result);
+  } catch (error: any) {
+    res.status(404).json({ error: error.message || "Failed to delete DJ" });
   }
-  await dj.destroy();
-  res.json({ message: "DJ deleted" });
 };

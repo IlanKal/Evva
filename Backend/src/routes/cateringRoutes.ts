@@ -1,18 +1,11 @@
 import express from "express";
-import {
-  getAllCatering,
-  getCateringById,
-  createCatering,
-  updateCatering,
-  deleteCatering
-} from "../controllers/cateringController";
+import * as cateringController from "../controllers/cateringController";
 
 const router = express.Router();
 
-router.get("/catering", getAllCatering);
-router.get("/catering/:id", getCateringById);
-router.post("/catering", createCatering);
-router.put("/catering/:id", updateCatering);
-router.delete("/catering/:id", deleteCatering);
+router.get("/caterings", cateringController.getAllCaterings);
+router.get("/caterings/:id", cateringController.getCateringById);
+router.put("/caterings/:id", cateringController.updateCatering);
+router.delete("/caterings/:id", cateringController.deleteCatering);
 
 export default router;

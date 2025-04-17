@@ -1,195 +1,55 @@
-// controllers/registerSupplierController.ts
 import { Request, Response } from "express";
-import Supplier from "../models/Supplier";
-import Photographer from "../models/Photographer";
-import Catering from "../models/Catering";
-import Location from "../models/Location";
-import Speaker from "../models/Speaker";
-import DJ from "../models/DJ";
+import * as registerSupplierService from "../services/registerSupplierService";
 
-export const registerPhotographer = async (req: Request, res: Response) => {
+export const registerSupplier = async (req: Request, res: Response): Promise<void> => {
+  const { type, supplier, details } = req.body;
+
+  if (!type || !supplier || !details) {
+    res.status(400).json({ error: "Missing type, supplier or details" });
+    return;
+  }
+
   try {
-    const {
-      name,
-      email,
-      password,
-      available_days,
-      region,
-      rating,
-      image_url,
-      additional_info,
-      contact_info,
-      price_per_hour,
-      has_magnets,
-      has_stills,
-      has_video
-    } = req.body;
-
-    const newSupplier = await Supplier.create({
-      name,
-      email,
-      password,
-      available_days,
-      region,
-      rating,
-      image_url,
-      additional_info,
-      contact_info
-    });
-
-    const newPhotographer = await Photographer.create({
-      supplier_id: newSupplier.supplier_id,
-      price_per_hour,
-      has_magnets,
-      has_stills,
-      has_video
-    });
-
-    res.status(201).json({ message: "Photographer registered successfully", supplier: newSupplier, photographer: newPhotographer });
-  } catch (error) {
-    console.error("❌ Error registering photographer:", error);
-    res.status(500).json({ error: "Registration failed" });
+    const result = await registerSupplierService.registerSupplier(type, supplier, details);
+    res.status(201).json(result);
+  } catch (error: any) {
+    console.error("❌ Error registering supplier:", error);
+    res.status(500).json({ error: "Server error during supplier registration" });
   }
 };
 
-export const registerCatering = async (req: Request, res: Response) => {
+export const getAllSuppliers = async (_req: Request, res: Response): Promise<void> => {
   try {
-    const {
-      name,
-      email,
-      password,
-      available_days,
-      region,
-      rating,
-      image_url,
-      additional_info,
-      contact_info,
-      price_per_person,
-      menu,
-      kosher,
-      vegetarian,
-      vegan,
-      gluten_free
-    } = req.body;
-
-    const newSupplier = await Supplier.create({ name, email, password, available_days, region, rating, image_url, additional_info, contact_info });
-
-    const newCatering = await Catering.create({
-      supplier_id: newSupplier.supplier_id,
-      price_per_person,
-      menu,
-      kosher,
-      vegetarian,
-      vegan,
-      gluten_free
-    });
-
-    res.status(201).json({ message: "Catering registered successfully", supplier: newSupplier, catering: newCatering });
+    const suppliers = await registerSupplierService.getAllSuppliers();
+    res.json(suppliers);
   } catch (error) {
-    console.error("❌ Error registering catering:", error);
-    res.status(500).json({ error: "Registration failed" });
+    res.status(500).json({ error: "Failed to fetch suppliers" });
   }
 };
 
-export const registerLocation = async (req: Request, res: Response) => {
+export const getSupplierById = async (req: Request, res: Response): Promise<void> => {
   try {
-    const {
-      name,
-      email,
-      password,
-      available_days,
-      region,
-      rating,
-      image_url,
-      additional_info,
-      contact_info,
-      address,
-      city,
-      capacity,
-      price,
-      parking,
-      place_type
-    } = req.body;
-
-    const newSupplier = await Supplier.create({ name, email, password, available_days, region, rating, image_url, additional_info, contact_info });
-
-    const newLocation = await Location.create({
-      supplier_id: newSupplier.supplier_id,
-      address,
-      city,
-      capacity,
-      price,
-      parking,
-      place_type
-    });
-
-    res.status(201).json({ message: "Location registered successfully", supplier: newSupplier, location: newLocation });
-  } catch (error) {
-    console.error("❌ Error registering location:", error);
-    res.status(500).json({ error: "Registration failed" });
+    const supplier = await registerSupplierService.getSupplierById(req.params.id);
+    res.json(supplier);
+  } catch (error: any) {
+    res.status(404).json({ error: error.message || "Supplier not found" });
   }
 };
 
-export const registerSpeaker = async (req: Request, res: Response) => {
+export const updateSupplier = async (req: Request, res: Response): Promise<void> => {
   try {
-    const {
-      name,
-      email,
-      password,
-      available_days,
-      region,
-      rating,
-      image_url,
-      additional_info,
-      contact_info,
-      price_per_lecture,
-      lecture_duration,
-      lecture_field
-    } = req.body;
-
-    const newSupplier = await Supplier.create({ name, email, password, available_days, region, rating, image_url, additional_info, contact_info });
-
-    const newSpeaker = await Speaker.create({
-      supplier_id: newSupplier.supplier_id,
-      price_per_lecture,
-      lecture_duration,
-      lecture_field
-    });
-
-    res.status(201).json({ message: "Speaker registered successfully", supplier: newSupplier, speaker: newSpeaker });
-  } catch (error) {
-    console.error("❌ Error registering speaker:", error);
-    res.status(500).json({ error: "Registration failed" });
+    const updated = await registerSupplierService.updateSupplier(req.params.id, req.body);
+    res.json(updated);
+  } catch (error: any) {
+    res.status(404).json({ error: error.message || "Failed to update supplier" });
   }
 };
 
-export const registerDJ = async (req: Request, res: Response) => {
+export const deleteSupplier = async (req: Request, res: Response): Promise<void> => {
   try {
-    const {
-      name,
-      email,
-      password,
-      available_days,
-      region,
-      rating,
-      image_url,
-      additional_info,
-      contact_info,
-      price_per_hour,
-      music_styles
-    } = req.body;
-
-    const newSupplier = await Supplier.create({ name, email, password, available_days, region, rating, image_url, additional_info, contact_info });
-
-    const newDJ = await DJ.create({
-      supplier_id: newSupplier.supplier_id,
-      price_per_hour,
-      music_styles
-    });
-
-    res.status(201).json({ message: "DJ registered successfully", supplier: newSupplier, dj: newDJ });
-  } catch (error) {
-    console.error("❌ Error registering DJ:", error);
-    res.status(500).json({ error: "Registration failed" });
+    const result = await registerSupplierService.deleteSupplier(req.params.id);
+    res.json(result);
+  } catch (error: any) {
+    res.status(404).json({ error: error.message || "Failed to delete supplier" });
   }
 };

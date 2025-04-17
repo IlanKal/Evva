@@ -1,42 +1,42 @@
-import { DataTypes, Model, Optional } from 'sequelize';
-import { sequelize } from '../config/db';
+import { DataTypes, Model } from "sequelize";
+import { sequelize } from "../config/db";
+import { EVENT_TYPES } from "../constants/eventTypes";
 
 interface EventRequestAttributes {
-  request_id: number;
+  request_id?: number;
   user_id: number;
-  event_type: 'conference' | 'Seminar' | 'Corporate event' | 'Product launch' | 'Customer event';
-  event_date: string | null;
-  budget: number | null;
-  guest_count: number | null;
-  location: string | null;
-  catering_preferences: object | null;
-  photographer_preferences: object | null;
-  dj_preferences: object | null;
-  location_preferences: object | null;
-  lecturer_preferences: object | null;
-  additional_notes: string | null;
-  status: 'draft' | 'finalized';
-  created_at?: string;
+  event_type?: string;
+  event_date: string;
+  budget: number;
+  guest_count: number;
+  location?: string;
+
+  catering_preferences?: object;
+  photographer_preferences?: object;
+  dj_preferences?: object;
+  location_preferences?: object;
+  lecturer_preferences?: object;
+
+  additional_notes?: string;
+  status?: "draft" | "finalized" ;
 }
 
-interface EventRequestCreationAttributes extends Optional<EventRequestAttributes, 'request_id' | 'created_at'> {}
+class EventRequest extends Model<EventRequestAttributes> implements EventRequestAttributes {
+  public request_id!: number;
+  public user_id!: number;
+  public event_type?: string;
+  public event_date!: string;
+  public budget!: number;
+  public guest_count!: number;
+  public location?: string;
 
-class EventRequest extends Model<EventRequestAttributes, EventRequestCreationAttributes> implements EventRequestAttributes {
-  request_id!: number;
-  user_id!: number;
-  event_type!: 'conference' | 'Seminar' | 'Corporate event' | 'Product launch' | 'Customer event';
-  event_date!: string | null;
-  budget!: number | null;
-  guest_count!: number | null;
-  location!: string | null;
-  catering_preferences!: object | null;
-  photographer_preferences!: object | null;
-  dj_preferences!: object | null;
-  location_preferences!: object | null;
-  lecturer_preferences!: object | null;
-  additional_notes!: string | null;
-  status!: 'draft' | 'finalized';
-  created_at?: string;
+  public catering_preferences?: object;
+  public photographer_preferences?: object;
+  public dj_preferences?: object;
+  public location_preferences?: object;
+  public lecturer_preferences?: object;
+  public additional_notes?: string;
+  public status?: "draft" | "finalized" ;
 }
 
 EventRequest.init(
@@ -52,10 +52,48 @@ EventRequest.init(
     },
     event_type: {
       type: DataTypes.STRING,
+      allowNull:true,
+      validate:{ 
+        isIn: [EVENT_TYPES as unknown as string[]],
+      }
+    },
+    event_date: {
+      type: DataTypes.DATEONLY,
+      allowNull: false,
+    },
+    budget: {
+      type: DataTypes.DECIMAL(10, 2),
+      allowNull: false,
+    },
+    guest_count: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    location: {
+      type: DataTypes.STRING,
+    },
+    catering_preferences: {
+      type: DataTypes.JSONB,
       allowNull: true,
-      validate: {
-        isIn: [['conference', 'Seminar', 'Corporate event', 'Product launch', 'Customer event']],
-      },
+    },
+    photographer_preferences: {
+      type: DataTypes.JSONB,
+      allowNull: true,
+    },
+    dj_preferences: {
+      type: DataTypes.JSONB,
+      allowNull: true,
+    },
+    location_preferences: {
+      type: DataTypes.JSONB,
+      allowNull: true,
+    },
+    lecturer_preferences: {
+      type: DataTypes.JSONB,
+      allowNull: true,
+    },
+    additional_notes: {
+      type: DataTypes.TEXT,
     },
     status: {
       type: DataTypes.STRING,
@@ -64,22 +102,13 @@ EventRequest.init(
         isIn: [['draft', 'finalized']],
       },
     },
-    event_date: DataTypes.DATEONLY,
-    budget: DataTypes.DECIMAL(10, 2),
-    guest_count: DataTypes.INTEGER,
-    location: DataTypes.STRING(255),
-    catering_preferences: DataTypes.JSON,
-    photographer_preferences: DataTypes.JSON,
-    dj_preferences: DataTypes.JSON,
-    location_preferences: DataTypes.JSON,
-    lecturer_preferences: DataTypes.JSON,
-    additional_notes: DataTypes.TEXT,
   },
   {
     sequelize,
-    modelName: 'EventRequest',
-    tableName: 'event_requests',
-    timestamps: true,
+    modelName: "EventRequest",
+    tableName: "event_requests",
+    timestamps: false,
+
   }
 );
 

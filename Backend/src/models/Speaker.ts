@@ -1,7 +1,21 @@
 import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../config/db';
 
-class Speaker extends Model {}
+interface SpeakerAttributes {
+  speaker_id?: number;
+  supplier_id: number;
+  price_per_lecture?: number;
+  lecture_duration?: number;
+  lecture_field?: string;
+}
+
+class Speaker extends Model<SpeakerAttributes> implements SpeakerAttributes {
+  public speaker_id!: number;
+  public supplier_id!: number;
+  public price_per_lecture?: number;
+  public lecture_duration?: number;
+  public lecture_field?: string;
+}
 
 Speaker.init(
   {

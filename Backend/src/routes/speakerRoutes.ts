@@ -1,18 +1,11 @@
 import express from "express";
-import {
-  getAllSpeakers,
-  getSpeakerById,
-  createSpeaker,
-  updateSpeaker,
-  deleteSpeaker
-} from "../controllers/speakerController";
+import * as speakerController from "../controllers/speakerController";
 
 const router = express.Router();
 
-router.get("/speakers", getAllSpeakers);
-router.get("/speakers/:id", getSpeakerById);
-router.post("/speakers", createSpeaker);
-router.put("/speakers/:id", updateSpeaker);
-router.delete("/speakers/:id", deleteSpeaker);
+router.get("/speakers", speakerController.getAllSpeakers);
+router.get("/speakers/:id", speakerController.getSpeakerById);
+router.put("/speakers/:id", speakerController.updateSpeaker);
+router.delete("/speakers/:id", speakerController.deleteSpeaker);
 
 export default router;

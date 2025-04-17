@@ -1,62 +1,59 @@
 import { Request, Response } from "express";
-import Event from "../models/event";
+import * as eventService from "../services/eventService";
 
-export const getAllEvents = async (req: Request, res: Response): Promise<void> => {
+export const getAllEvents = async (_req: Request, res: Response): Promise<void> => {
   try {
-    const events = await Event.findAll();
+    const events = await eventService.getAllEvents();
     res.json(events);
-  } catch (error) {
-    console.error("Error fetching events:", error);
+  } catch {
     res.status(500).json({ error: "Failed to fetch events" });
   }
 };
 
 export const getEventById = async (req: Request, res: Response): Promise<void> => {
   try {
-    const event = await Event.findByPk(req.params.id.trim());
+    const event = await eventService.getEventById(req.params.id.trim());
     if (!event) {
       res.status(404).json({ error: "Event not found" });
       return;
     }
     res.json(event);
-  } catch (error) {
+  } catch {
     res.status(500).json({ error: "Failed to fetch event" });
   }
 };
 
 export const createEvent = async (req: Request, res: Response): Promise<void> => {
   try {
-    const newEvent = await Event.create(req.body);
+    const newEvent = await eventService.createEvent(req.body);
     res.status(201).json(newEvent);
-  } catch (error) {
+  } catch {
     res.status(500).json({ error: "Failed to create event" });
   }
 };
 
 export const updateEvent = async (req: Request, res: Response): Promise<void> => {
   try {
-    const event = await Event.findByPk(req.params.id.trim());
-    if (!event) {
+    const updated = await eventService.updateEvent(req.params.id.trim(), req.body);
+    if (!updated) {
       res.status(404).json({ error: "Event not found" });
       return;
     }
-    await event.update(req.body);
-    res.json(event);
-  } catch (error) {
+    res.json(updated);
+  } catch {
     res.status(500).json({ error: "Failed to update event" });
   }
 };
 
 export const deleteEvent = async (req: Request, res: Response): Promise<void> => {
   try {
-    const event = await Event.findByPk(req.params.id.trim());
-    if (!event) {
+    const deleted = await eventService.deleteEvent(req.params.id.trim());
+    if (!deleted) {
       res.status(404).json({ error: "Event not found" });
       return;
     }
-    await event.destroy();
     res.json({ message: "Event deleted" });
-  } catch (error) {
+  } catch {
     res.status(500).json({ error: "Failed to delete event" });
   }
 };

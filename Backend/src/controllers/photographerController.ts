@@ -1,69 +1,38 @@
-// controllers/photographerController.ts
 import { Request, Response } from "express";
-import Photographer from "../models/Photographer";
+import * as photographerService from "../services/photographerService";
 
-// GET all photographers
-export const getAllPhotographers = async (req: Request, res: Response) => {
+export const getAllPhotographers = async (_req: Request, res: Response): Promise<void> => {
   try {
-    const photographers = await Photographer.findAll();
+    const photographers = await photographerService.getAllPhotographers();
     res.json(photographers);
-  } catch (error) {
+  } catch {
     res.status(500).json({ error: "Failed to fetch photographers" });
   }
 };
 
-// GET one photographer by ID
-export const getPhotographerById = async (req: Request, res: Response) => {
-  const { id } = req.params;
+export const getPhotographerById = async (req: Request, res: Response): Promise<void> => {
   try {
-    const photographer = await Photographer.findByPk(id);
-    if (photographer) {
-      res.json(photographer);
-    } else {
-      res.status(404).json({ error: "Photographer not found" });
-    }
-  } catch (error) {
-    res.status(500).json({ error: "Failed to fetch photographer" });
+    const photographer = await photographerService.getPhotographerById(req.params.id);
+    res.json(photographer);
+  } catch (error: any) {
+    res.status(404).json({ error: error.message || "Photographer not found" });
   }
 };
 
-// CREATE a new photographer
-export const createPhotographer = async (req: Request, res: Response) => {
+export const updatePhotographer = async (req: Request, res: Response): Promise<void> => {
   try {
-    const newPhotographer = await Photographer.create(req.body);
-    res.status(201).json(newPhotographer);
-  } catch (error) {
-    res.status(500).json({ error: "Failed to create photographer" });
+    const updated = await photographerService.updatePhotographer(req.params.id, req.body);
+    res.json(updated);
+  } catch (error: any) {
+    res.status(404).json({ error: error.message || "Failed to update photographer" });
   }
 };
 
-// UPDATE a photographer
-export const updatePhotographer = async (req: Request, res: Response) => {
-  const { id } = req.params;
+export const deletePhotographer = async (req: Request, res: Response): Promise<void> => {
   try {
-    const [updated] = await Photographer.update(req.body, { where: { photographer_id: id } });
-    if (updated) {
-      const updatedPhotographer = await Photographer.findByPk(id);
-      res.json(updatedPhotographer);
-    } else {
-      res.status(404).json({ error: "Photographer not found" });
-    }
-  } catch (error) {
-    res.status(500).json({ error: "Failed to update photographer" });
-  }
-};
-
-// DELETE a photographer
-export const deletePhotographer = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  try {
-    const deleted = await Photographer.destroy({ where: { photographer_id: id } });
-    if (deleted) {
-      res.json({ message: "Photographer deleted" });
-    } else {
-      res.status(404).json({ error: "Photographer not found" });
-    }
-  } catch (error) {
-    res.status(500).json({ error: "Failed to delete photographer" });
+    const result = await photographerService.deletePhotographer(req.params.id);
+    res.json(result);
+  } catch (error: any) {
+    res.status(404).json({ error: error.message || "Failed to delete photographer" });
   }
 };

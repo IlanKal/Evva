@@ -1,66 +1,38 @@
 import { Request, Response } from "express";
-import Location from "../models/Location";
+import * as locationService from "../services/locationService";
 
-// GET all
-export const getAllLocations = async (req: Request, res: Response): Promise<void> => {
+export const getAllLocations = async (_req: Request, res: Response): Promise<void> => {
   try {
-    const locations = await Location.findAll();
+    const locations = await locationService.getAllLocations();
     res.json(locations);
   } catch {
     res.status(500).json({ error: "Failed to fetch locations" });
   }
 };
 
-// GET by ID
 export const getLocationById = async (req: Request, res: Response): Promise<void> => {
   try {
-    const location = await Location.findByPk(req.params.id);
-    if (!location) {
-      res.status(404).json({ error: "Location not found" });
-      return;
-    }
+    const location = await locationService.getLocationById(req.params.id);
     res.json(location);
-  } catch {
-    res.status(500).json({ error: "Failed to fetch location" });
+  } catch (error: any) {
+    res.status(404).json({ error: error.message || "Location not found" });
   }
 };
 
-// POST
-export const createLocation = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const newLocation = await Location.create(req.body);
-    res.status(201).json(newLocation);
-  } catch {
-    res.status(500).json({ error: "Failed to create location" });
-  }
-};
-
-// PUT
 export const updateLocation = async (req: Request, res: Response): Promise<void> => {
   try {
-    const location = await Location.findByPk(req.params.id);
-    if (!location) {
-      res.status(404).json({ error: "Location not found" });
-      return;
-    }
-    await location.update(req.body);
-    res.json(location);
-  } catch {
-    res.status(500).json({ error: "Failed to update location" });
+    const updated = await locationService.updateLocation(req.params.id, req.body);
+    res.json(updated);
+  } catch (error: any) {
+    res.status(404).json({ error: error.message || "Failed to update location" });
   }
 };
 
-// DELETE
 export const deleteLocation = async (req: Request, res: Response): Promise<void> => {
   try {
-    const location = await Location.findByPk(req.params.id);
-    if (!location) {
-      res.status(404).json({ error: "Location not found" });
-      return;
-    }
-    await location.destroy();
-    res.json({ message: "Location deleted" });
-  } catch {
-    res.status(500).json({ error: "Failed to delete location" });
+    const result = await locationService.deleteLocation(req.params.id);
+    res.json(result);
+  } catch (error: any) {
+    res.status(404).json({ error: error.message || "Failed to delete location" });
   }
 };

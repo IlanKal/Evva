@@ -1,18 +1,11 @@
 import express from "express";
-import {
-  getAllPhotographers,
-  getPhotographerById,
-  createPhotographer,
-  updatePhotographer,
-  deletePhotographer,
-} from "../controllers/photographerController";
+import * as photographerController from "../controllers/photographerController";
 
 const router = express.Router();
 
-router.get("/photographers", getAllPhotographers);
-router.get("/photographers/:id", getPhotographerById);
-router.post("/photographers", createPhotographer);
-router.put("/photographers/:id", updatePhotographer);
-router.delete("/photographers/:id", deletePhotographer);
+router.get("/photographers", photographerController.getAllPhotographers);
+router.get("/photographers/:id", photographerController.getPhotographerById);
+router.put("/photographers/:id", photographerController.updatePhotographer);
+router.delete("/photographers/:id", photographerController.deletePhotographer);
 
 export default router;
