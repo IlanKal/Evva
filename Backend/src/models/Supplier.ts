@@ -1,9 +1,8 @@
 import { DataTypes, Model } from "sequelize";
 import { sequelize } from "../config/db";
 
-// נגדיר ממשק לשדות
 interface SupplierAttributes {
-  supplier_id?: number; // שדה אוטומטי
+  supplier_id?: number;
   name: string;
   email: string;
   password: string;
@@ -13,6 +12,7 @@ interface SupplierAttributes {
   image_url?: string;
   additional_info?: string;
   contact_info?: string;
+  rating_count?: number;
 }
 
 class Supplier extends Model<SupplierAttributes> implements SupplierAttributes {
@@ -26,6 +26,8 @@ class Supplier extends Model<SupplierAttributes> implements SupplierAttributes {
   public image_url?: string;
   public additional_info?: string;
   public contact_info?: string;
+  public rating_count!: number;
+
 }
 
 Supplier.init(
@@ -40,10 +42,15 @@ Supplier.init(
     password: { type: DataTypes.STRING(255), allowNull: false },
     available_days: DataTypes.STRING,
     region: DataTypes.STRING(50),
-    rating: DataTypes.INTEGER,
+    rating: DataTypes.FLOAT,
     image_url: DataTypes.STRING(255),
     additional_info: DataTypes.TEXT,
     contact_info: DataTypes.TEXT,
+    rating_count: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
+    },
   },
   {
     sequelize,
