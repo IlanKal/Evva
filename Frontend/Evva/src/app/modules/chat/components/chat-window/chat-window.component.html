@@ -1,5 +1,5 @@
 <div class="chat-window">
-    <h2>Evva</h2>
+    <h2 class="chat-title">Evva</h2>
   
     <div class="messages">
       <div *ngFor="let msg of chatMessages" [class.user]="msg.sender === 'User'" [class.evva]="msg.sender === 'Evva'">
