@@ -1,28 +1,41 @@
-// import { EventRepository } from "../repositories/eventRepository";
-// import { copilotAPI } from "../config/copilot";
+// src/services/eventService.ts
+import * as eventRepository from "../repositories/eventRepository";
+import * as yup from "yup";
 
-// export class EventService {
-//   private eventRepo = new EventRepository();
+const eventSchema = yup.object({
+  user_id: yup.number().required("User ID is required"),
+  event_date: yup.date().required("Event date is required"),
+  budget: yup.number().positive().required("Budget is required"),
+  guest_count: yup.number().integer().positive().required("Guest count is required"),
+  location: yup.string().notRequired(),
+});
 
-//   async getAllEvents() {
-//     const events = await this.eventRepo.getAllEvents();
-//     const insights = await this.analyzeEventsWithCopilot(events);
-//     return { events, insights };
-//   }
+const eventUpdateSchema = yup.object({
+  user_id: yup.number().notRequired(),
+  event_date: yup.date().notRequired(),
+  budget: yup.number().positive().notRequired(),
+  guest_count: yup.number().integer().positive().notRequired(),
+  location: yup.string().notRequired(),
+});
 
-//   async createEvent(name: string, date: string, location: string) {
-//     return await this.eventRepo.createEvent({ name, date, location });
-//   }
+export const getAllEvents = async () => {
+  return await eventRepository.getAllEvents();
+};
 
-//   private async analyzeEventsWithCopilot(events: any[]) {
-//     try {
-//       const response = await copilotAPI.post("/generate", {
-//         prompt: `Analyze these business events: ${JSON.stringify(events)}`,
-//       });
-//       return response.data;
-//     } catch (error) {
-//       console.error("Copilot API Error:", error);
-//       return { error: "Analysis failed" };
-//     }
-//   }
-// }
+export const getEventById = async (id: string) => {
+  return await eventRepository.getEventById(id);
+};
+
+export const createEvent = async (data: any) => {
+  await eventSchema.validate(data, { abortEarly: false });
+  return eventRepository.createEvent(data);
+};
+
+export const updateEvent = async (id: string, data: any) => {
+  await eventUpdateSchema.validate(data, { abortEarly: false });
+  return eventRepository.updateEvent(id, data);
+};
+
+export const deleteEvent = async (id: string) => {
+  return await eventRepository.deleteEvent(id);
+};

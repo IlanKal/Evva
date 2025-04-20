@@ -1,14 +1,51 @@
-import { DataTypes } from "sequelize";
-import { sequelize } from "../config/db";
-import { Supplier } from "./Supplier";
+import { DataTypes, Model } from 'sequelize';
+import { sequelize } from '../config/db';
 
-export const Catering = sequelize.define("Catering", {
-    catering_id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-    supplier_id: { type: DataTypes.INTEGER, references: { model: Supplier, key: "supplier_id" } },
-    price_per_person: { type: DataTypes.DECIMAL(10, 2) },
-    menu: { type: DataTypes.TEXT },
-    kosher: { type: DataTypes.BOOLEAN },
-    vegetarian: { type: DataTypes.BOOLEAN },
-    vegan: { type: DataTypes.BOOLEAN },
-    gluten_free: { type: DataTypes.BOOLEAN }
-});
+interface CateringAttributes {
+  catering_id?: number;
+  supplier_id: number;
+  price_per_person?: number;
+  menu?: string;
+  kosher?: boolean;
+  vegetarian?: boolean;
+  vegan?: boolean;
+  gluten_free?: boolean;
+}
+
+class Catering extends Model<CateringAttributes> implements CateringAttributes {
+  public catering_id!: number;
+  public supplier_id!: number;
+  public price_per_person?: number;
+  public menu?: string;
+  public kosher?: boolean;
+  public vegetarian?: boolean;
+  public vegan?: boolean;
+  public gluten_free?: boolean;
+}
+Catering.init(
+  {
+    catering_id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    supplier_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    price_per_person: DataTypes.DECIMAL(10, 2),
+    menu: DataTypes.TEXT,
+    kosher: DataTypes.BOOLEAN,
+    vegetarian: DataTypes.BOOLEAN,
+    vegan: DataTypes.BOOLEAN,
+    gluten_free: DataTypes.BOOLEAN,
+  },
+  {
+    sequelize,
+    modelName: 'Catering',
+    tableName: 'catering',
+    timestamps: false,
+  }
+);
+
+export default Catering;

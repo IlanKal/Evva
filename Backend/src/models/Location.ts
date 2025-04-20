@@ -1,14 +1,52 @@
-import { DataTypes } from "sequelize";
-import { sequelize } from "../config/db";
-import { Supplier } from "./Supplier";
+import { DataTypes, Model } from 'sequelize';
+import { sequelize } from '../config/db';
 
-export const Location = sequelize.define("Location", {
-    location_id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-    supplier_id: { type: DataTypes.INTEGER, references: { model: Supplier, key: "supplier_id" } },
-    address: { type: DataTypes.STRING },
-    city: { type: DataTypes.STRING },
-    capacity: { type: DataTypes.INTEGER },
-    price: { type: DataTypes.DECIMAL(10, 2) },
-    parking: { type: DataTypes.BOOLEAN },
-    place_type: { type: DataTypes.STRING }
-});
+interface LocationAttributes {
+  location_id?: number;
+  supplier_id: number;
+  address?: string;
+  city?: string;
+  capacity?: number;
+  price?: number;
+  parking?: boolean;
+  place_type?: string;
+}
+
+class Location extends Model<LocationAttributes> implements LocationAttributes {
+  public location_id!: number;
+  public supplier_id!: number;
+  public address?: string;
+  public city?: string;
+  public capacity?: number;
+  public price?: number;
+  public parking?: boolean;
+  public place_type?: string;
+}
+
+Location.init(
+  {
+    location_id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    supplier_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    address: DataTypes.STRING(255),
+    city: DataTypes.STRING(100),
+    capacity: DataTypes.INTEGER,
+    price: DataTypes.DECIMAL(10, 2),
+    parking: DataTypes.BOOLEAN,
+    place_type: DataTypes.STRING(100),
+  },
+  {
+    sequelize,
+    modelName: 'Location',
+    tableName: 'locations',
+    timestamps: false,
+  }
+);
+
+export default Location;
