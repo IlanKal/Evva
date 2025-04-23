@@ -11,11 +11,11 @@ interface SupplierAttributes {
   available_days?: Weekday[];
   region?: Region;
   rating?: number;
-  ratings_count: number;
   image_url?: string;
   additional_info?: string;
   contact_info?: string;
   rating_count?: number;
+  supplier_type: "catering" | "dj" | "photographer" | "speaker" | "location";
 }
 
 class Supplier extends Model<SupplierAttributes> implements SupplierAttributes {
@@ -26,11 +26,11 @@ class Supplier extends Model<SupplierAttributes> implements SupplierAttributes {
   public available_days?: Weekday[];
   public region?: Region;
   public rating?: number;
-  public ratings_count!: number;
   public image_url?: string;
   public additional_info?: string;
   public contact_info?: string;
   public rating_count!: number;
+  public supplier_type!: "catering" | "dj" | "photographer" | "speaker" | "location";
 
 }
 
@@ -57,11 +57,6 @@ Supplier.init(
       //},
     },
     rating: DataTypes.FLOAT,
-    ratings_count: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      defaultValue: 0,
-    },
     image_url: DataTypes.STRING(255),
     additional_info: DataTypes.TEXT,
     contact_info: DataTypes.TEXT,
@@ -70,6 +65,13 @@ Supplier.init(
       allowNull: false,
       defaultValue: 0,
     },
+    supplier_type: {
+      type: DataTypes.STRING,
+      allowNull:false,
+      validate: {
+        isIn: [['catering', 'dj', 'photographer', 'speaker', 'location']],
+      },
+    }
   },
   {
     sequelize,

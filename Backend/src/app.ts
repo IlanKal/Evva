@@ -11,6 +11,8 @@ import speakerRoutes from './routes/speakerRoutes';
 import registerSupplierRoute from './routes/registerSupplierRoutes';
 import authRoutes from './routes/auth.routes';
 import filterSuppliersRoutes from "./routes/filterSuppliersRoutes";
+import guestUploadRoutes from './routes/guestUploadRoutes';
+import rsvpRoutes from './routes/rsvpRoutes';
 
 const app = express();
 
@@ -28,5 +30,7 @@ app.use('/api', speakerRoutes);
 app.use('/api', registerSupplierRoute);
 app.use('/api/auth', authRoutes);
 app.use("/api", filterSuppliersRoutes);
+app.use('/api/guest-upload', guestUploadRoutes);
+app.use('/rsvp', rsvpRoutes);
 
 export default app;

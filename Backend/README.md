@@ -29,5 +29,35 @@ Backend for the Evva website, built with Node.js. The server connects to a datab
     The server will be running at http://localhost:{{PORT}}.
 
 
+5. ### 📤 Uploading Guests via Excel
+
+The system allows uploading a list of guests for a specific event using an `.xlsx` Excel file.
+
+#### ✅ Requirements:
+- The file must be sent as `multipart/form-data` with the field name `file`
+- The Excel file should include the following columns (first row as headers):
+  - `full_name` (required)
+  - `email` (required)
+  - `phone` (optional)
+
+#### 📥 Example Request (using Postman or curl):
+
+**Endpoint:**
+```
+POST /api/guest-upload/upload/:eventId
+```
+
+**Headers:**
+```
+Content-Type: multipart/form-data
+```
+
+**Form Data:**
+
+| Key  | Type | Value                |
+|------|------|----------------------|
+| file | File | your_excel_file.xlsx |
+
+
 
 

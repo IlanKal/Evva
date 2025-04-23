@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { filterRelevantSuppliers } from "../services/filterRelevantSuppliers";
+import { filterRelevantSuppliers } from "../services/filterSupplierService";
 
 export const filterSuppliersByRequestId = async (
   req: Request,
