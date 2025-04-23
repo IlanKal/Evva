@@ -1,11 +1,13 @@
 .chat-window {
-    flex-grow: 1;
-  }
-  
-  .messages div {
-    margin-bottom: 10px;
-  }
-  
-  .input-area {
-  }
-  
+  flex-grow: 1;
+}
+
+.messages div {
+  margin-bottom: 10px;
+}
+
+.input-area {}
+
+.chat-title {
+  border-bottom: 2px solid #e5e5e5;
+}

@@ -21,32 +21,38 @@
     <mat-card-content>
         <div class="inner-card">
 
-            <div>
-                <mat-icon class="icon">paid</mat-icon>
-                <span>Budget:</span>
-                <span>
-                    {{ user.budget }}$
-                </span>
+            <div class="a-i-c m-b-10">
+                <mat-icon color="primary" class="icon">paid</mat-icon>
+                <div class="space-between person-detail-row">
+                    <span class="field-title">Budget:</span>
+                    <span>
+                        {{ user.budget }}$
+                    </span>
+                </div>
             </div>
-            <div>
-                <mat-icon class="icon">paid</mat-icon>
-                <span>The number of guests:</span>
-                <span>
-                    {{ user.guests }}
-                </span>
+            <div class="a-i-c m-b-10">
+                <mat-icon color="primary" class="icon">format_list_numbered</mat-icon>
+                <div class="space-between person-detail-row">
+                    <span class="field-title">The number of guests:</span>
+                    <span>
+                        {{ user.guests }}
+                    </span>
+                </div>
             </div>
-            <div>
-                <mat-icon class="icon">paid</mat-icon>
-                <span>Date of the event:</span>
-                <span>
-                    {{ user.eventDate }}
-                </span>
+            <div class="a-i-c m-b-10">
+                <mat-icon color="primary" class="icon">calendar_month</mat-icon>
+                <div class="space-between person-detail-row">
+                    <span class="field-title">Date of the event:</span>
+                    <span>
+                        {{ user.eventDate }}
+                    </span>
+                </div>
             </div>
         </div>
     </mat-card-content>
 
 </mat-card>
 
-<div>
+<div class="button-line">
     <button mat-raised-button color="primary" (click)="createEvent()">Create an event</button>
 </div>
