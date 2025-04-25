@@ -28,3 +28,42 @@ export const refreshToken = async (req: Request, res: Response) => {
     res.status(403).json({ message: error.message || 'Invalid refresh token' });
   }
 };
+
+export const registerUser = async (req: Request, res: Response) => {
+  try {
+    const { full_name, email, password, phone, rememberMe } = req.body;
+
+    const result = await authService.registerUser({
+      full_name,
+      email,
+      password,
+      phone,
+      rememberMe,
+    });
+
+    res.status(201).json(result);
+  } catch (error: any) {
+    res.status(400).json({ message: error.message || 'Registration failed' });
+  }
+};
+
+export const registerSupplier = async (req: Request, res: Response) => {
+  try {
+    const result = await authService.registerSupplier(req.body);
+    res.status(201).json(result);
+  } catch (error: any) {
+    res.status(400).json({ message: error.message || 'Supplier registration failed' });
+  }
+};
+
+export const registerSupplierDetails = async (req: Request, res: Response) => {
+  try {
+    const result = await authService.registerSupplierDetails(req.body);
+    res.status(201).json(result);
+  } catch (error: any) {
+    res.status(400).json({ message: error.message || 'Failed to save supplier details' });
+  }
+};
+
+
+

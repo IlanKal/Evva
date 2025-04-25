@@ -1,14 +1,14 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import { sequelize } from '../config/db';
+import RsvpStatus from '../types/RsvpStatus';
 
-// Define the shape of the model attributes
 export interface GuestAttributes {
   guest_id?: number;
   event_id: number;
   full_name: string;
   phone?: string;
   email: string;
-  rsvp?: boolean | null;
+  rsvp?: RsvpStatus;
 }
 
 export type GuestCreationAttributes = Optional<GuestAttributes, 'guest_id' | 'phone' | 'rsvp'>;
@@ -19,7 +19,7 @@ class Guest extends Model<GuestAttributes, GuestCreationAttributes> implements G
   public full_name!: string;
   public email!: string;
   public phone?: string;
-  public rsvp?: boolean | null;
+  public rsvp?: RsvpStatus;
 }
 
 Guest.init(
@@ -43,9 +43,12 @@ Guest.init(
       allowNull: false,
     },
     rsvp: {
-      type: DataTypes.BOOLEAN,
-      allowNull: true,
-      defaultValue: null,
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: 'PENDING',
+      validate: {
+        isIn: [['PENDING', 'APPROVED', 'REJECTED']],
+      },
     },
   },
   {

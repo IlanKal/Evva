@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import GuestUploadService from '../services/GuestUploadService';
+import RsvpStatus from '../types/RsvpStatus'; // ⬅️ שימוש בטיפוס המרכזי
 
 export const handleRsvpResponse = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -11,8 +12,7 @@ export const handleRsvpResponse = async (req: Request, res: Response): Promise<v
       return;
     }
 
-    const rsvpValue = response === 'yes';
-
+    const rsvpValue: RsvpStatus = response === 'yes' ? 'APPROVED' : 'REJECTED';
     const updatedGuest = await GuestUploadService.updateRsvp(guestId, rsvpValue);
 
     if (!updatedGuest) {
@@ -24,8 +24,8 @@ export const handleRsvpResponse = async (req: Request, res: Response): Promise<v
       <div style="font-family: Arial, sans-serif; padding: 40px; text-align: center;">
         <h2>Thank you, ${updatedGuest.full_name}!</h2>
         <p>Your response has been recorded as:</p>
-        <p style="font-size: 20px; font-weight: bold; color: ${rsvpValue ? '#4CAF50' : '#f44336'};">
-          ${rsvpValue ? 'I will attend' : 'I won\'t attend'}
+        <p style="font-size: 20px; font-weight: bold; color: ${rsvpValue === 'APPROVED' ? '#4CAF50' : '#f44336'};">
+          ${rsvpValue === 'APPROVED' ? 'I will attend' : 'I won\'t attend'}
         </p>
       </div>
     `);

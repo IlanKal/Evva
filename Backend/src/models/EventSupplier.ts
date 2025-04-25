@@ -1,7 +1,18 @@
 import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../config/db';
+import RsvpStatus from '../types/RsvpStatus'; 
 
-class EventSupplier extends Model {}
+interface EventSupplierAttributes {
+  event_id: number;
+  supplier_id: number;
+  approval_status?: RsvpStatus;
+}
+
+class EventSupplier extends Model<EventSupplierAttributes> implements EventSupplierAttributes {
+  public event_id!: number;
+  public supplier_id!: number;
+  public approval_status!: RsvpStatus;
+}
 
 EventSupplier.init(
   {
@@ -12,6 +23,14 @@ EventSupplier.init(
     supplier_id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
+    },
+    approval_status: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: 'PENDING',
+      validate: {
+        isIn: [['PENDING', 'APPROVED', 'REJECTED']],
+      },
     },
   },
   {
