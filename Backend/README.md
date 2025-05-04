@@ -33,13 +33,15 @@ The backend receives event preferences collected via a built-in chatbot interfac
 ## Project Structure
 src/
 ├── config/ # Database connection settings
+├── constants/ # Enums and constants (regions, weekdays, etc.)
 ├── controllers/ # Handles API requests
+├── middlewares/ # Auth and error handling middleware
 ├── models/ # Sequelize models (tables)
 ├── repositories/ # DB interaction logic
-├── services/ # Business logic, including optimization algorithm
 ├── routes/ # API endpoints
-├── types/ # TypeScript interfaces and types
-├── utils/ # Utility functions
+├── services/ # Business logic, including optimization algorithm
+├── types/ # TypeScript interfaces and definitions
+├── utils/ # Utility functions (e.g., JWT helpers)
+├── app.ts # Express app setup
 └── server.ts # Entry point
-
 
