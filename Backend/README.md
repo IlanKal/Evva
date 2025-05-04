@@ -32,7 +32,7 @@ The backend receives event preferences collected via a built-in chatbot interfac
 
 ## Project Structure
 
-src/
+```src/
 ├── config/         # Database connection settings
 ├── constants/      # Enums and constants (regions, weekdays, etc.)
 ├── controllers/    # Handles API requests
@@ -45,5 +45,6 @@ src/
 ├── utils/          # Utility functions (e.g., JWT helpers)
 ├── app.ts          # Express app setup
 └── server.ts       # Entry point
+```
 
 
