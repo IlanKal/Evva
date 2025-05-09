@@ -1,9 +1,20 @@
 import { Routes } from '@angular/router';
-import { ChatComponent } from './modules/chat/components/chat/chat.component';
-import { LoginComponent } from './modules/login/components/login/login.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent },
-  { path: 'chat', component: ChatComponent }
+  {
+    path: 'register',
+    loadChildren: () =>
+      import('./modules/register/register.routes').then((m) => m.registerRoutes),
+  },
+  {
+    path: 'login',
+    loadComponent: () =>
+      import('./modules/login/components/login/login.component').then((m) => m.LoginComponent),
+  },
+  {
+    path: 'chat',
+    loadComponent: () =>
+      import('./modules/chat/components/chat/chat.component').then((m) => m.ChatComponent),
+  },
+  { path: '', redirectTo: 'register', pathMatch: 'full' },
 ];

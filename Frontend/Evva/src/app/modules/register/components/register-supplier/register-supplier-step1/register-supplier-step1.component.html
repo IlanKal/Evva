@@ -1,0 +1,15 @@
+<h2>Supplier Registration - Step 1</h2>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <label>Business Name:<input formControlName="businessName"></label><br>
+  <label>Email:<input formControlName="email" type="email"></label><br>
+  <label>Password:<input formControlName="password" type="password"></label><br>
+  <label>Phone:<input formControlName="phone"></label><br>
+  <label>Supplier Type:
+    <select formControlName="supplierType">
+      <option value="dj">DJ</option>
+      <option value="location">Event Hall</option>
+      <option value="catering">Catering</option>
+    </select>
+  </label><br>
+  <button type="submit" [disabled]="form.invalid">Continue</button>
+</form>

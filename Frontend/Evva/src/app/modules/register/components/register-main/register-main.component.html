@@ -1,0 +1,9 @@
+<h2>Register</h2>
+<label>
+  <input type="radio" name="type" [(ngModel)]="selectedType" value="user"> Client
+</label>
+<label>
+  <input type="radio" name="type" [(ngModel)]="selectedType" value="supplier"> Supplier
+</label>
+<br>
+<button (click)="goToRegister()" [disabled]="!selectedType">Continue</button>
