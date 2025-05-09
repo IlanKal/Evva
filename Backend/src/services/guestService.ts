@@ -7,16 +7,22 @@ const guestSchema = yup.object({
     full_name: yup.string().required("Full name is required"),
     phone: yup.string().nullable(),
     email: yup.string().email().nullable(),
-    rsvp: yup.boolean().nullable(),
-  });
+    rsvp: yup
+    .mixed<'PENDING' | 'APPROVED' | 'REJECTED'>()
+    .oneOf(['PENDING', 'APPROVED', 'REJECTED'])
+    .nullable(),
+    });
   
   const guestUpdateSchema = guestSchema.noUnknown().shape({
     event_id: yup.number().notRequired(),
     full_name: yup.string().notRequired(),
     phone: yup.string().nullable(),
     email: yup.string().email().nullable(),
-    rsvp: yup.boolean().nullable(),
-  });  
+    rsvp: yup
+    .mixed<'PENDING' | 'APPROVED' | 'REJECTED'>()
+    .oneOf(['PENDING', 'APPROVED', 'REJECTED'])
+    .nullable(),
+    });  
 export const getAllGuests = () => guestRepo.getAllGuests();
 
 export const getGuestById = (id: string) => guestRepo.getGuestById(id);

@@ -19,7 +19,6 @@ export const filterRelevantSuppliers = async (requestId: number) => {
     throw new Error("❌ Event request not found");
   }
 
-
 //שליפת משתנים מתוך הבקשה
   const {
     event_date,
@@ -201,9 +200,5 @@ export const filterRelevantSuppliers = async (requestId: number) => {
     });
     result.speakers = speakers;
   }
-  
-
-  console.log("🔍 Filtered Suppliers Result:", JSON.stringify(result, null, 2));
-
   return result;
 };
