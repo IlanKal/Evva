@@ -1,25 +1,25 @@
-import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-register',
   standalone: true,
+  imports: [CommonModule, MatCardModule, MatButtonModule, MatIconModule],
   templateUrl: './register-main.component.html',
   styleUrls: ['./register-main.component.scss'],
-  imports: [CommonModule, FormsModule],
 })
 export class RegisterComponent {
-  selectedType: 'user' | 'supplier' | null = null;
+  constructor(private router: Router) {}
 
-  constructor(private router: Router) { }
-
-  goToRegister() {
-    if (this.selectedType === 'user') {
+  registerAs(type: 'user' | 'supplier') {
+    if (type === 'user') {
       this.router.navigate(['/register/client']);
-    } else if (this.selectedType === 'supplier') {
-      this.router.navigate(['/register/supplier/step1']);
+    } else {
+      this.router.navigate(['/register/supplier']);
     }
   }
 }

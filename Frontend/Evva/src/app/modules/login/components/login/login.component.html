@@ -48,16 +48,7 @@
     <div class="register-section mt-6 text-center">
       <p class="mb-2">Not a member yet?</p>
 
-      <div class="flex justify-center mb-4">
-        <mat-radio-group color="primary" [(ngModel)]="registerRole" name="registerRole" class="flex flex-row gap-4">
-          <label class="mb-2 font-medium text-gray-700">Register as:</label>
-
-          <mat-radio-button value="supplier">Supplier</mat-radio-button>
-          <mat-radio-button value="client">Client</mat-radio-button>
-        </mat-radio-group>
-      </div>
-
-      <button mat-stroked-button color="primary" class="w-full" (click)="onRegister()" [disabled]="!registerRole">
+      <button mat-button color="primary" (click)="onRegister()">
         Register Now
       </button>
     </div>

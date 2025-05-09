@@ -1,20 +1,17 @@
-<h2>Supplier Registration - Step 2 ({{ type }})</h2>
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
-  <div *ngIf="type === 'dj'">
-    <label>Genre:<input formControlName="genre"></label><br>
-    <label>Experience Years:<input formControlName="experienceYears" type="number"></label><br>
-    <label>Equipment:<input formControlName="equipment"></label><br>
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-grid-3">
+  <div class="field-group" *ngFor="let field of fields">
+    <div class="field-title">{{ field.label }}</div>
+    <mat-form-field appearance="outline" class="full-width">
+      <input matInput *ngIf="field.type !== 'textarea'" [type]="field.type" [formControlName]="field.name"
+        [placeholder]="field.placeholder">
+      <textarea matInput *ngIf="field.type === 'textarea'" [formControlName]="field.name"
+        [placeholder]="field.placeholder"></textarea>
+    </mat-form-field>
   </div>
-
-  <div *ngIf="type === 'location'">
-    <label>Capacity:<input formControlName="capacity" type="number"></label><br>
-    <label>Has Parking:<input type="checkbox" formControlName="hasParking"></label><br>
-  </div>
-
-  <div *ngIf="type === 'catering'">
-    <label>Cuisine Type:<input formControlName="cuisineType"></label><br>
-    <label>Vegan Options:<input type="checkbox" formControlName="veganOptions"></label><br>
-  </div>
-
-  <button type="submit" [disabled]="form.invalid">Submit</button>
 </form>
+
+<div class="button-container">
+  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="form.invalid">
+    Submit →
+  </button>
+</div>

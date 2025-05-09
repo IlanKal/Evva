@@ -12,13 +12,8 @@ export const registerRoutes: Routes = [
       import('./components/register-client/register-client.component').then((m) => m.RegisterClientComponent),
   },
   {
-    path: 'supplier/step1',
+    path: 'supplier',
     loadComponent: () =>
-      import('./components/register-supplier/register-supplier-step1/register-supplier-step1.component').then((m) => m.RegisterSupplierStep1Component),
-  },
-  {
-    path: 'supplier/step2',
-    loadComponent: () =>
-      import('./components/register-supplier/register-supplier-step2/register-supplier-step2.component').then((m) => m.RegisterSupplierStep2Component),
+      import('./components/register-supplier/register-supplier.component').then((m) => m.RegisterSupplierComponent),
   },
 ];
