@@ -16,5 +16,10 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./modules/chat/components/chat/chat.component').then((m) => m.ChatComponent),
   },
+  {
+    path: 'my-events',
+    loadComponent: () =>
+      import('./modules/my-events/my-events.component').then((m) => m.MyEventsComponent),
+  },
   { path: '', redirectTo: 'register', pathMatch: 'full' },
 ];
