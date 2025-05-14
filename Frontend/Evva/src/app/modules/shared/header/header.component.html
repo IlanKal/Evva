@@ -1,0 +1,19 @@
+<mat-toolbar  class="header-toolbar">
+    <div class="left-section">
+      <img src="assets/images/logo.svg" alt="EVVA Logo" class="logo" />
+    </div>
+  
+    <span class="spacer"></span>
+  
+    <div class="right-section">
+      <button mat-icon-button aria-label="Notifications">
+        <mat-icon  >notifications</mat-icon>
+      </button>
+  
+      <div class="user-info" *ngIf="user">
+        <span class="user-name">Welcome, {{ user.name }}</span>
+        <img [src]="user.avatarUrl" alt="User Avatar" class="avatar" />
+      </div>
+    </div>
+  </mat-toolbar>
+  

@@ -1,0 +1,36 @@
+<div>
+    <img class="img-size" src="assets/images/logo.svg">
+</div>
+
+
+
+
+<div class="card-container">
+    <mat-card class="option-card">
+        <mat-card-header>
+            <mat-card-title class="card-title">Register Now As Client!</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            Plan an event, invite guests, and manage suppliers.
+        </mat-card-content>
+        <mat-card-actions>
+            <button class="button-text" mat-raised-button color="primary" (click)="registerAs('user')">
+                Register as Client
+            </button>
+        </mat-card-actions>
+    </mat-card>
+
+    <mat-card class="option-card">
+        <mat-card-header>
+            <mat-card-title class="card-title">Register Now As Supplier!</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            Offer services as DJ, catering, hall, or speaker.
+        </mat-card-content>
+        <mat-card-actions>
+            <button class="button-text" mat-raised-button color="accent" (click)="registerAs('supplier')">
+                Register as Supplier
+            </button>
+        </mat-card-actions>
+    </mat-card>
+</div>

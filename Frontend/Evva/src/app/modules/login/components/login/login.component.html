@@ -1,0 +1,56 @@
+<div class="bg-gray-100 absolute">
+  <img class="img-size" src="assets/images/logo.svg">
+</div>
+
+<div class="flex items-center justify-center min-h-screen bg-gray-100  w-full">
+  <mat-card class="p-8 max-w-md login">
+    <h2 class="text-2xl font-bold mb-6 text-center">Welcome Back 🖐️</h2>
+
+    <form (ngSubmit)="onSubmit()" [formGroup]="loginForm" novalidate>
+      <mat-label class="font-bold">Email</mat-label>
+      <mat-form-field appearance="outline" class="w-full mb-4">
+        <input matInput type="email" formControlName="email" placeholder="Enter your email">
+        <!-- <mat-error *ngIf="email.hasError('required')">This field is required</mat-error> -->
+        <!-- <mat-error *ngIf="email.hasError('email')">Invalid email address</mat-error> -->
+      </mat-form-field>
+
+      <mat-label class="font-bold">Password</mat-label>
+      <mat-form-field appearance="outline" class="w-full mb-6">
+        <input matInput type="password" formControlName="password" placeholder="Enter your password">
+        <!-- <mat-error *ngIf="password.hasError('required')">This field is required</mat-error> -->
+        <!-- <mat-error *ngIf="password.hasError('minlength')">Password must be at least 6 characters</mat-error> -->
+      </mat-form-field>
+
+      <!-- New Radio Group for Role Selection -->
+      <mat-radio-group color="primary" formControlName="role" class="w-full flex flex-col baseline">
+        <label class="mb-2 font-medium text-gray-700">Login as:</label>
+
+        <mat-radio-button class="mb-2" value="supplier">
+          Supplier
+        </mat-radio-button>
+
+        <mat-radio-button class="mb-4" value="client">
+          Client
+        </mat-radio-button>
+        <!-- 
+        <mat-error *ngIf="role.hasError('required')">
+          Please select your role
+        </mat-error> -->
+      </mat-radio-group>
+
+      <button mat-flat-button color="primary" class="w-full py-3" type="submit" [disabled]="loginForm.invalid">
+        Log In
+      </button>
+
+
+    </form>
+    <!-- Register section -->
+    <div class="register-section mt-6 text-center">
+      <p class="mb-2">Not a member yet?</p>
+
+      <button mat-button color="primary" (click)="onRegister()">
+        Register Now
+      </button>
+    </div>
+  </mat-card>
+</div>

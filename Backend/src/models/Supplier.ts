@@ -3,7 +3,7 @@ import { sequelize } from "../config/db";
 import { Region, REGIONS } from "../constants/regions";
 import { Weekday } from "../constants/weekdays";
 
-interface SupplierAttributes {
+export interface SupplierAttributes {
   supplier_id?: number; // שדה אוטומטי
   name: string;
   email: string;

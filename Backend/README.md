@@ -30,16 +30,6 @@ The backend receives event preferences collected via a built-in chatbot interfac
     npx ts-node src/server.ts
     The server will be running at http://localhost:{{PORT}}.
 
-## Project Structure
-src/
-├── config/ # Database connection settings
-├── controllers/ # Handles API requests
-├── models/ # Sequelize models (tables)
-├── repositories/ # DB interaction logic
-├── services/ # Business logic, including optimization algorithm
-├── routes/ # API endpoints
-├── types/ # TypeScript interfaces and types
-├── utils/ # Utility functions
-└── server.ts # Entry point
+
 
 

@@ -1,0 +1,76 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-grid-3">
+    <!-- שורה ראשונה -->
+    <div class="field-group">
+        <div class="field-title">Name</div>
+        <mat-form-field appearance="outline" class="full-width">
+            <input matInput formControlName="name" placeholder="Supplier name">
+        </mat-form-field>
+    </div>
+
+    <div class="field-group">
+        <div class="field-title">Email</div>
+        <mat-form-field appearance="outline" class="full-width">
+            <input matInput formControlName="email" type="email" placeholder="Email">
+        </mat-form-field>
+    </div>
+
+    <div class="field-group">
+        <div class="field-title">Password</div>
+        <mat-form-field appearance="outline" class="full-width">
+            <input matInput formControlName="password" type="password" placeholder="Password">
+        </mat-form-field>
+    </div>
+
+    <!-- שורה שנייה -->
+    <div class="field-group">
+        <div class="field-title">Available Days</div>
+        <mat-form-field appearance="outline" class="full-width">
+            <input matInput formControlName="available_days" placeholder="e.g., Sunday, Wednesday">
+        </mat-form-field>
+    </div>
+
+    <div class="field-group">
+        <div class="field-title">Region</div>
+        <mat-form-field appearance="outline" class="full-width">
+            <input matInput formControlName="region" placeholder="Region (e.g., Center)">
+        </mat-form-field>
+    </div>
+
+
+
+    <!-- שורה שלישית -->
+    <div class="field-group">
+        <div class="field-title">Image URL</div>
+        <mat-form-field appearance="outline" class="full-width">
+            <input matInput formControlName="image_url" placeholder="https://example.com/image.jpg">
+        </mat-form-field>
+    </div>
+
+    <div class="field-group">
+        <div class="field-title">Contact Info</div>
+        <mat-form-field appearance="outline" class="full-width">
+            <input matInput formControlName="contact_info" placeholder="Phone number or contact details">
+        </mat-form-field>
+    </div>
+    <div class="field-group ">
+        <div class="field-title">Supplier Type</div>
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-select formControlName="supplier_type" placeholder="Select supplier type">
+                <mat-option *ngFor="let type of supplierTypes" [value]="type">{{ type | uppercase }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+
+    <div class="field-group full-line">
+        <div class="field-title">Additional Info</div>
+        <mat-form-field appearance="outline" class="full-width full-height">
+            <textarea matInput formControlName="additional_info" placeholder="Additional information"></textarea>
+        </mat-form-field>
+    </div>
+</form>
+
+<div class="button-container">
+    <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="form.invalid">
+        Create →
+    </button>
+</div>

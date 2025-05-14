@@ -1,0 +1,132 @@
+.container {
+    background: rgb(244 244 246);
+}
+
+.title {
+    height: 40px;
+}
+
+
+.login {
+    height: 50%;
+    width: 25%;
+
+}
+
+.card {
+    width: 500px;
+    height: 500px;
+}
+
+.card-title {
+    font-size: 24px;
+    display: flex;
+    justify-content: center;
+    margin: 20px;
+}
+
+
+
+
+.flex {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* גובה מסך מלא */
+.min-h-screen {
+    min-height: 100vh;
+}
+
+/* צבע רקע */
+.bg-gray-100 {
+    background-color: #f3f4f6;
+}
+
+/* עיצוב ל-Mat Card */
+mat-card {
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* רוחב מלא לשדות */
+.w-full {
+    width: 100%;
+}
+
+/* מרווח תחתון */
+.mb-4 {
+    margin-bottom: 1rem;
+}
+
+.mb-6 {
+    margin-bottom: 1.5rem;
+}
+
+/* טקסט בכותרת */
+h2 {
+    font-size: 1.75rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+/* כפתור */
+button {
+    font-size: 1rem;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+}
+
+/* כפתור במצב disabled */
+button[disabled] {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.baseline {
+    display: flex;
+    align-items: baseline;
+}
+
+.img-size {
+    width: 140px;
+    margin: 30px;
+}
+
+
+.absolute {
+    position: absolute;
+}
+
+.register-section {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+
+}
+
+.register-section p {
+    font-size: 1rem;
+    color: #4b5563;
+}
+
+.mat-radio-group.flex.flex-row.gap-4 {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+button[mat-stroked-button] {
+    border-radius: 0.5rem;
+    padding: 0.6rem;
+    font-weight: 600;
+}
+
+.font-bold {
+    font-weight: bold;
+}

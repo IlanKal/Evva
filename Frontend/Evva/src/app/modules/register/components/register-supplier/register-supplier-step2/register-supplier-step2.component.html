@@ -1,0 +1,17 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-grid-3">
+  <div class="field-group" *ngFor="let field of fields">
+    <div class="field-title">{{ field.label }}</div>
+    <mat-form-field appearance="outline" class="full-width">
+      <input matInput *ngIf="field.type !== 'textarea'" [type]="field.type" [formControlName]="field.name"
+        [placeholder]="field.placeholder">
+      <textarea matInput *ngIf="field.type === 'textarea'" [formControlName]="field.name"
+        [placeholder]="field.placeholder"></textarea>
+    </mat-form-field>
+  </div>
+</form>
+
+<div class="button-container">
+  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="form.invalid">
+    Submit →
+  </button>
+</div>

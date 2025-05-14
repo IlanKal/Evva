@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
-import * as eventService from "../services/eventService";
+import * as eventService from "../services/eventService"; 
 
 export const getAllEvents = async (_req: Request, res: Response): Promise<void> => {
   try {
     const events = await eventService.getAllEvents();
     res.json(events);
-  } catch {
+  } catch (error) {
     res.status(500).json({ error: "Failed to fetch events" });
   }
 };
@@ -18,7 +18,7 @@ export const getEventById = async (req: Request, res: Response): Promise<void> =
       return;
     }
     res.json(event);
-  } catch {
+  } catch (error) {
     res.status(500).json({ error: "Failed to fetch event" });
   }
 };
@@ -27,7 +27,7 @@ export const createEvent = async (req: Request, res: Response): Promise<void> =>
   try {
     const newEvent = await eventService.createEvent(req.body);
     res.status(201).json(newEvent);
-  } catch {
+  } catch (error) {
     res.status(500).json({ error: "Failed to create event" });
   }
 };
@@ -40,7 +40,7 @@ export const updateEvent = async (req: Request, res: Response): Promise<void> =>
       return;
     }
     res.json(updated);
-  } catch {
+  } catch (error) {
     res.status(500).json({ error: "Failed to update event" });
   }
 };
@@ -53,7 +53,29 @@ export const deleteEvent = async (req: Request, res: Response): Promise<void> =>
       return;
     }
     res.json({ message: "Event deleted" });
-  } catch {
+  } catch (error) {
     res.status(500).json({ error: "Failed to delete event" });
   }
 };
+
+export const finishEvent = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { event_id } = req.body;
+
+    if (!event_id) {
+      res.status(400).json({ error: "Missing event_id" });
+      return;
+    }
+
+    const suppliers = await eventService.finishEvent(event_id);
+
+    res.json({
+      message: "Event marked as finished. Rating emails sent to guests.",
+      suppliers,
+    });
+  } catch (error) {
+    console.error("Failed to finish event:", error);
+    res.status(500).json({ error: "Failed to finish event" });
+  }
+};
+

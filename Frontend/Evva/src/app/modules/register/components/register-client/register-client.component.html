@@ -1,0 +1,51 @@
+<div>
+    <img class="img-size" src="assets/images/logo.svg">
+  </div>
+  
+  <mat-card>
+    <h2>Register as a user</h2>
+  
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-grid">
+      <div class="field-group">
+        <div class="field-title">Full Name</div>
+        <mat-form-field appearance="outline" class="full-width">
+          <input matInput formControlName="fullName" placeholder="Business name">
+        </mat-form-field>
+      </div>
+  
+      <div class="field-group">
+        <div class="field-title">Email</div>
+        <mat-form-field appearance="outline" class="full-width">
+          <input matInput formControlName="email" type="email" placeholder="Email">
+        </mat-form-field>
+      </div>
+  
+      <div class="field-group">
+        <div class="field-title">Password</div>
+        <mat-form-field appearance="outline" class="full-width">
+          <input matInput formControlName="password" type="password" placeholder="Password">
+        </mat-form-field>
+      </div>
+  
+      <div class="field-group">
+        <div class="field-title">Phone Number</div>
+        <mat-form-field appearance="outline" class="full-width">
+          <input matInput formControlName="phoneNumber" placeholder="Phone number">
+        </mat-form-field>
+      </div>
+  
+      <div class="field-group full-width">
+        <div class="field-title">Role</div>
+        <mat-form-field appearance="outline" class="full-width">
+          <input matInput formControlName="role" placeholder="Full name">
+        </mat-form-field>
+      </div>
+    </form>
+  
+    <div class="button-container">
+      <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="form.invalid">
+        Create →
+      </button>
+    </div>
+  </mat-card>
+  

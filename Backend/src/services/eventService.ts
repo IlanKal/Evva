@@ -1,6 +1,6 @@
-// src/services/eventService.ts
 import * as eventRepository from "../repositories/eventRepository";
 import * as yup from "yup";
+import MailService from "./MailService";
 
 const eventSchema = yup.object({
   user_id: yup.number().required("User ID is required"),
@@ -38,4 +38,21 @@ export const updateEvent = async (id: string, data: any) => {
 
 export const deleteEvent = async (id: string) => {
   return await eventRepository.deleteEvent(id);
+};
+
+export const finishEvent = async (eventId: number): Promise<void> => {
+  const approvedEventSuppliers = await eventRepository.getApprovedEventSuppliers(eventId);
+  const supplierIds = approvedEventSuppliers.map(link => link.supplier_id);
+
+  if (supplierIds.length === 0) {
+    throw new Error("No approved suppliers found for this event.");
+  }
+
+  const suppliers = await eventRepository.getSuppliersByIds(supplierIds);
+
+  const approvedGuests = await eventRepository.getApprovedGuestsByEventId(eventId);
+
+  for (const guest of approvedGuests) {
+    await MailService.sendRatingEmail(guest, suppliers, eventId);
+  }
 };

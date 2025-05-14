@@ -1,0 +1,42 @@
+.header-toolbar {
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    height: 64px;
+    background: white;
+    border-bottom: 1px solid rgb(224.4, 224.4, 224.4);
+}
+
+.left-section .logo {
+    height: 40px;
+    width: auto;
+}
+
+.spacer {
+    flex: 1 1 auto;
+}
+
+.right-section {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid white;
+}
+
+.user-name {
+    font-size: 0.95rem;
+    color: #424242;
+}

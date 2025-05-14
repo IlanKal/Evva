@@ -1,0 +1,17 @@
+<div>
+    <img class="img-size" src="assets/images/logo.svg">
+</div>
+
+<mat-card>
+
+    <h2>Register as a Supplier</h2>
+    <span class="f-s-16 m-b-20">{{ currentStep === 1 ? 'Step 1: Basic Info' : 'Step 2: Details' }}</span>
+
+    <ng-container *ngIf="currentStep === 1">
+        <app-register-supplier-step1 (supplierTypeSelected)="goToStep2($event)"></app-register-supplier-step1>
+    </ng-container>
+
+    <ng-container *ngIf="currentStep === 2">
+        <app-register-supplier-step2 [supplierType]="supplierType"></app-register-supplier-step2>
+    </ng-container>
+</mat-card>
