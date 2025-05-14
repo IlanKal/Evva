@@ -1,0 +1,23 @@
+<app-header *ngIf="user" [user]="user"></app-header>
+
+<div class="my-events-content">
+
+    <div class="m-b-40">
+        <span class="title">
+            My events
+        </span>
+    </div>
+
+    <ng-container *ngIf="!loading; else loadingTpl">
+        <app-events-list [events]="events"></app-events-list>
+
+        <button mat-raised-button color="primary" class="create-event-btn" (click)="navigateToCreateEvent()">
+            + Create New Event  
+        </button>
+
+    </ng-container>
+
+    <ng-template #loadingTpl>
+        <p>Loading your events...</p>
+    </ng-template>
+</div>

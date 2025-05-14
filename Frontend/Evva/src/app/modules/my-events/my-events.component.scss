@@ -1,0 +1,25 @@
+.create-event-btn {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    z-index: 10;
+    border-radius: 20px;
+}
+
+.title {
+    font-size: 27px;
+    font-family: math;
+    font-weight: 600;
+}
+
+.my-events-content {
+    height: calc(100% - 146px);
+    overflow: auto;
+    padding: 40px;
+    background: rgb(246 246 246);
+    position: relative;
+}
+
+.m-b-40 {
+    margin-bottom: 40px;
+}

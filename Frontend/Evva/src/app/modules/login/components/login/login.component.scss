@@ -90,3 +90,43 @@ button[disabled] {
     display: flex;
     align-items: baseline;
 }
+
+.img-size {
+    width: 140px;
+    margin: 30px;
+}
+
+
+.absolute {
+    position: absolute;
+}
+
+.register-section {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+
+}
+
+.register-section p {
+    font-size: 1rem;
+    color: #4b5563;
+}
+
+.mat-radio-group.flex.flex-row.gap-4 {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+button[mat-stroked-button] {
+    border-radius: 0.5rem;
+    padding: 0.6rem;
+    font-weight: 600;
+}
+
+.font-bold {
+    font-weight: bold;
+}

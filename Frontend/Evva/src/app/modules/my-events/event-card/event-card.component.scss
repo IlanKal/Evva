@@ -1,0 +1,20 @@
+.event-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+  }
+  
+  .event-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  }
+  
+  .event-status {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 4px 8px;
+    border-radius: 12px;
+    background-color: #e0e0e0;
+    font-size: 0.75rem;
+    color: #333;
+  }
+  
