@@ -1,6 +1,9 @@
 # Evva Backend
 
-Backend for the Evva website, built with Node.js. The server connects to a database (PostgreSQL) using Sequelize and interacts with the Copilot API.
+This is the backend for **Evva**, a smart event-planning platform for companies.  
+Built with **Node.js**, it connects to a **PostgreSQL** database using **Sequelize**.
+
+The backend receives event preferences collected via a built-in chatbot interface, filters relevant suppliers (e.g., venues, catering, DJs, photographers), and uses a custom optimization algorithm to recommend the best supplier combination that fits the user's budget and needs.
 
 ## Prerequisites
 - **Node.js** and **npm** installed on your machine.
@@ -9,8 +12,7 @@ Backend for the Evva website, built with Node.js. The server connects to a datab
     node -v
     npm -v
     ```
-- **Database Connection**: Ensure you have the correct database credentials in `db.ts` or `.env`.
-- **Copilot API Key**: Obtain an API key and set it in your `.env` file.
+- **Database Connection**: Ensure you have the correct database credentials in `db.ts` or `.env`.(hosted on Render)
 
 ## Installation
 1. Clone the repository:
@@ -28,6 +30,16 @@ Backend for the Evva website, built with Node.js. The server connects to a datab
     npx ts-node src/server.ts
     The server will be running at http://localhost:{{PORT}}.
 
-
+## Project Structure
+src/
+├── config/ # Database connection settings
+├── controllers/ # Handles API requests
+├── models/ # Sequelize models (tables)
+├── repositories/ # DB interaction logic
+├── services/ # Business logic, including optimization algorithm
+├── routes/ # API endpoints
+├── types/ # TypeScript interfaces and types
+├── utils/ # Utility functions
+└── server.ts # Entry point
 
 

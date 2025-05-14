@@ -202,8 +202,5 @@ export const filterRelevantSuppliers = async (requestId: number) => {
     result.speakers = speakers;
   }
   
-
-  console.log("🔍 Filtered Suppliers Result:", JSON.stringify(result, null, 2));
-
   return result;
 };

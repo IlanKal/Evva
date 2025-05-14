@@ -19,6 +19,7 @@ interface EventRequestAttributes {
 
   additional_notes?: string;
   status?: "draft" | "finalized" ;
+  event_id?: number;
 }
 
 class EventRequest extends Model<EventRequestAttributes> implements EventRequestAttributes {
@@ -37,6 +38,7 @@ class EventRequest extends Model<EventRequestAttributes> implements EventRequest
   public lecturer_preferences?: object;
   public additional_notes?: string;
   public status?: "draft" | "finalized" ;
+  public event_id?: number;
 }
 
 EventRequest.init(
@@ -102,6 +104,10 @@ EventRequest.init(
         isIn: [['draft', 'finalized']],
       },
     },
+    event_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    }
   },
   {
     sequelize,
