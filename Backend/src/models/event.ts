@@ -1,7 +1,23 @@
 import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../config/db';
 
-class Event extends Model {}
+export interface EventAttributes {
+  event_id: number;
+  user_id: number;
+  event_date?: string;
+  budget?: number;
+  guest_count?: number;
+  location?: string;
+}
+
+class Event extends Model<EventAttributes> implements EventAttributes {
+  public event_id!: number;
+  public user_id!: number;
+  public event_date?: string;
+  public budget?: number;
+  public guest_count?: number;
+  public location?: string;
+}
 
 Event.init(
   {

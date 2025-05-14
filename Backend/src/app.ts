@@ -1,4 +1,5 @@
 import express from 'express';
+import qs from 'qs';
 import eventRequestRoutes from './routes/eventRequestRoutes';
 import userRoutes from './routes/userRoutes';
 import eventRoutes from './routes/eventRoutes';
@@ -8,15 +9,30 @@ import photographerRoutes from './routes/photographerRoutes';
 import locationRoutes from './routes/locationRoutes';
 import cateringRoutes from './routes/cateringRoutes';
 import speakerRoutes from './routes/speakerRoutes';
-import registerSupplierRoute from './routes/registerSupplierRoutes';
 import authRoutes from './routes/auth.routes';
 import filterSuppliersRoutes from "./routes/filterSuppliersRoutes";
 import guestUploadRoutes from './routes/guestUploadRoutes';
 import rsvpRoutes from './routes/rsvpRoutes';
+import ratingRoutes from './routes/ratingRoutes';
+import supplierRoutes from './routes/supplierRoutes';
+
+
 
 const app = express();
 
 app.use(express.json());
+app.use(express.urlencoded({
+  extended: true,
+  parameterLimit: 10000,
+  limit: '10mb',
+}));
+
+app.use((req, res, next) => {
+  if (req.is('application/x-www-form-urlencoded') && typeof req.body === 'string') {
+    req.body = qs.parse(req.body);
+  }
+  next();
+});
 
 app.use('/api', eventRequestRoutes);
 app.use('/api', userRoutes);
@@ -27,10 +43,12 @@ app.use('/api', photographerRoutes);
 app.use('/api', locationRoutes);
 app.use('/api', cateringRoutes);
 app.use('/api', speakerRoutes);
-app.use('/api', registerSupplierRoute);
 app.use('/api/auth', authRoutes);
 app.use("/api", filterSuppliersRoutes);
 app.use('/api/guest-upload', guestUploadRoutes);
 app.use('/rsvp', rsvpRoutes);
+app.use('/api', ratingRoutes);
+app.use('/api', supplierRoutes);
+
 
 export default app;

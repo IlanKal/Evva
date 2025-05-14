@@ -9,6 +9,7 @@ export interface GuestAttributes {
   phone?: string;
   email: string;
   rsvp?: RsvpStatus;
+  has_rated?: boolean;
 }
 
 export type GuestCreationAttributes = Optional<GuestAttributes, 'guest_id' | 'phone' | 'rsvp'>;
@@ -20,6 +21,7 @@ class Guest extends Model<GuestAttributes, GuestCreationAttributes> implements G
   public email!: string;
   public phone?: string;
   public rsvp?: RsvpStatus;
+  public has_rated?: boolean;
 }
 
 Guest.init(
@@ -49,6 +51,11 @@ Guest.init(
       validate: {
         isIn: [['PENDING', 'APPROVED', 'REJECTED']],
       },
+    },
+    has_rated: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
     },
   },
   {
