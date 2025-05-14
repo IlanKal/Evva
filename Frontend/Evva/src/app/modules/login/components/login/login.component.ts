@@ -6,10 +6,13 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormField, MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { AuthService } from '../../../../services/auth.service';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule,
+  imports: [
+    ReactiveFormsModule,
     CommonModule,
     MatFormField,
     MatInputModule,
@@ -22,10 +25,9 @@ import { AuthService } from '../../../../services/auth.service';
 })
 export class LoginComponent {
   loginForm: FormGroup;
-  registerRole: 'supplier' | 'client' | null = null;
 
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
@@ -64,11 +66,7 @@ export class LoginComponent {
   }
 
   onRegister() {
-    if (this.registerRole) {
-      console.log('Navigating to register as', this.registerRole);
-      // לדוגמה - נווט למסך הרשמה לפי סוג המשתמש
-      // this.router.navigate([`/register/${this.registerRole}`]);
-    }
+    this.router.navigate([`/register`]);
   }
 
 }

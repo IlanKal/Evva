@@ -21,5 +21,5 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./modules/my-events/my-events.component').then((m) => m.MyEventsComponent),
   },
-  { path: '', redirectTo: 'register', pathMatch: 'full' },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
 ];
