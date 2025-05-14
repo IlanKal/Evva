@@ -3,7 +3,6 @@ import { EventRequest, Event } from "../models";
 import { filterRelevantSuppliers } from "../services/filterSuppliersService";
 import { prepareSuppliersForOptimization } from "../services/prepareSuppliersForOptimizationService";
 import { optimizeSuppliers } from "../services/optimizeSuppliersService";
-//import { saveRecommendedSuppliers } from "../services/saveRecommendedSuppliersService"; // אם חילקת את זה
 
 export const createEventFromRequest = async (
   req: Request,

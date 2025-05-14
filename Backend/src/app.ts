@@ -15,6 +15,7 @@ import rsvpRoutes from './routes/rsvpRoutes';
 import ratingRoutes from './routes/ratingRoutes';
 import supplierRoutes from './routes/supplierRoutes';
 import createEventFromRequest from "./routes/createEventFromRequest";
+
 const app = express();
 
 app.use(express.json());
