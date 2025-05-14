@@ -200,9 +200,6 @@ export const filterRelevantSuppliers = async (requestId: number) => {
     });
     result.speakers = speakers;
   }
-<<<<<<<< HEAD:Backend/src/services/filterSuppliersService.ts
-  
-========
->>>>>>>> 421d42725a5e36001f9da842d6a2443f395e33ea:Backend/src/services/filterSupplierService.ts
+
   return result;
 };
