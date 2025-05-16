@@ -1,5 +1,7 @@
-// src/repositories/eventRepository.ts
 import Event from "../models/event";
+import EventSupplier from '../models/EventSupplier';
+import Supplier from '../models/Supplier';
+import Guest from '../models/Guest';
 
 export const getAllEvents = async () => {
   return await Event.findAll();
@@ -24,4 +26,28 @@ export const deleteEvent = async (id: string) => {
   if (!event) return null;
   await event.destroy();
   return true;
+};
+
+export const getApprovedEventSuppliers = async (eventId: number) => {
+  return await EventSupplier.findAll({
+    where: {
+      event_id: eventId,
+      approval_status: 'APPROVED',
+    },
+  });
+};
+
+export const getSuppliersByIds = async (supplierIds: number[]) => {
+  return await Supplier.findAll({
+    where: { supplier_id: supplierIds },
+  });
+};
+
+export const getApprovedGuestsByEventId = async (eventId: number) => {
+  return await Guest.findAll({
+    where: {
+      event_id: eventId,
+      rsvp: 'APPROVED',
+    },
+  });
 };

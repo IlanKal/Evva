@@ -23,7 +23,7 @@ const supplierSchema = yup.object({
 export const registerSupplier = async (type: string, supplier: any, details: any) => {
   await supplierSchema.validate(supplier, { abortEarly: false });
 
-  const newSupplier = await supplierRepository.createSupplier(supplier);
+  const newSupplier = await supplierRepository.createSupplier({...supplier,supplier_type: type.toLowerCase(),});
   const supplier_id = newSupplier.get("supplier_id");
   await supplierRepository.createSpecificSupplier(type.toLowerCase(), { ...details, supplier_id });
 

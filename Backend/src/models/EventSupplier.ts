@@ -8,12 +8,17 @@ interface EventSupplierAttributes {
   approval_status?: RsvpStatus;
 }
 
-class EventSupplier extends Model<EventSupplierAttributes> implements EventSupplierAttributes {
+export class EventSupplier extends Model {
+  public id!: number;
   public event_id!: number;
   public supplier_id!: number;
-  public approval_status!: RsvpStatus;
+  public approval_status!: 'SUGGESTED' | 'BACKUP' | 'CHOSEN' | 'APPROVED' | 'DECLINED';
 }
-
+//'suggested' - האופציה המושלמת
+//'backup' - האלטרנטיבות
+//'chosen' - מה שהלקוח בחר
+//'approved' - הספק אישר
+//'declined' - הספק דחה
 EventSupplier.init(
   {
     event_id: {
@@ -29,7 +34,7 @@ EventSupplier.init(
       allowNull: false,
       defaultValue: 'PENDING',
       validate: {
-        isIn: [['PENDING', 'APPROVED', 'REJECTED']],
+        isIn: [['SUGGESTED', 'BACKUP', 'CHOSEN', 'APPROVED' ,'DECLINED']],
       },
     },
   },

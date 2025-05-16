@@ -25,7 +25,34 @@ export const getAllSuppliers = async () => {
 };
 
 export const getSupplierById = async (id: string) => {
-  return await Supplier.findByPk(id);
+  const supplier = await Supplier.findByPk(id);
+  if (!supplier) return null;
+
+  const type = supplier.supplier_type;
+  let specificData = null;
+
+  switch (type) {
+    case "dj":
+      specificData = await DJ.findOne({ where: { supplier_id: id } });
+      break;
+    case "photographer":
+      specificData = await Photographer.findOne({ where: { supplier_id: id } });
+      break;
+    case "speaker":
+      specificData = await Speaker.findOne({ where: { supplier_id: id } });
+      break;
+    case "catering":
+      specificData = await Catering.findOne({ where: { supplier_id: id } });
+      break;
+    case "location":
+      specificData = await Location.findOne({ where: { supplier_id: id } });
+      break;
+  }
+
+  return {
+    ...supplier.toJSON(),
+    ...(specificData?.toJSON() || {}),
+  };
 };
 
 export const updateSupplier = async (id: string, data: any) => {
