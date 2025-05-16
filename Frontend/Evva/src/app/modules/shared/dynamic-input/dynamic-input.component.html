@@ -1,0 +1,36 @@
+<div [ngSwitch]="inputType">
+
+    <!-- Text Input -->
+    <mat-form-field *ngSwitchCase="'text'" appearance="outline" style="width: 100%;">
+      <mat-label>Your answer</mat-label>
+      <input matInput [value]="model" (input)="onChange($any($event.target).value)">
+    </mat-form-field>
+  
+    <!-- Radio Buttons -->
+    <mat-radio-group *ngSwitchCase="'radio'" [value]="model" (change)="onChange($event.value)">
+      <mat-radio-button *ngFor="let option of options" [value]="option">
+        {{ option }}
+      </mat-radio-button>
+    </mat-radio-group>
+  
+    <!-- Checkboxes -->
+    <div *ngSwitchCase="'checkbox'">
+      <mat-checkbox *ngFor="let option of options"
+                    [checked]="model?.[option]"
+                    (change)="onCheckboxChange(option, $event)">
+        {{ option }}
+      </mat-checkbox>
+    </div>
+  
+    <!-- Select Dropdown -->
+    <mat-form-field *ngSwitchCase="'select'" appearance="outline" style="width: 100%;">
+      <mat-label>Select an option</mat-label>
+      <mat-select [value]="model" (selectionChange)="onChange($event.value)">
+        <mat-option *ngFor="let option of options" [value]="option">
+          {{ option }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  
+  </div>
+  
