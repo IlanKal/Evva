@@ -15,7 +15,7 @@ const transporter = nodemailer.createTransport({
 class MailService {
   static async sendRsvpEmail(guest: GuestAttributes) {
     const { full_name, email, guest_id } = guest;
-    const baseUrl = process.env.BASE_URL;
+    const baseUrl = process.env.SERVER_BASE_URL;
     const yesLink = `${baseUrl}/rsvp/${guest_id}/yes`;
     const noLink = `${baseUrl}/rsvp/${guest_id}/no`;
 
@@ -45,7 +45,7 @@ class MailService {
 
   static async sendRatingEmail(guest: GuestAttributes, suppliers: SupplierAttributes[], eventId: number) {
     const { full_name, email, guest_id } = guest;
-    const baseUrl = process.env.BASE_URL;
+    const baseUrl = process.env.CLIENT_BASE_URL;
   
     const ratingPageUrl = `${baseUrl}/rate-page/guest/${guest_id}/${eventId}`;
   
