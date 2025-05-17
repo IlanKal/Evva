@@ -1,5 +1,34 @@
-<div class="chat-layout">
-    <app-user-detail></app-user-detail>
-    <app-chat-window></app-chat-window>
+<app-header></app-header> <!-- Header שלך -->
+
+<div class="chat-wrapper">
+
+  <!-- Title & Description (כמו HelpWise) -->
+  <div class="chat-header-section">
+    <img src="assets/images/evva-avatar.png" alt="EVVA" class="chat-avatar">
+    <h2>EVVA</h2>
+    <p>Your smart event assistant. Ready to help you plan your event!</p>
   </div>
-  
+
+  <!-- Messages History -->
+  <div class="chat-messages">
+    <div *ngFor="let msg of messages" class="chat-bubble" [ngClass]="msg.from">
+      <img *ngIf="msg.from === 'bot'" src="assets/images/evva-avatar.png" class="avatar" alt="EVVA">
+      <div class="bubble-content">
+        {{ msg.text }}
+      </div>
+    </div>
+  </div>
+
+  <!-- Dynamic Input for current question -->
+  <div class="chat-input-section" *ngIf="currentStep?.inputType !== 'end'">
+
+    <app-dynamic-input [inputType]="safeInputType" [options]="currentStep.options || []" [(model)]="userAnswer">
+    </app-dynamic-input>
+
+
+
+
+    <button class="send-button" (click)="sendAnswer()">Send</button>
+  </div>
+
+</div>

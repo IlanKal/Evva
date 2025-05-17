@@ -53,6 +53,7 @@ export class LoginComponent {
       this.authService.login(loginData).subscribe({
         next: (res) => {
           console.log('Login success:', res);
+          this.router.navigate([`/my-events`]);
           // שמור טוקן, נווט הלאה וכו'
         },
         error: (err) => {

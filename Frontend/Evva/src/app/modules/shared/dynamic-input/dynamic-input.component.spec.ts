@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ChatWindowComponent } from './chat-window.component';
+import { DynamicInputComponent } from './dynamic-input.component';
 
-describe('ChatWindowComponent', () => {
-  let component: ChatWindowComponent;
-  let fixture: ComponentFixture<ChatWindowComponent>;
+describe('DynamicInputComponent', () => {
+  let component: DynamicInputComponent;
+  let fixture: ComponentFixture<DynamicInputComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ChatWindowComponent]
+      imports: [DynamicInputComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ChatWindowComponent);
+    fixture = TestBed.createComponent(DynamicInputComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
