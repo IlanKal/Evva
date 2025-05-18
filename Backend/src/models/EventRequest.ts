@@ -5,7 +5,6 @@ import { EVENT_TYPES } from "../constants/eventTypes";
 interface EventRequestAttributes {
   request_id?: number;
   user_id: number;
-  title: string;
   event_type?: string;
   event_date: string;
   budget: number;

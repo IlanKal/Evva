@@ -7,7 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { Event, EventService } from '../../services/event.service';
 import { UserStateService } from '../../services/user-state.service';
-import { IUser } from '../../models/iUser';
+import { IUser } from '../../models/IUser';
 
 @Component({
   selector: 'app-my-events',
