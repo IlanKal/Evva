@@ -2,13 +2,30 @@
     display: flex;
     gap: 24px;
     align-items: flex-start;
-  }
-  
-  app-milestone {
+}
+
+app-milestone {
     width: 250px;
-  }
-  
-  app-step-results {
+}
+
+.content {
     flex: 1;
-  }
-  
+}
+
+.static-step {
+    padding: 16px;
+}
+
+.guest-list-input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-family: inherit;
+    font-size: 14px;
+    margin: 12px 0;
+}
+
+.textarea-full {
+    width: 100%;
+}

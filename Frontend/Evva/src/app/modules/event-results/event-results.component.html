@@ -1,16 +1,56 @@
 <div class="layout">
+    <!-- אבני דרך בצד -->
     <app-milestone
       [milestones]="milestones"
       [activeCategory]="activeCategory"
       (milestoneClicked)="onMilestoneClick($event)"
     ></app-milestone>
   
-    <app-step-results
-      *ngIf="suppliersMap[activeCategory]"
-      [category]="activeCategory"
-      [suppliers]="suppliersMap[activeCategory]"
-      (supplierChosen)="onChooseSupplier($event)"
-      (rejectedAll)="onRejectAll()"
-    ></app-step-results>
+    <!-- תוכן ראשי לפי סוג אבן דרך -->
+    <div class="content" [ngSwitch]="activeCategory">
+  
+      <!-- 🗓 תאריך -->
+      <div *ngSwitchCase="'date'" class="static-step">
+        <h2>Event Date</h2>
+  
+        <p *ngIf="eventDate">
+          Current date: <strong>{{ eventDate | date:'longDate' }}</strong>
+        </p>
+  
+        <mat-form-field appearance="outline">
+          <mat-label>Change Date</mat-label>
+          <input matInput [matDatepicker]="picker" [value]="eventDate" (dateChange)="onDateChosen($event.value)">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </div>
+  
+      <!-- 👥 רשימת אורחים -->
+      <div *ngSwitchCase="'guests'" class="static-step">
+        <h2>Guest List</h2>
+  
+        <p *ngIf="guestList.length">
+          Current Guests ({{ guestList.length }}):<br>
+          <small>{{ guestList.join(', ') }}</small>
+        </p>
+  
+        <mat-form-field appearance="outline" class="textarea-full">
+          <mat-label>Add More Guests (one per line)</mat-label>
+          <textarea matInput rows="8" [(ngModel)]="guestInput"></textarea>
+        </mat-form-field>
+  
+        <button mat-raised-button color="primary" (click)="onGuestListSubmit()">Add Guests</button>
+      </div>
+  
+      <!-- 🧩 ספקים -->
+      <app-step-results
+        *ngSwitchDefault
+        [category]="activeCategory"
+        [suppliers]="suppliersMap[activeCategory]"
+        (supplierChosen)="onChooseSupplier($event)"
+        (rejectedAll)="onRejectAll()"
+      ></app-step-results>
+  
+    </div>
   </div>
   
