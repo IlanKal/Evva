@@ -1,0 +1,14 @@
+.layout {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+  }
+  
+  app-milestone {
+    width: 250px;
+  }
+  
+  app-step-results {
+    flex: 1;
+  }
+  
