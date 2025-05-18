@@ -1,38 +1,33 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Observable, map } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface Event {
   event_id: number;
   title: string;
+  type: string;
   date: string;
   status: string;
-  imageUrl?: string;
 }
 
 @Injectable({
   providedIn: 'root'
 })
-export class MockEventService {
-  constructor() {}
+export class EventService {
+  constructor(private http: HttpClient) {}
 
-  getUserEvents(): Observable<Event[]> {
-    const mockEvents: Event[] = [
-      {
-        event_id: 101,
-        title: 'Company Annual Meeting',
-        date: '2025-06-20',
-        status: 'Scheduled',
-        imageUrl: 'assets/images/event1.jpg'
-      },
-      {
-        event_id: 102,
-        title: 'Product Launch Party',
-        date: '2025-07-10',
-        status: 'Planning',
-        imageUrl: 'assets/images/event2.jpg'
-      }
-    ];
-
-    return of(mockEvents);
+  getUserEvents(userId: number): Observable<Event[]> {
+    return this.http.get<any[]>(`${environment.apiUrl}/api/events/user/${userId}`).pipe(
+      map(events =>
+        events.map(event => ({
+          event_id: event.event_id,
+          title: event.title,
+          type: event.event_type,
+          date: event.event_date,
+          status: event.status,
+        }))
+      )
+    );
   }
 }
