@@ -17,7 +17,7 @@ interface LoginResponse {
   accessToken: string;
   refreshToken: string;
   email: string;
-  name: string;
+  full_name: string;
   phone: string;
 }
 
@@ -40,7 +40,7 @@ export class AuthService {
         this.userState.setUser({
           user_id: res.id,
           email: res.email,
-          name: res.name,
+          name: res.full_name,
           phone: res.phone,
         });
       })
