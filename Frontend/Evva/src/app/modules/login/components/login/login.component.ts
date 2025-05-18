@@ -25,13 +25,14 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent {
   loginForm: FormGroup;
-
+  loginError = 'Check the account information you entered and try again.';
 
   constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      role: ['', Validators.required] // <--- new control
+      type: ['', Validators.required], // <--- new control
+      rememberMe: [true] // ← הוספה נדרשת
     });
   }
 
@@ -43,23 +44,31 @@ export class LoginComponent {
     return this.loginForm.get('password');
   }
 
-  get role() {
-    return this.loginForm.get('role');
+  get type() {
+    return this.loginForm.get('type');
   }
+
+  get rememberMe() {
+    return this.loginForm.get('rememberMe');
+  }
+  
 
   onSubmit() {
     if (this.loginForm.valid) {
       const loginData = this.loginForm.value;
       this.authService.login(loginData).subscribe({
         next: (res) => {
+          localStorage.setItem('accessToken', res.accessToken);
+          localStorage.setItem('refreshToken', res.refreshToken);
+          localStorage.setItem('userType', res.type);
+          localStorage.setItem('userId', res.id.toString());
           console.log('Login success:', res);
           this.router.navigate([`/my-events`]);
-          // שמור טוקן, נווט הלאה וכו'
         },
         error: (err) => {
           console.error('Login failed:', err);
-          // הצג הודעת שגיאה למשתמש
-        }
+          this.loginError = err?.error?.message || 'Login failed';
+          console.error('Login failed:', err);        }
       });
       console.log(this.loginForm.value);
       // Perform login logic here

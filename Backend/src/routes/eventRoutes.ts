@@ -9,5 +9,7 @@ router.post("/events", eventController.createEvent);
 router.put("/events/:id", eventController.updateEvent);
 router.delete("/events/:id", eventController.deleteEvent);
 router.post("/events/finish", eventController.finishEvent);
+router.get('/events/user/:userId', eventController.getEventsByUserId);
+
 
 export default router;

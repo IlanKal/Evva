@@ -22,6 +22,10 @@ export const getAllEvents = async () => {
   return await eventRepository.getAllEvents();
 };
 
+export const getEventsByUserId = async (userId: number) => {
+  return await eventRepository.getEventsByUserId(userId);
+};
+
 export const getEventById = async (id: string) => {
   return await eventRepository.getEventById(id);
 };

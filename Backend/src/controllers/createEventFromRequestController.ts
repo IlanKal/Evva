@@ -30,6 +30,9 @@ export const createEventFromRequest = async (
       budget: request.budget,
       location: request.location,
       event_request_id: request.request_id,
+      title: `Just for now!!`, 
+      status: 'PLANNING',
+      event_type: 'Conference',
     });
 
     // 3. עדכון בקשת האירוע עם ID

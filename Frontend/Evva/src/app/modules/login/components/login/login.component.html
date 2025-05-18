@@ -21,20 +21,20 @@
         <!-- <mat-error *ngIf="password.hasError('minlength')">Password must be at least 6 characters</mat-error> -->
       </mat-form-field>
 
-      <!-- New Radio Group for Role Selection -->
-      <mat-radio-group color="primary" formControlName="role" class="w-full flex flex-col baseline">
+      <!-- New Radio Group for type Selection -->
+      <mat-radio-group color="primary" formControlName="type" class="w-full flex flex-col baseline">
         <label class="mb-2 font-medium text-gray-700">Login as:</label>
 
         <mat-radio-button class="mb-2" value="supplier">
           Supplier
         </mat-radio-button>
 
-        <mat-radio-button class="mb-4" value="client">
+        <mat-radio-button class="mb-4" value="user">
           Client
         </mat-radio-button>
         <!-- 
-        <mat-error *ngIf="role.hasError('required')">
-          Please select your role
+        <mat-error *ngIf="type.hasError('required')">
+          Please select your type
         </mat-error> -->
       </mat-radio-group>
 

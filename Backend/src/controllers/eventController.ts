@@ -10,6 +10,23 @@ export const getAllEvents = async (_req: Request, res: Response): Promise<void> 
   }
 };
 
+export const getEventsByUserId = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const userId = Number(req.params.userId);
+    if (isNaN(userId)) {
+      res.status(400).json({ error: "Invalid user ID" });
+      return;
+    }
+
+    const events = await eventService.getEventsByUserId(userId);
+    res.json(events);
+  } catch (error) {
+    console.error("Failed to fetch user events:", error);
+    res.status(500).json({ error: "Failed to fetch user events" });
+  }
+};
+
+
 export const getEventById = async (req: Request, res: Response): Promise<void> => {
   try {
     const event = await eventService.getEventById(req.params.id.trim());

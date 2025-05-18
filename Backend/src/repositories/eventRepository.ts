@@ -15,6 +15,12 @@ export const createEvent = async (data: any) => {
   return await Event.create(data);
 };
 
+export const getEventsByUserId = async (userId: number) => {
+  return await Event.findAll({
+    where: { user_id: userId },
+  });
+};
+
 export const updateEvent = async (id: string, data: any) => {
   const event = await Event.findByPk(id.trim());
   if (!event) return null;

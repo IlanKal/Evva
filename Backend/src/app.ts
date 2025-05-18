@@ -1,5 +1,6 @@
 import express from 'express';
 import qs from 'qs';
+import cors from 'cors';
 import eventRequestRoutes from './routes/eventRequestRoutes';
 import userRoutes from './routes/userRoutes';
 import eventRoutes from './routes/eventRoutes';
@@ -24,6 +25,12 @@ app.use(express.urlencoded({
   parameterLimit: 10000,
   limit: '10mb',
 }));
+
+app.use(cors({
+  origin: process.env.CLIENT_BASE_URL,
+  credentials: true
+}));
+
 
 app.use((req, res, next) => {
   if (req.is('application/x-www-form-urlencoded') && typeof req.body === 'string') {
