@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
+import { environment } from '../../environments/environment';
 
-interface Event {
+export interface Event {
   event_id: number;
   title: string;
+  type: string;
   date: string;
   status: string;
-  imageUrl?: string;
 }
 
 @Injectable({
@@ -16,7 +17,17 @@ interface Event {
 export class EventService {
   constructor(private http: HttpClient) {}
 
-  getUserEvents(): Observable<Event[]> {
-    return this.http.get<Event[]>('/api/events/my');
-  }
+  getUserEvents(userId: number): Observable<Event[]> {
+    return this.http.get<any[]>(`${environment.apiUrl}/api/events/user/${userId}`).pipe(
+      map((events: any[]): Event[] =>
+        events.map((event: any): Event => ({
+          event_id: event.event_id,
+          title: event.title,
+          type: event.event_type,
+          date: event.event_date,
+          status: event.status,
+        }))
+      )
+    );
+  }  
 }

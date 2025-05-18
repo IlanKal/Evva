@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
+import { UserStateService } from './user-state.service';
 
 interface LoginPayload {
   email: string;
@@ -10,15 +11,54 @@ interface LoginPayload {
   rememberMe: boolean;
 }
 
+interface LoginResponse {
+  id: number;
+  type: 'user' | 'supplier';
+  accessToken: string;
+  refreshToken: string;
+  email: string;
+  name: string;
+  phone: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private baseUrl = `${environment.apiUrl}/api/auth`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private userState: UserStateService) { }
 
-  login(payload: LoginPayload): Observable<any> {
-    return this.http.post(`${this.baseUrl}/login`, payload);
+  login(payload: LoginPayload): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(`${this.baseUrl}/login`, payload).pipe(
+      tap((res) => {
+        // Save tokens in localStorage
+        localStorage.setItem('accessToken', res.accessToken);
+        localStorage.setItem('refreshToken', res.refreshToken);
+
+        // Update in-memory user state
+        this.userState.setUser({
+          user_id: res.id,
+          email: res.email,
+          name: res.name,
+          phone: res.phone,
+        });
+      })
+    );
+  }
+
+  logout() {
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    this.userState.clearUser();
+  }
+
+  getAccessToken(): string | null {
+    return localStorage.getItem('accessToken');
+  }
+
+  refreshAccessToken(): Observable<{ accessToken: string }> {
+    const refreshToken = localStorage.getItem('refreshToken');
+    return this.http.post<{ accessToken: string }>(`${this.baseUrl}/refresh`, { refreshToken });
   }
 }

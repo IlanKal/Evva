@@ -51,29 +51,17 @@ export class LoginComponent {
   get rememberMe() {
     return this.loginForm.get('rememberMe');
   }
-  
+
 
   onSubmit() {
     if (this.loginForm.valid) {
-      const loginData = this.loginForm.value;
-      this.authService.login(loginData).subscribe({
-        next: (res) => {
-          localStorage.setItem('accessToken', res.accessToken);
-          localStorage.setItem('refreshToken', res.refreshToken);
-          localStorage.setItem('userType', res.type);
-          localStorage.setItem('userId', res.id.toString());
-          console.log('Login success:', res);
-          this.router.navigate([`/my-events`]);
-        },
-        error: (err) => {
-          console.error('Login failed:', err);
-          this.loginError = err?.error?.message || 'Login failed';
-          console.error('Login failed:', err);        }
+      this.authService.login(this.loginForm.value).subscribe({
+        next: () => this.router.navigate(['/my-events']),
+        error: (err) => this.loginError = err.error.message || 'Login failed',
       });
-      console.log(this.loginForm.value);
-      // Perform login logic here
     }
   }
+
 
   onRegister() {
     this.router.navigate([`/register`]);
