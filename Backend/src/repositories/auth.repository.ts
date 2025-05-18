@@ -13,7 +13,10 @@ type AuthUser = {
   id: number;
   email: string;
   password: string;
+  full_name: string;
+  phone: string;
 };
+
 
 export const findUserByEmailAndType = async (
   email: string,
@@ -22,16 +25,16 @@ export const findUserByEmailAndType = async (
   if (type === 'user') {
     const user = await User.findOne({
       where: { email },
-      attributes: [['user_id', 'id'], 'email', 'password'],
+      attributes: [['user_id', 'id'], 'email', 'password', 'full_name', 'phone'],
     });
 
-    return user ? user.get({ plain: true }) as unknown as AuthUser : null;
+    return user ? user.get ({ plain: true }) as AuthUser : null;
   }
 
   if (type === 'supplier') {
     const supplier = await Supplier.findOne({
       where: { email },
-      attributes: [['supplier_id', 'id'], 'email', 'password'],
+      attributes: [['supplier_id', 'id'], 'email', 'password', ['name', 'full_name'], ['contact_info', 'phone']],
     });
 
     return supplier ? supplier.get({ plain: true }) as unknown as AuthUser : null;
