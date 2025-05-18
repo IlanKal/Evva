@@ -1,0 +1,11 @@
+<mat-nav-list>
+    <mat-list-item *ngFor="let m of milestones" (click)="select(m.category)">
+      <mat-icon [style.color]="getColor(m.status)">
+        {{ getIcon(m.status) }}
+      </mat-icon>
+      <span [ngStyle]="{ fontWeight: m.category === activeCategory ? 'bold' : 'normal' }">
+        {{ m.category | titlecase }}
+      </span>
+    </mat-list-item>
+  </mat-nav-list>
+  

@@ -1,0 +1,16 @@
+<div class="layout">
+    <app-milestone
+      [milestones]="milestones"
+      [activeCategory]="activeCategory"
+      (milestoneClicked)="onMilestoneClick($event)"
+    ></app-milestone>
+  
+    <app-step-results
+      *ngIf="suppliersMap[activeCategory]"
+      [category]="activeCategory"
+      [suppliers]="suppliersMap[activeCategory]"
+      (supplierChosen)="onChooseSupplier($event)"
+      (rejectedAll)="onRejectAll()"
+    ></app-step-results>
+  </div>
+  

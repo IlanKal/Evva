@@ -1,0 +1,25 @@
+.category-title {
+    font-size: 24px;
+    margin-bottom: 16px;
+  }
+  
+  .main-supplier-card {
+    margin-bottom: 24px;
+  }
+  
+  .alternative-suppliers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 16px;
+  }
+  
+  .card {
+    width: 220px;
+  }
+  
+  .price {
+    font-weight: bold;
+    color: #3f51b5;
+  }
+  

@@ -23,4 +23,8 @@ export class ChatMockService {
     submitAnswer(answer: any) {
         this.currentStep++;
     }
+    getCurrentEventId(): number {
+        return 42; // לדוגמה בלבד — תחליף בהחזרה דינמית בעתיד
+    }
+
 }
