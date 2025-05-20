@@ -1,11 +1,11 @@
 import { DataTypes, Model } from "sequelize";
 import { sequelize } from "../config/db";
-import { EVENT_TYPES } from "../constants/eventTypes";
+import { EVENT_TYPES, EventType } from "../constants/eventTypes";
 
 interface EventRequestAttributes {
   request_id?: number;
   user_id: number;
-  event_type?: string;
+  event_type?: EventType;
   event_date: string;
   budget: number;
   guest_count: number;
@@ -18,14 +18,17 @@ interface EventRequestAttributes {
   lecturer_preferences?: object;
 
   additional_notes?: string;
-  status?: "draft" | "finalized" ;
   event_id?: number;
+  title?: string;
+  company_name?: string;
+  event_start_time?: string; // TIME in string format
+  event_duration_hours?: number; // float value (REAL)
 }
 
 class EventRequest extends Model<EventRequestAttributes> implements EventRequestAttributes {
   public request_id!: number;
   public user_id!: number;
-  public event_type?: string;
+  public event_type?: EventType;
   public event_date!: string;
   public budget!: number;
   public guest_count!: number;
@@ -36,9 +39,13 @@ class EventRequest extends Model<EventRequestAttributes> implements EventRequest
   public dj_preferences?: object;
   public location_preferences?: object;
   public lecturer_preferences?: object;
+
   public additional_notes?: string;
-  public status?: "draft" | "finalized" ;
   public event_id?: number;
+  public title?: string;
+  public company_name?: string;
+  public event_start_time?: string;
+  public event_duration_hours?: number;
 }
 
 EventRequest.init(
@@ -54,10 +61,10 @@ EventRequest.init(
     },
     event_type: {
       type: DataTypes.STRING,
-      allowNull:true,
-      validate:{ 
+      allowNull: true,
+      validate: {
         isIn: [EVENT_TYPES as unknown as string[]],
-      }
+      },
     },
     event_date: {
       type: DataTypes.DATEONLY,
@@ -96,25 +103,34 @@ EventRequest.init(
     },
     additional_notes: {
       type: DataTypes.TEXT,
-    },
-    status: {
-      type: DataTypes.STRING,
       allowNull: true,
-      validate: {
-        isIn: [['draft', 'finalized']],
-      },
     },
     event_id: {
       type: DataTypes.INTEGER,
       allowNull: true,
-    }
+    },
+    title: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    company_name: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    event_start_time: {
+      type: DataTypes.TIME,
+      allowNull: true,
+    },
+    event_duration_hours: {
+      type: DataTypes.REAL,
+      allowNull: true,
+    },
   },
   {
     sequelize,
     modelName: "EventRequest",
     tableName: "event_requests",
     timestamps: false,
-
   }
 );
 

@@ -1,7 +1,12 @@
 import { v4 as uuidv4 } from 'uuid';
 import EventRequestRepository from '../repositories/EventRequestRepository';
+import { estimateMinimumBudget } from '../utils/budgetEstimator';
+import { EVENT_TYPES } from '../constants/eventTypes';
+import { REGIONS } from '../constants/regions';
+import { MUSIC_STYLES } from '../constants/musicStyles';
 
-export type QuestionType = 'text' | 'number' | 'date' | 'time' | 'yes_no' | 'multiple_choice' | 'message';
+
+export type QuestionType = 'text' | 'number' | 'date' | 'time' | 'yes_no' | 'multiple_choice' | 'single_choice' | 'message';
 
 export interface ConversationQuestion {
   id: string;
@@ -16,8 +21,13 @@ export interface ConversationQuestion {
 
 const conversationScript: ConversationQuestion[] = [
   {
+    id: 'title',
+    questionText: "Hello! I'm EVVA, here to assist with planning your corporate event. Let's start with a few quick questions!\n  What is the name of the event?",
+    type: 'text',
+  },  
+  {
     id: 'companyName',
-    questionText: "Hello! I'm EVVA, here to assist with planning your corporate event. Let's start with a few quick questions\nWhat is your company's name?",
+    questionText: "What is your company's name?",
     type: 'text',
   },
   {
@@ -43,28 +53,19 @@ const conversationScript: ConversationQuestion[] = [
   {
     id: 'eventType',
     questionText: 'What type of event are you planning?',
-    type: 'multiple_choice',
-    options: ['conference', 'Seminar', 'Corporate event', 'Product launch', 'Customer event'],
+    type: 'single_choice',
+    options: [...EVENT_TYPES],
   },
   {
-    id: 'eventBudget',
-    questionText: 'What is the total event budget?',
-    type: 'number',
+    id: 'location',
+    questionText: 'In which area would you like to hold the event?',
+    type: 'single_choice',
+    options: [...REGIONS],
   },
   {
     id: 'needVenue',
     questionText: 'Will you need help finding a venue?',
     type: 'yes_no',
-  },
-  {
-    id: 'venueArea',
-    questionText: 'In which area would you like to hold the event?',
-    type: 'multiple_choice',
-    options: ['Center', 'South', 'North'],
-    dependsOn: {
-      questionId: 'needVenue',
-      expectedAnswer: true,
-    },
   },
   {
     id: 'venueParking',
@@ -157,12 +158,27 @@ const conversationScript: ConversationQuestion[] = [
     id: 'djMusicGenres',
     questionText: 'Which music genres would you like?',
     type: 'multiple_choice',
-    options: ['Pop', 'Rock', 'Jazz', 'Electronic', 'Classical', 'Hip-hop', 'Other'],
+    options: [...MUSIC_STYLES],
     dependsOn: {
       questionId: 'needDJ',
       expectedAnswer: true,
     },
   },
+  {
+    id: 'needSpeaker',
+    questionText: 'Will you need a speaker for the event?',
+    type: 'yes_no',
+  },
+  {
+    id: 'eventBudget',
+    questionText: 'What is the total event budget?',
+    type: 'number',
+  },
+  {
+    id: 'additional_notes',
+    questionText: 'Any additional notes or special requests?',
+    type: 'text',
+  },  
   {
     id: 'endMessage',
     questionText: "EVVA: Thank you for sharing all the details! I'm starting the search for the best suppliers for your event and will get back to you very soon with great options.",
@@ -198,18 +214,50 @@ class EventConversationService {
         let inputVal = answer[answerKey];
         const originalQuestion = conversationScript.find(q => q.id === answerKey);
 
-        if (originalQuestion?.type === 'yes_no' && typeof inputVal === 'string') {
+        if (!originalQuestion) {
+          return {
+            conversationId,
+            completed: false,
+            error: 'Unknown question. Please try again.',
+          };
+        }
+
+        if (originalQuestion.type === 'yes_no' && typeof inputVal === 'string') {
           const lower = inputVal.trim().toLowerCase();
           if (lower === 'true') inputVal = true;
           else if (lower === 'false') inputVal = false;
         }
 
-        const isValid = originalQuestion ? this.validateAnswer(originalQuestion, inputVal) : true;
+        if (answerKey === 'eventBudget') {
+          const minBudget = await estimateMinimumBudget(this.conversations[conversationId].answers);
+          if (Number(inputVal) < minBudget) {
+            return {
+              conversationId,
+              completed: false,
+              question: originalQuestion,
+              error: `The minimum required budget based on your selections is ${minBudget}₪. Please enter a higher amount.`,
+            };
+          }
+        }
+
+        const isValid = this.validateAnswer(originalQuestion, inputVal);
         if (!isValid) {
+          const errorMessages = [
+            "Hmm... that didn’t go through 😅 Let’s try again.",
+            "Oops! That answer doesn’t look quite right 🤔 Give it another shot.",
+            "I couldn’t process that one, Mind trying again?",
+            "Something’s off with that response 😕 Let’s fix it together.",
+            "Looks like that wasn’t what I expected 😅 Can you rephrase it?",
+          ];
+          const randomError = errorMessages[Math.floor(Math.random() * errorMessages.length)];
+
           return {
             conversationId,
             completed: false,
-            question: originalQuestion,
+            question: {
+              ...originalQuestion,
+              questionText: `${randomError}\n${originalQuestion.questionText}`,
+            },
             error: 'Invalid answer. Please try again.',
           };
         }
@@ -221,6 +269,22 @@ class EventConversationService {
       }
 
       const next = this.findNextQuestion(conversationId);
+
+      if (next?.id === 'eventBudget') {
+        const minBudget = await estimateMinimumBudget(this.conversations[conversationId].answers);
+        next.questionText = `What is the total event budget? (Note: based on your selections, the minimum required is ${minBudget}₪)`;
+
+        return {
+          conversationId,
+          completed: false,
+          question: {
+            ...next,
+            meta: {
+              minBudget,
+            },
+          },
+        };
+      }
 
       if (next?.id === 'endMessage') {
         const requestId = await this.finalizeEventRequest(conversationId);
@@ -243,16 +307,36 @@ class EventConversationService {
     switch (question.type) {
       case 'number':
         return typeof value === 'number' && !isNaN(value);
+
       case 'yes_no':
         return typeof value === 'boolean';
-      case 'multiple_choice':
-        return question.options?.includes(value) ?? false;
+
+      case 'single_choice':
+        return typeof value === 'string' && (question.options?.includes(value) ?? false);
+
+      case 'multiple_choice': {
+        let values: string[] = [];
+
+        if (typeof value === 'string') {
+          values = value.split(',').map(v => v.trim());
+        } else if (Array.isArray(value)) {
+          values = value;
+        } else {
+          return false;
+        }
+
+        return values.every(v => question.options?.includes(v));
+      }
+
       case 'text':
         return typeof value === 'string' && value.trim().length > 0;
+
       case 'date':
         return /^\d{4}-\d{2}-\d{2}$/.test(value);
+
       case 'time':
         return /^\d{2}:\d{2}$/.test(value);
+
       default:
         return true;
     }
@@ -282,9 +366,14 @@ class EventConversationService {
       event_date: answers['eventDate'],
       budget: answers['eventBudget'],
       guest_count: answers['guestCount'],
+      title: answers['title'],
+      company_name: answers['companyName'],
+      event_start_time: answers['eventStartTime'],
+      event_duration_hours: answers['eventDurationHours'],
+      location: answers['location'], 
       location_preferences: answers['needVenue']
         ? {
-            area: answers['venueArea'],
+            area: answers['location'],
             parking: answers['venueParking'],
           }
         : undefined,
@@ -296,20 +385,24 @@ class EventConversationService {
             gluten_free: answers['cateringGlutenFree'],
           }
         : undefined,
-      photographer_preferences: answers['needPhotography']
+        photographer_preferences: answers['needPhotography']
         ? {
-            magnetic_prints: answers['photoMagneticPrints'],
-            regular_photos: answers['photoRegular'],
-            video_recording: answers['photoVideoRecording'],
+            has_magnets: answers['photoMagneticPrints'],
+            has_stills: answers['photoRegular'],
+            has_video: answers['photoVideoRecording'],
           }
-        : undefined,
-      dj_preferences: answers['needDJ']
+        : undefined,      
+        dj_preferences: answers['needDJ']
         ? {
-            genres: answers['djMusicGenres'],
+            music_styles: Array.isArray(answers['djMusicGenres'])
+              ? answers['djMusicGenres']
+              : typeof answers['djMusicGenres'] === 'string'
+              ? answers['djMusicGenres'].split(',').map((s: string) => s.trim())
+              : [],
           }
-        : undefined,
+        : undefined,      
+      lecturer_preferences: answers['needSpeaker'] ? { required: true } : undefined,
       additional_notes: answers['additional_notes'] || null,
-      status: 'finalized',
     });
 
     return eventRequest.request_id;

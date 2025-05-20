@@ -1,20 +1,25 @@
 import EventRequest from '../models/EventRequest';
+import { EventType } from '../constants/eventTypes';
 
 interface CreateEventRequestData {
   user_id: number;
-  event_type: 'conference' | 'Seminar' | 'Corporate event' | 'Product launch' | 'Customer event';
+  event_type: EventType;
   event_date: string;
   budget: number;
   guest_count: number;
+  title?: string;
+  company_name?: string;
+  event_start_time?: string;
+  event_duration_hours?: number;
   location?: string;
   catering_preferences?: object;
   photographer_preferences?: object;
   dj_preferences?: object;
   location_preferences?: object;
   lecturer_preferences?: object;
-  additional_notes: string;
-  status: 'draft' | 'finalized';
+  additional_notes?: string;
 }
+
 
 class EventRequestRepository {
   
