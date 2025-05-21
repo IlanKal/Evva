@@ -6,7 +6,7 @@ import { REGIONS } from '../constants/regions';
 import { MUSIC_STYLES } from '../constants/musicStyles';
 
 
-export type QuestionType = 'text' | 'number' | 'date' | 'time' | 'yes_no' | 'multiple_choice' | 'single_choice' | 'message';
+export type QuestionType = 'text' | 'number' | 'date' | 'time' | 'yes_no' | 'multiple_choice' | 'single_choice' | 'end';
 
 export interface ConversationQuestion {
   id: string;
@@ -18,6 +18,40 @@ export interface ConversationQuestion {
     expectedAnswer: any;
   };
 }
+
+const casualPhrases = {
+  early: [
+    "Let's move on to the next one!",
+    "Alright, here's another question.",
+    "Thanks! Let's keep going.",
+    "Great! Ready for the next?",
+    "Okay, next step coming up.",
+    "Let’s get to know more about your event.",
+    "Cool, let’s go on!",
+    "Perfect. Another quick one:",
+  ],
+  mid: [
+    "Got it! Moving on.",
+    "Perfect, let's keep going.",
+    "Noted. Let's continue.",
+    "Thanks for that. Next one!",
+    "Appreciate it! Let’s go on.",
+    "Alright, continuing with the next detail.",
+    "Great. Let’s keep rolling.",
+    "Let’s proceed to the next part.",
+  ],
+  late: [
+    "Almost there! Here's the next.",
+    "Good stuff! Let’s proceed.",
+    "Thanks! Just a few more left.",
+    "You’re doing great, next question!",
+    "We’re close to finishing up!",
+    "One last detail before we wrap up.",
+    "Let’s finish strong!",
+    "Nearly done. Just a couple more.",
+  ]
+};
+
 
 const conversationScript: ConversationQuestion[] = [
   {
@@ -182,12 +216,14 @@ const conversationScript: ConversationQuestion[] = [
   {
     id: 'endMessage',
     questionText: "EVVA: Thank you for sharing all the details! I'm starting the search for the best suppliers for your event and will get back to you very soon with great options.",
-    type: 'message',
+    type: 'end',
   },
 ];
 
 class EventConversationService {
   private static conversations: Record<string, any> = {};
+
+  
 
   static async continueConversation(input: {
     userId?: number;
@@ -297,7 +333,37 @@ class EventConversationService {
         return { completed: true, question: endMessage, requestId };
       }
 
-      return { conversationId, completed: false, question: next };
+      let lastPhrase: string | null = null;
+
+      function getRandomPhrase(stage: 'early' | 'mid' | 'late'): string {
+        const options = casualPhrases[stage];
+        const filtered = lastPhrase ? options.filter(p => p !== lastPhrase) : options;
+        const selected = filtered[Math.floor(Math.random() * filtered.length)];
+        lastPhrase = selected;
+        return selected;
+      }
+      
+      const isTitle = next.id === 'title';
+      const isEnd = next.id === 'endMessage';
+      
+      const totalQuestions = conversationScript.filter(q => q.type !== 'end' && q.id !== 'endMessage').length;
+      const answered = Object.keys(this.conversations[conversationId].answers).length;
+      const progress = answered / totalQuestions;
+      
+      let stage: 'early' | 'mid' | 'late' = 'mid';
+      if (progress < 0.3) stage = 'early';
+      else if (progress > 0.8) stage = 'late';
+      
+      const phrase = !isTitle && !isEnd ? getRandomPhrase(stage) : '';
+
+      return {
+        conversationId,
+        completed: false,
+        question: {
+          ...next,
+          questionText: phrase ? `${phrase}\n${next.questionText}` : next.questionText
+        }
+      };
     }
 
     throw new Error('Invalid conversation state');
@@ -306,7 +372,7 @@ class EventConversationService {
   private static validateAnswer(question: ConversationQuestion, value: any): boolean {
     switch (question.type) {
       case 'number':
-        return typeof value === 'number' && !isNaN(value);
+        return typeof value === 'number' && !isNaN(value) && value > 0;
 
       case 'yes_no':
         return typeof value === 'boolean';
