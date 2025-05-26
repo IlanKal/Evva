@@ -3,7 +3,7 @@ import { EventType } from '../constants/eventTypes';
 
 interface CreateEventRequestData {
   user_id: number;
-  event_type: EventType;
+  event_type?: EventType;
   event_date: string;
   budget: number;
   guest_count: number;
@@ -18,6 +18,7 @@ interface CreateEventRequestData {
   location_preferences?: object;
   lecturer_preferences?: object;
   additional_notes?: string;
+  event_id?: number;
 }
 
 
@@ -33,7 +34,10 @@ class EventRequestRepository {
   }
 
   static async update(requestId: string, data: Partial<CreateEventRequestData>): Promise<[number, EventRequest[]]> {
-    return EventRequest.update(data, { where: { request_id: requestId }, returning: true });
+    return EventRequest.update(data, {
+      where: { request_id: requestId },
+      returning: true,
+    });
   }
 
   static async delete(requestId: string): Promise<number> {

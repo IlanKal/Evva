@@ -52,6 +52,23 @@ export const getEventRequestsByUser = async (req: Request, res: Response): Promi
   }
 };
 
+export const updateEventRequest = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+    const updated = await EventRequestCrudService.update(id, req.body);
+
+    if (!updated) {
+      res.status(404).json({ message: 'Event request not found.' });
+      return;
+    }
+
+    res.status(200).json(updated);
+  } catch (error) {
+    console.error('Error updating event request:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
 export const deleteEventRequest = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
