@@ -20,6 +20,10 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
+import { HeaderComponent } from '../shared/header/header.component';
+import { IUser } from '../../models/IUser';
+import { UserStateService } from '../../services/user-state.service';
+import { GuestUploadComponent } from './guest-upload/guest-upload.component';
 
 @Component({
   selector: 'app-event-results',
@@ -37,7 +41,9 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     MatSelectModule,
     MatOptionModule,
     MatCheckbox,
-    MatSlideToggleModule],
+    MatSlideToggleModule,
+    HeaderComponent,
+    GuestUploadComponent],
   templateUrl: './event-results.component.html',
   styleUrls: ['./event-results.component.scss']
 })
@@ -49,6 +55,7 @@ export class EventResultsComponent implements OnInit {
   eventDate: Date = new Date(); // ברירת מחדל
   guestList: string[] = [];
   guestInput: string = '';
+  user!: IUser | null;
 
 
   constructor(
@@ -64,12 +71,12 @@ export class EventResultsComponent implements OnInit {
       if (requestId) {
         this.requestId = +requestId;
         this.loadOverview();
-        this.loadEventIdIfExists(); 
+        this.loadEventIdIfExists();
         this.fetchResults();
       }
     });
   }
-  
+
   overviewForm!: FormGroup;
   requestId: number = Number(localStorage.getItem('requestId'));
 
@@ -88,7 +95,7 @@ export class EventResultsComponent implements OnInit {
         }
       });
   }
-  
+
   readonly EVENT_TYPES = [
     "Conference",
     "Seminar",
@@ -284,6 +291,12 @@ export class EventResultsComponent implements OnInit {
     if (nextMilestone) {
       this.activeCategory = nextMilestone.category;
     }
+  }
+
+  onGuestsConfirmed(guests: string[]) {
+    this.guestList = guests;
+    this.updateMilestoneStatus('guests', 'approved');
+    this.moveToNextMilestone();
   }
 
 }

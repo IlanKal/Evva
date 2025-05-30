@@ -1,11 +1,20 @@
+:host {
+    height: 100%;
+    display: block;
+}
+
 .layout {
     display: flex;
     gap: 24px;
     align-items: flex-start;
+    height: calc(100% - 75px);
 }
 
 app-milestone {
     width: 250px;
+    height: 100%;
+    box-shadow: 1px 4px 10px #e0e0e0;
+    padding: 0px 20px;
 }
 
 .content {
@@ -61,4 +70,17 @@ app-milestone {
     width: 250px;
     display: flex;
     height: 100vh;
+}
+
+.event-name {
+    margin-top: 20px;
+    font-family: cursive;
+    font-weight: bold;
+    color: #424242;
+}
+
+.milestone-title {
+    font-family: math;
+    color: #424242;
+    font-size: 24px;
 }

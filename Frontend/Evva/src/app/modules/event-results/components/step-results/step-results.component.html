@@ -1,36 +1,48 @@
-<h2 class="category-title">Top {{ category }} Recommendation</h2>
+<div *ngIf="suppliers.length > 0" class="step-results-container">
+  <!-- אזור הבחירה -->
+  <div class="supplier-selection">
+    <!-- כרטיס ראשי -->
+    <div
+      class="main-supplier-card selectable"
+      [class.selected]="selectedSupplierId === suppliers[0].id"
+      (click)="selectSupplier(suppliers[0].id!)"
+    >
+      <img [src]="suppliers[0].imageUrl" alt="{{ suppliers[0].name }}" />
+      <h3>{{ suppliers[0].name }}</h3>
+      <p>{{ suppliers[0].city }}</p>
+      <div class="price">${{ suppliers[0].price }}</div>
+      <p class="desc">{{ suppliers[0].description }}</p>
+    </div>
 
-<mat-card *ngIf="suppliers.length" class="main-supplier-card">
-  <img mat-card-image [src]="suppliers[0].imageUrl" alt="{{suppliers[0].name}}">
-  <mat-card-content>
-    <h3>{{ suppliers[0].name }} – {{ suppliers[0].city }}</h3>
-    <p class="price">${{ suppliers[0].price }}</p>
-    <p>{{ suppliers[0].description }}</p>
-  </mat-card-content>
-  <mat-card-actions>
-    <button mat-raised-button color="primary" (click)="chooseSupplier(suppliers[0].id)">
-      I want this {{ category }}
+    <!-- ספקים נוספים -->
+    <div class="alternative-suppliers">
+      <div
+        class="mini-card selectable"
+        *ngFor="let s of suppliers.slice(1)"
+        [class.selected]="selectedSupplierId === s.id"
+        (click)="selectSupplier(s.id)"
+      >
+        <img [src]="s.imageUrl" alt="{{ s.name }}" />
+        <h4>{{ s.name }}</h4>
+        <p>{{ s.city }}</p>
+        <div class="price">${{ s.price }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- כפתורים בצד ימין -->
+  <div class="action-panel">
+    <button
+      mat-raised-button
+      color="primary"
+      [disabled]="!selectedSupplierId"
+      (click)="confirmSelection()"
+    >
+      i want this {{ category }}
     </button>
+
     <button mat-stroked-button color="accent" (click)="rejectAll()">
-      This is not what I want
+      this is not what I want
     </button>
-  </mat-card-actions>
-</mat-card>
-
-<mat-divider></mat-divider>
-
-<h4>More Options</h4>
-<div class="alternative-suppliers">
-  <mat-card *ngFor="let s of suppliers.slice(1)" class="card">
-    <img mat-card-image [src]="s.imageUrl" alt="{{s.name}}">
-    <mat-card-content>
-      <h5>{{ s.name }}</h5>
-      <p>{{ s.city }}</p>
-      <p class="price">${{ s.price }}</p>
-    </mat-card-content>
-    <mat-card-actions>
-      <button mat-button (click)="chooseSupplier(s.id)">Choose</button>
-    </mat-card-actions>
-  </mat-card>
+  </div>
 </div>
-    

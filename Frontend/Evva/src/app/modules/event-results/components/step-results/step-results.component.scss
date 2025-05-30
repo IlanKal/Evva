@@ -1,25 +1,70 @@
-.category-title {
-    font-size: 24px;
-    margin-bottom: 16px;
-  }
-  
-  .main-supplier-card {
-    margin-bottom: 24px;
-  }
-  
-  .alternative-suppliers {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-    margin-top: 16px;
-  }
-  
-  .card {
-    width: 220px;
-  }
-  
-  .price {
-    font-weight: bold;
-    color: #3f51b5;
-  }
-  
+.step-results-container {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+}
+
+.supplier-selection {
+  flex: 1;
+}
+
+.action-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: sticky;
+  top: 100px;
+}
+
+.selectable {
+  border: 2px solid transparent;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.selectable:hover {
+  border-color: #ccc;
+}
+
+.selected {
+  border-color: #3f51b5;
+  box-shadow: 0 0 8px rgba(63, 81, 181, 0.4);
+}
+
+.main-supplier-card {
+  padding: 16px;
+  background: #fafafa;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.main-supplier-card img {
+  max-width: 100%;
+  border-radius: 12px;
+  margin-bottom: 12px;
+}
+
+.alternative-suppliers {
+  display: flex;
+  gap: 16px;
+}
+
+.mini-card {
+  width: 200px;
+  padding: 12px;
+  background: #fff;
+  text-align: center;
+  border-radius: 8px;
+}
+
+.mini-card img {
+  width: 100%;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.price {
+  color: #3f51b5;
+  font-weight: 600;
+}
