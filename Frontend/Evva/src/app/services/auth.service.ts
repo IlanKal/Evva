@@ -51,7 +51,8 @@ export class AuthService {
   logout() {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
-    localStorage.removeItem('userId');
+    localStorage.removeItem('refreshToken');
+
     this.userState.clearUser();
   }
 
