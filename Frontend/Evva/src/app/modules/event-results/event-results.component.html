@@ -1,56 +1,151 @@
 <div class="layout">
-    <!-- אבני דרך בצד -->
-    <app-milestone
-      [milestones]="milestones"
-      [activeCategory]="activeCategory"
-      (milestoneClicked)="onMilestoneClick($event)"
-    ></app-milestone>
-  
-    <!-- תוכן ראשי לפי סוג אבן דרך -->
-    <div class="content" [ngSwitch]="activeCategory">
-  
-      <!-- 🗓 תאריך -->
-      <div *ngSwitchCase="'date'" class="static-step">
-        <h2>Event Date</h2>
-  
-        <p *ngIf="eventDate">
-          Current date: <strong>{{ eventDate | date:'longDate' }}</strong>
-        </p>
-  
-        <mat-form-field appearance="outline">
-          <mat-label>Change Date</mat-label>
-          <input matInput [matDatepicker]="picker" [value]="eventDate" (dateChange)="onDateChosen($event.value)">
-          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
+  <app-milestone
+    [milestones]="milestones"
+    [activeCategory]="activeCategory"
+    (milestoneClicked)="onMilestoneClick($event)"
+  ></app-milestone>
+
+  <div class="content" [ngSwitch]="activeCategory">
+
+    <!-- 📝 טופס אימות נתונים -->
+    <ng-container *ngSwitchCase="'overview'">
+      <div class="static-step" *ngIf="overviewForm">
+        <h2>Verify and Edit Event Details</h2>
+
+        <form [formGroup]="overviewForm" (ngSubmit)="onSubmitOverview()">
+
+          <!-- פרטים בסיסיים -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Company Name</mat-label>
+            <input matInput formControlName="company_name">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Event Title</mat-label>
+            <input matInput formControlName="title">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Event Type</mat-label>
+            <mat-select formControlName="event_type">
+              <mat-option *ngFor="let type of EVENT_TYPES" [value]="type">{{ type }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Event Date</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="event_date">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Start Time</mat-label>
+            <input matInput type="time" formControlName="event_start_time">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Duration (hours)</mat-label>
+            <input matInput type="number" formControlName="event_duration_hours">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Budget</mat-label>
+            <input matInput type="number" formControlName="budget">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Guest Count</mat-label>
+            <input matInput type="number" formControlName="guest_count">
+          </mat-form-field>
+
+          <!-- 🍽 Need Catering -->
+          <mat-slide-toggle formControlName="need_catering">Need Catering?</mat-slide-toggle>
+          <div formGroupName="catering_preferences" *ngIf="overviewForm.get('need_catering')?.value">
+            <label class="section-title">Catering Preferences</label>
+            <mat-checkbox formControlName="vegan">Vegan</mat-checkbox>
+            <mat-checkbox formControlName="kosher">Kosher</mat-checkbox>
+            <mat-checkbox formControlName="vegetarian">Vegetarian</mat-checkbox>
+            <mat-checkbox formControlName="gluten_free">Gluten-Free</mat-checkbox>
+          </div>
+
+          <!-- 📸 Need Photographer -->
+          <mat-slide-toggle formControlName="need_photographer">Need Photographer?</mat-slide-toggle>
+          <div formGroupName="photographer_preferences" *ngIf="overviewForm.get('need_photographer')?.value">
+            <label class="section-title">Photographer Preferences</label>
+            <mat-checkbox formControlName="has_stills">Stills</mat-checkbox>
+            <mat-checkbox formControlName="has_video">Video</mat-checkbox>
+            <mat-checkbox formControlName="has_magnets">Magnets</mat-checkbox>
+          </div>
+
+          <!-- 🎵 Need DJ -->
+          <mat-slide-toggle formControlName="need_dj">Need DJ?</mat-slide-toggle>
+          <div formGroupName="dj_preferences" *ngIf="overviewForm.get('need_dj')?.value">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Music Styles</mat-label>
+              <mat-select formControlName="music_styles" multiple>
+                <mat-option *ngFor="let style of MUSIC_STYLES" [value]="style">{{ style }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <!-- 🏢 Need Venue -->
+          <mat-slide-toggle formControlName="need_location">Need Venue?</mat-slide-toggle>
+          <div formGroupName="location_preferences" *ngIf="overviewForm.get('need_location')?.value">
+            <label class="section-title">Location Preferences</label>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Region</mat-label>
+              <mat-select formControlName="area">
+                <mat-option *ngFor="let region of REGIONS" [value]="region">{{ region }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-checkbox formControlName="parking">Parking Required</mat-checkbox>
+          </div>
+
+          <!-- 👨‍🏫 Need Lecturer -->
+          <mat-slide-toggle formControlName="need_lecturer">Need Lecturer?</mat-slide-toggle>
+          <div formGroupName="lecturer_preferences" *ngIf="overviewForm.get('need_lecturer')?.value">
+            <mat-checkbox formControlName="required">Lecturer Required</mat-checkbox>
+          </div>
+
+          <!-- 📝 הערות -->
+          <mat-form-field appearance="outline" class="textarea-full">
+            <mat-label>Additional Notes</mat-label>
+            <textarea matInput formControlName="additional_notes" rows="4"></textarea>
+          </mat-form-field>
+
+          <button mat-raised-button color="primary" type="submit" [disabled]="overviewForm.invalid">
+            Save & Continue
+          </button>
+        </form>
       </div>
-  
-      <!-- 👥 רשימת אורחים -->
-      <div *ngSwitchCase="'guests'" class="static-step">
-        <h2>Guest List</h2>
-  
-        <p *ngIf="guestList.length">
-          Current Guests ({{ guestList.length }}):<br>
-          <small>{{ guestList.join(', ') }}</small>
-        </p>
-  
-        <mat-form-field appearance="outline" class="textarea-full">
-          <mat-label>Add More Guests (one per line)</mat-label>
-          <textarea matInput rows="8" [(ngModel)]="guestInput"></textarea>
-        </mat-form-field>
-  
-        <button mat-raised-button color="primary" (click)="onGuestListSubmit()">Add Guests</button>
-      </div>
-  
-      <!-- 🧩 ספקים -->
-      <app-step-results
-        *ngSwitchDefault
-        [category]="activeCategory"
-        [suppliers]="suppliersMap[activeCategory]"
-        (supplierChosen)="onChooseSupplier($event)"
-        (rejectedAll)="onRejectAll()"
-      ></app-step-results>
-  
+    </ng-container>
+
+    <!-- 👥 רשימת אורחים -->
+    <div *ngSwitchCase="'guests'" class="static-step">
+      <h2>Guest List</h2>
+
+      <p *ngIf="guestList.length">
+        Current Guests ({{ guestList.length }}):<br>
+        <small>{{ guestList.join(', ') }}</small>
+      </p>
+
+      <mat-form-field appearance="outline" class="textarea-full">
+        <mat-label>Add More Guests (one per line)</mat-label>
+        <textarea matInput rows="8" [(ngModel)]="guestInput"></textarea>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" (click)="onGuestListSubmit()">Add Guests</button>
     </div>
+
+    <!-- 🧩 ספקים -->
+    <app-step-results
+      *ngSwitchDefault
+      [category]="activeCategory"
+      [suppliers]="suppliersMap[activeCategory]"
+      (supplierChosen)="onChooseSupplier($event)"
+      (rejectedAll)="onRejectAll()"
+    ></app-step-results>
+
   </div>
-  
+</div>

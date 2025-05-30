@@ -372,7 +372,7 @@ class EventConversationService {
   private static validateAnswer(question: ConversationQuestion, value: any): boolean {
     switch (question.type) {
       case 'number':
-        return typeof value === 'number' && !isNaN(value) && value > 0;
+        return typeof value === 'number' && !isNaN(value) && value > 0 && value < Number.MAX_VALUE ;
 
       case 'yes_no':
         return typeof value === 'boolean';

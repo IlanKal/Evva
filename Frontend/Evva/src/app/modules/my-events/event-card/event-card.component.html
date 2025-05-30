@@ -1,8 +1,8 @@
-<mat-card class="event-card">
-
+<mat-card class="event-card" (click)="navigateToDetails()">
     <mat-card-content>
-        <h3>{{ event.title }}</h3>
-        <p>{{ event.date | date:'longDate' }}</p>
-        <span class="event-status">{{ event.status }}</span>
+      <h3>{{ event.title }}</h3>
+      <p>{{ event.date | date:'longDate' }}</p>
+      <span class="event-status">{{ event.status }}</span>
     </mat-card-content>
-</mat-card>
+  </mat-card>
+  

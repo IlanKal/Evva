@@ -5,12 +5,15 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormField, MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../../../services/auth.service';
 import { Router } from '@angular/router';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 
 @Component({
   selector: 'app-login',
+  standalone: true,
   imports: [
     ReactiveFormsModule,
     CommonModule,
@@ -19,20 +22,28 @@ import { Router } from '@angular/router';
     MatButtonModule,
     MatCardModule,
     MatRadioModule,
-    FormsModule],
+    MatIconModule,
+    FormsModule,
+    MatCheckboxModule
+  ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
   loginForm: FormGroup;
-  loginError = 'Check the account information you entered and try again.';
+  loginError = '';
+  hidePassword = true;
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router
+  ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      type: ['', Validators.required], // <--- new control
-      rememberMe: [true] // ← הוספה נדרשת
+      type: ['user', Validators.required],
+      rememberMe: [false] 
     });
   }
 
@@ -48,23 +59,25 @@ export class LoginComponent {
     return this.loginForm.get('type');
   }
 
-  get rememberMe() {
-    return this.loginForm.get('rememberMe');
+  togglePasswordVisibility(): void {
+    this.hidePassword = !this.hidePassword;
   }
-
 
   onSubmit() {
     if (this.loginForm.valid) {
       this.authService.login(this.loginForm.value).subscribe({
         next: () => this.router.navigate(['/my-events']),
-        error: (err) => this.loginError = err.error.message || 'Login failed',
+        error: (err) => {
+          console.error('❌ Login error:', err);
+          this.loginError = err.status === 401
+            ? 'Invalid email or password'
+            : 'An unexpected error occurred. Please try again.';
+        }
       });
     }
   }
 
-
   onRegister() {
-    this.router.navigate([`/register`]);
+    this.router.navigate(['/register']);
   }
-
 }

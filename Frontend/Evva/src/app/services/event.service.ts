@@ -5,6 +5,7 @@ import { environment } from '../../environments/environment';
 
 export interface Event {
   event_id: number;
+  requestId: number;
   title: string;
   type: string;
   date: string;
@@ -22,6 +23,7 @@ export class EventService {
       map((events: any[]): Event[] =>
         events.map((event: any): Event => ({
           event_id: event.event_id,
+          requestId: event.event_request_id,
           title: event.title,
           type: event.event_type,
           date: event.event_date,
@@ -29,5 +31,5 @@ export class EventService {
         }))
       )
     );
-  }  
+  } 
 }

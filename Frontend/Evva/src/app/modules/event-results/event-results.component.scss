@@ -16,6 +16,33 @@ app-milestone {
     padding: 16px;
 }
 
+.full-width {
+    width: 100%;
+    margin-bottom: 12px;
+}
+  
+  .section-title {
+    display: block;
+    margin: 16px 0 8px;
+    font-weight: bold;
+}
+
+.checkbox-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+  }
+  
+  .checkbox-item {
+    margin: 4px 0;
+  }
+  
+  .section-title {
+    font-weight: bold;
+    margin-bottom: 8px;
+    display: block;
+}
+
 .guest-list-input {
     width: 100%;
     padding: 12px;

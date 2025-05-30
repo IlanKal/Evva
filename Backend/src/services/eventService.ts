@@ -30,6 +30,10 @@ export const getEventById = async (id: string) => {
   return await eventRepository.getEventById(id);
 };
 
+export const getEventByRequestId = async (requestId: number): Promise<number | null> => {
+  return await eventRepository.getEventIdByRequestId(requestId);
+};
+
 export const createEvent = async (data: any) => {
   await eventSchema.validate(data, { abortEarly: false });
   return eventRepository.createEvent(data);
