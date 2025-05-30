@@ -1,9 +1,9 @@
+<app-header [user]="user"></app-header>
 <div class="layout">
-  <app-milestone
-    [milestones]="milestones"
-    [activeCategory]="activeCategory"
-    (milestoneClicked)="onMilestoneClick($event)"
-  ></app-milestone>
+  <div class="milestones">
+    <app-milestone [milestones]="milestones" [activeCategory]="activeCategory"
+      (milestoneClicked)="onMilestoneClick($event)"></app-milestone>
+  </div>
 
   <div class="content" [ngSwitch]="activeCategory">
 
@@ -123,29 +123,12 @@
 
     <!-- 👥 רשימת אורחים -->
     <div *ngSwitchCase="'guests'" class="static-step">
-      <h2>Guest List</h2>
-
-      <p *ngIf="guestList.length">
-        Current Guests ({{ guestList.length }}):<br>
-        <small>{{ guestList.join(', ') }}</small>
-      </p>
-
-      <mat-form-field appearance="outline" class="textarea-full">
-        <mat-label>Add More Guests (one per line)</mat-label>
-        <textarea matInput rows="8" [(ngModel)]="guestInput"></textarea>
-      </mat-form-field>
-
-      <button mat-raised-button color="primary" (click)="onGuestListSubmit()">Add Guests</button>
+      <app-guest-upload (guestsConfirmed)="onGuestsConfirmed($event)"></app-guest-upload>
     </div>
 
     <!-- 🧩 ספקים -->
-    <app-step-results
-      *ngSwitchDefault
-      [category]="activeCategory"
-      [suppliers]="suppliersMap[activeCategory]"
-      (supplierChosen)="onChooseSupplier($event)"
-      (rejectedAll)="onRejectAll()"
-    ></app-step-results>
+    <app-step-results *ngSwitchDefault [category]="activeCategory" [suppliers]="suppliersMap[activeCategory]"
+      (supplierChosen)="onChooseSupplier($event)" (rejectedAll)="onRejectAll()"></app-step-results>
 
   </div>
 </div>
