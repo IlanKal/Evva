@@ -81,8 +81,7 @@ export class EventResultsComponent implements OnInit {
   requestId: number = Number(localStorage.getItem('requestId'));
 
   loadEventIdIfExists(): void {
-    this.http.get<any>(`${environment.apiUrl}/api/events/by-request/${this.requestId}`)
-      .subscribe({
+    this.eventResultsService.getEventByRequestId(this.requestId).subscribe({
         next: (data) => {
           if (data?.event_id) {
             this.eventId = data.event_id;
@@ -124,7 +123,7 @@ export class EventResultsComponent implements OnInit {
 
 
   loadOverview(): void {
-    this.http.get<any>(`${environment.apiUrl}/api/event-request/${this.requestId}`).subscribe((data) => {
+    this.eventResultsService.getEventRequestOverview(this.requestId).subscribe((data) => {
       this.overviewForm = this.fb.group({
         company_name: [data.company_name || ''],
         title: [data.title || ''],
@@ -207,7 +206,7 @@ export class EventResultsComponent implements OnInit {
       payload.lecturer_preferences = null;
     }
 
-    this.http.put(`${environment.apiUrl}/api/event-request/${this.requestId}`, payload).subscribe(() => {
+    this.eventResultsService.updateEventRequestOverview(this.requestId, payload).subscribe(() => {
       this.updateMilestoneStatus('overview', 'approved');
       this.moveToNextMilestone();
     });

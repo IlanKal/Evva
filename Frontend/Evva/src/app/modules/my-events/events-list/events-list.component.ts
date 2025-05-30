@@ -2,8 +2,7 @@ import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Event } from '../../../services/event.service';
 import { EventCardComponent } from '../event-card/event-card.component';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../../environments/environment';
+import { EventService } from '../../../services/event.service';
 
 @Component({
   selector: 'app-events-list',
@@ -15,10 +14,10 @@ import { environment } from '../../../../environments/environment';
 export class EventsListComponent {
   @Input() events: Event[] = [];
 
-  constructor(private http: HttpClient) {}
+  constructor(private eventService: EventService) {}
 
   onDeleteEvent(eventId: number): void {
-    this.http.delete(`${environment.apiUrl}/api/events/${eventId}`).subscribe({
+    this.eventService.deleteEvent(eventId).subscribe({
       next: () => {
         this.events = this.events.filter(e => e.event_id !== eventId);
       },
