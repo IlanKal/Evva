@@ -20,8 +20,8 @@ app-milestone {
     width: 100%;
     margin-bottom: 12px;
 }
-  
-  .section-title {
+
+.section-title {
     display: block;
     margin: 16px 0 8px;
     font-weight: bold;
@@ -31,13 +31,13 @@ app-milestone {
     display: flex;
     flex-direction: column;
     margin-bottom: 16px;
-  }
-  
-  .checkbox-item {
+}
+
+.checkbox-item {
     margin: 4px 0;
-  }
-  
-  .section-title {
+}
+
+.section-title {
     font-weight: bold;
     margin-bottom: 8px;
     display: block;
@@ -55,4 +55,10 @@ app-milestone {
 
 .textarea-full {
     width: 100%;
+}
+
+.milestones {
+    width: 250px;
+    display: flex;
+    height: 100vh;
 }

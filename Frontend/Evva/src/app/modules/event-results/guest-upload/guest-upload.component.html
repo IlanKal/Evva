@@ -1,0 +1,13 @@
+<h2 class="milestone-title">Guest List</h2>
+
+<div *ngIf="guestList.length">
+    Current Guests ({{ guestList.length }}):
+<ul>
+    <li *ngFor="let guest of guestList">{{ guest }}</li>
+</ul>
+</div>
+
+<label for="excelUpload" class="upload-label">Upload Excel or CSV:</label>
+<input type="file" id="excelUpload" (change)="onGuestFileSelected($event)" accept=".xlsx,.xls,.csv" />
+
+<button mat-raised-button color="primary" (click)="confirmGuests()">Confirm Guests</button>

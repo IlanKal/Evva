@@ -1,9 +1,8 @@
 <div class="layout">
-  <app-milestone
-    [milestones]="milestones"
-    [activeCategory]="activeCategory"
-    (milestoneClicked)="onMilestoneClick($event)"
-  ></app-milestone>
+  <div class="milestones">
+    <app-milestone [milestones]="milestones" [activeCategory]="activeCategory"
+      (milestoneClicked)="onMilestoneClick($event)"></app-milestone>
+  </div>
 
   <div class="content" [ngSwitch]="activeCategory">
 
@@ -139,13 +138,8 @@
     </div>
 
     <!-- 🧩 ספקים -->
-    <app-step-results
-      *ngSwitchDefault
-      [category]="activeCategory"
-      [suppliers]="suppliersMap[activeCategory]"
-      (supplierChosen)="onChooseSupplier($event)"
-      (rejectedAll)="onRejectAll()"
-    ></app-step-results>
+    <app-step-results *ngSwitchDefault [category]="activeCategory" [suppliers]="suppliersMap[activeCategory]"
+      (supplierChosen)="onChooseSupplier($event)" (rejectedAll)="onRejectAll()"></app-step-results>
 
   </div>
 </div>
