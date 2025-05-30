@@ -35,7 +35,7 @@ export class AuthService {
         // Save tokens in localStorage
         localStorage.setItem('accessToken', res.accessToken);
         localStorage.setItem('refreshToken', res.refreshToken);
-        localStorage.setItem('userId', res.id.toString())  ;
+        localStorage.setItem('userId', res.id.toString());
 
         // Update in-memory user state
         this.userState.setUser({
@@ -51,6 +51,8 @@ export class AuthService {
   logout() {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
+    localStorage.removeItem('userId');
+
     this.userState.clearUser();
   }
 
