@@ -7,7 +7,19 @@
     transform: translateY(-2px);
     box-shadow: 0 4px 10px rgba(0,0,0,0.15);
   }
+
+  .event-card {
+    position: relative;
+  }
   
+  .delete-btn {
+    position: absolute;
+    top: 8px;
+    color: aqua;
+    right: 8px;
+    z-index: 1;
+  }
+
   .event-status {
     display: inline-block;
     margin-top: 8px;
