@@ -14,16 +14,14 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-
 import { HeaderComponent } from '../shared/header/header.component';
 import { IUser } from '../../models/IUser';
-import { UserStateService } from '../../services/user-state.service';
 import { GuestUploadComponent } from './guest-upload/guest-upload.component';
+import { IGuest } from '../../models/iGuest';
 
 @Component({
   selector: 'app-event-results',
@@ -56,7 +54,6 @@ export class EventResultsComponent implements OnInit {
   guestList: string[] = [];
   guestInput: string = '';
   user!: IUser | null;
-
 
   constructor(
     private route: ActivatedRoute,
@@ -283,6 +280,7 @@ export class EventResultsComponent implements OnInit {
       this.moveToNextMilestone();
     }
   }
+
   moveToNextMilestone(): void {
     const currentIndex = this.milestones.findIndex(m => m.category === this.activeCategory);
     const nextMilestone = this.milestones[currentIndex + 1];
@@ -292,10 +290,9 @@ export class EventResultsComponent implements OnInit {
     }
   }
 
-  onGuestsConfirmed(guests: string[]) {
-    this.guestList = guests;
+  onGuestsConfirmed(guests: IGuest[]) {
+    this.guestList = guests.map(g => g.full_name);
     this.updateMilestoneStatus('guests', 'approved');
     this.moveToNextMilestone();
   }
-
 }

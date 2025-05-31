@@ -46,4 +46,9 @@ export const bulkCreateGuests = async (guests: any[]) => {
     return guestRepo.bulkCreateGuests(guests);
   };
 
+  export const getGuestsByEventId = (eventId: number) => {
+    return guestRepo.getGuestsByEventId(eventId);
+  };
+  
+
   

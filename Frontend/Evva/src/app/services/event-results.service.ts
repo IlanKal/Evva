@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { ISupplier } from '../models/ISupplier';
 import { environment } from '../../environments/environment';
+import { IGuest } from '../models/iGuest';
+
 
 export interface EventStep {
   category: string;
@@ -145,6 +147,25 @@ chooseSupplier(eventId: number, category: string, supplierId: number): Observabl
 //     });
 //   }
 
+
+// guests part
+uploadGuestsFile(eventId: number, file: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post(`${environment.apiUrl}/api/guest-upload/upload/${eventId}`, formData);
+  }
+  
+  getGuestsByEventId(eventId: number): Observable<IGuest[]> {
+    return this.http.get<IGuest[]>(`${environment.apiUrl}/api/guests/by-event/${eventId}`);
+  }
+
+  updateGuest(guestId: number, data: any): Observable<any> {
+    return this.http.put(`${environment.apiUrl}/api/guests/${guestId}`, data);
+  }
+  
+  deleteGuest(guestId: number): Observable<any> {
+    return this.http.delete(`${environment.apiUrl}/api/guests/${guestId}`);
+  }
 }
 
 
