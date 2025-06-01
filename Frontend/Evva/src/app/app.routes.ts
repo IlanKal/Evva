@@ -26,6 +26,21 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./modules/event-results/event-results.component').then(m => m.EventResultsComponent),
   },
+  {
+    path: 'rate-page/guest/:guestId/:eventId',
+    loadComponent: () =>
+      import('./modules/rate/components/rate/rate.component').then((m) => m.RateComponent),
+  },
+  {
+    path: 'rate-page/thank-you',
+    loadComponent: () =>
+      import('./modules/rate/components/thank-you/thank-you.component').then(m => m.ThankYouComponent)
+  },
+  {
+    path: 'rate-page/user/:userId/:eventId',
+    loadComponent: () =>
+      import('./modules/rate/components/rate/rate.component').then((m) => m.RateComponent),
+  },   
 
   { path: '', redirectTo: 'login', pathMatch: 'full' },
 ];
