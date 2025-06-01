@@ -1,9 +1,7 @@
 <app-header [user]="user"></app-header>
 <div class="layout">
-  <div class="milestones">
     <app-milestone [milestones]="milestones" [activeCategory]="activeCategory"
       (milestoneClicked)="onMilestoneClick($event)"></app-milestone>
-  </div>
 
   <div class="content" [ngSwitch]="activeCategory">
 
