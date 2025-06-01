@@ -31,5 +31,10 @@ export class EventService {
         }))
       )
     );
-  } 
+  }
+  
+  deleteEvent(eventId: number): Observable<void> {
+    return this.http.delete<void>(`${environment.apiUrl}/api/events/${eventId}`);
+  }
+  
 }

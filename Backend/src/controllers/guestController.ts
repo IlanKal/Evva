@@ -72,3 +72,20 @@ export const bulkCreateGuests = async (req: Request, res: Response): Promise<voi
     res.status(500).json({ error: "Failed to insert guests in bulk" });
   }
 };
+
+export const getGuestsByEventId = async (req: Request, res: Response): Promise<void> => {
+  const eventId = Number(req.params.eventId);
+
+  if (isNaN(eventId)) {
+    res.status(400).json({ error: "Invalid eventId" });
+    return;
+  }
+
+  try {
+    const guests = await guestService.getGuestsByEventId(eventId);
+    res.json(guests);
+  } catch (err) {
+    console.error("❌ Failed to get guests by event ID:", err);
+    res.status(500).json({ error: "Failed to fetch guests" });
+  }
+};

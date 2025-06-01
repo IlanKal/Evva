@@ -14,16 +14,14 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-
 import { HeaderComponent } from '../shared/header/header.component';
 import { IUser } from '../../models/IUser';
-import { UserStateService } from '../../services/user-state.service';
 import { GuestUploadComponent } from './guest-upload/guest-upload.component';
+import { IGuest } from '../../models/iGuest';
 
 @Component({
   selector: 'app-event-results',
@@ -57,7 +55,6 @@ export class EventResultsComponent implements OnInit {
   guestInput: string = '';
   user!: IUser | null;
 
-
   constructor(
     private route: ActivatedRoute,
     private eventResultsService: EventResultsService,
@@ -81,8 +78,7 @@ export class EventResultsComponent implements OnInit {
   requestId: number = Number(localStorage.getItem('requestId'));
 
   loadEventIdIfExists(): void {
-    this.http.get<any>(`${environment.apiUrl}/api/events/by-request/${this.requestId}`)
-      .subscribe({
+    this.eventResultsService.getEventByRequestId(this.requestId).subscribe({
         next: (data) => {
           if (data?.event_id) {
             this.eventId = data.event_id;
@@ -124,7 +120,7 @@ export class EventResultsComponent implements OnInit {
 
 
   loadOverview(): void {
-    this.http.get<any>(`${environment.apiUrl}/api/event-request/${this.requestId}`).subscribe((data) => {
+    this.eventResultsService.getEventRequestOverview(this.requestId).subscribe((data) => {
       this.overviewForm = this.fb.group({
         company_name: [data.company_name || ''],
         title: [data.title || ''],
@@ -207,7 +203,7 @@ export class EventResultsComponent implements OnInit {
       payload.lecturer_preferences = null;
     }
 
-    this.http.put(`${environment.apiUrl}/api/event-request/${this.requestId}`, payload).subscribe(() => {
+    this.eventResultsService.updateEventRequestOverview(this.requestId, payload).subscribe(() => {
       this.updateMilestoneStatus('overview', 'approved');
       this.moveToNextMilestone();
     });
@@ -284,6 +280,7 @@ export class EventResultsComponent implements OnInit {
       this.moveToNextMilestone();
     }
   }
+
   moveToNextMilestone(): void {
     const currentIndex = this.milestones.findIndex(m => m.category === this.activeCategory);
     const nextMilestone = this.milestones[currentIndex + 1];
@@ -293,10 +290,9 @@ export class EventResultsComponent implements OnInit {
     }
   }
 
-  onGuestsConfirmed(guests: string[]) {
-    this.guestList = guests;
+  onGuestsConfirmed(guests: IGuest[]) {
+    this.guestList = guests.map(g => g.full_name);
     this.updateMilestoneStatus('guests', 'approved');
     this.moveToNextMilestone();
   }
-
 }

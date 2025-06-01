@@ -1,4 +1,8 @@
 <mat-card class="event-card" (click)="navigateToDetails()">
+    <button mat-icon-button color="warn" (click)="confirmDelete($event)">
+      <mat-icon color="primary">delete</mat-icon>
+    </button>
+  
     <mat-card-content>
       <h3>{{ event.title }}</h3>
       <p>{{ event.date | date:'longDate' }}</p>
