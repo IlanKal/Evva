@@ -8,17 +8,18 @@
     gap: 24px;
     align-items: flex-start;
     height: calc(100% - 75px);
+    overflow: auto;
 }
 
 app-milestone {
     width: 250px;
     height: 100%;
-    box-shadow: 1px 4px 10px #e0e0e0;
     padding: 0px 20px;
 }
 
 .content {
     flex: 1;
+    box-shadow: 1px 1px 15px 5px #e0e0e0;
 }
 
 .static-step {
@@ -66,11 +67,7 @@ app-milestone {
     width: 100%;
 }
 
-.milestones {
-    width: 250px;
-    display: flex;
-    height: 100vh;
-}
+
 
 .event-name {
     margin-top: 20px;
