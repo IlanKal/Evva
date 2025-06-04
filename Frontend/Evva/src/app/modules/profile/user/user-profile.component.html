@@ -1,0 +1,73 @@
+<!-- אייקון עיפרון + כפתור חזרה -->
+<div class="top-actions">
+    <button mat-icon-button (click)="toggleEdit()" aria-label="Edit">
+      <mat-icon>{{ isEditMode ? 'close' : 'edit' }}</mat-icon>
+    </button>
+  
+    <button mat-raised-button color="primary" [routerLink]="'/my-events'">
+      Back to My Events
+    </button>
+  </div>
+  
+  <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="profile-form">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Full Name</mat-label>
+      <input matInput formControlName="full_name" [readonly]="!isEditMode" />
+    </mat-form-field>
+  
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Phone</mat-label>
+      <input matInput formControlName="phone" [readonly]="!isEditMode" />
+    </mat-form-field>
+  
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Email</mat-label>
+      <input matInput type="email" formControlName="email" [readonly]="!isEditMode" />
+    </mat-form-field>
+  
+    <div *ngIf="isEditMode">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>New Password</mat-label>
+        <input
+          matInput
+          [type]="showPassword ? 'text' : 'password'"
+          formControlName="newPassword"
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          (click)="showPassword = !showPassword"
+          [attr.aria-label]="'Toggle password visibility'"
+          [attr.aria-pressed]="showPassword"
+          type="button"
+        >
+          <mat-icon>{{ showPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+      </mat-form-field>
+  
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Confirm Password</mat-label>
+        <input
+          matInput
+          [type]="showConfirmPassword ? 'text' : 'password'"
+          formControlName="confirmPassword"
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          (click)="showConfirmPassword = !showConfirmPassword"
+          [attr.aria-label]="'Toggle confirm password visibility'"
+          [attr.aria-pressed]="showConfirmPassword"
+          type="button"
+        >
+          <mat-icon>{{ showConfirmPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+      </mat-form-field>
+  
+      <button mat-raised-button color="primary" type="submit">Save</button>
+    </div>
+  
+    <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+    <p *ngIf="successMessage" class="success">{{ successMessage }}</p>
+  </form>
+  

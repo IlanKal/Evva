@@ -13,5 +13,9 @@
     <div class="user-info" *ngIf="user">
       <span class="user-name">Welcome, {{ user.name }}</span>
     </div>
+
+    <button mat-icon-button [routerLink]="getProfileLink()" aria-label="Profile">
+      <mat-icon>account_circle</mat-icon>
+    </button>
   </div>
 </mat-toolbar>

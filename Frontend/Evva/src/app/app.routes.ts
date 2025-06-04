@@ -40,7 +40,17 @@ export const routes: Routes = [
     path: 'rate-page/user/:userId/:eventId',
     loadComponent: () =>
       import('./modules/rate/components/rate/rate.component').then((m) => m.RateComponent),
-  },   
-
+  },
+  {
+    path: 'profile/user',
+    loadComponent: () =>
+      import('./modules/profile/user/user-profile.component').then(m => m.UserProfileComponent),
+  },
+  {
+    path: 'profile/supplier',
+    loadComponent: () =>
+      import('./modules/profile/supplier/supplier-profile.component').then(m => m.SupplierProfileComponent),
+  },
+  
   { path: '', redirectTo: 'login', pathMatch: 'full' },
 ];
