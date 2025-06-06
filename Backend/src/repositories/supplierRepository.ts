@@ -16,3 +16,13 @@ export const getApprovedSuppliersForEvent = async (eventId: number) => {
     attributes: ['supplier_id', 'name', 'supplier_type', 'image_url'],
   });
 };
+
+export const findSupplierById = async (id: string) => {
+  return await Supplier.findByPk(id);
+};
+
+export const updateSupplier = async (id: string, data: any) => {
+  const supplier = await Supplier.findByPk(id);
+  if (!supplier) return null;
+  return await supplier.update(data);
+};

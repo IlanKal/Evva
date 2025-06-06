@@ -48,6 +48,17 @@ class RatingRepository {
     );
   }
 
+  static async checkGuestRatingStatus(guestId: number, eventId: number): Promise<boolean> {
+    const guest = await Guest.findOne({
+      where: {
+        guest_id: guestId,
+        event_id: eventId
+      }
+    });
+
+    return guest?.has_rated ?? false;
+  }
+
   static async withTransaction<T>(callback: (transaction: Transaction) => Promise<T>): Promise<T> {
     return await sequelize.transaction(callback);
   }
