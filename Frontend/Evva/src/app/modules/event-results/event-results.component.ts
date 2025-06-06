@@ -216,27 +216,25 @@ export class EventResultsComponent implements OnInit {
 
   fetchResults() {
     this.eventResultsService.getEventResults(this.eventId).subscribe((data) => {
-      const staticMilestones: IMilestone[] = [
-        { category: 'overview', status: 'pending' },
-        { category: 'guests', status: 'pending' }
-      ];
-
+      const overviewMilestone: IMilestone = { category: 'overview', status: 'pending' };
+      const guestsMilestone: IMilestone = { category: 'guests', status: 'pending' };
+  
       const dynamicMilestones: IMilestone[] = data.steps.map((step: any) => ({
         category: step.category,
         status: step.status
       }));
-
-      this.milestones = [...staticMilestones, ...dynamicMilestones];
-
+  
+      this.milestones = [overviewMilestone, ...dynamicMilestones, guestsMilestone];
+  
       this.suppliersMap = {};
       for (let step of data.steps) {
         this.suppliersMap[step.category] = step.suppliers;
       }
-
-      // תמיד מתחילים בקטגוריה הראשונה
+  
       this.activeCategory = this.milestones[0].category;
     });
   }
+  
 
   onMilestoneClick(category: string) {
     this.activeCategory = category;
