@@ -31,7 +31,7 @@ export const refreshToken = async (req: Request, res: Response) => {
 
 export const registerUser = async (req: Request, res: Response) => {
   try {
-    const { full_name, email, password, phone, rememberMe } = req.body;
+    const { full_name, email, password, phone, rememberMe,role } = req.body;
 
     const result = await authService.registerUser({
       full_name,
@@ -39,6 +39,7 @@ export const registerUser = async (req: Request, res: Response) => {
       password,
       phone,
       rememberMe,
+      role,
     });
 
     res.status(201).json(result);

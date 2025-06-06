@@ -10,6 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 import { ProfileService } from '../../../services/profile.service';
+import { Router } from '@angular/router';
 
 const REGIONS = ['Center', 'North', 'South', 'All'];
 const WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -43,8 +44,18 @@ export class SupplierProfileComponent implements OnInit {
   readonly weekdays = WEEKDAYS;
   readonly regions = REGIONS;
 
-  constructor(private fb: FormBuilder, private profileService: ProfileService) {}
+  constructor(private fb: FormBuilder, private profileService: ProfileService, private router: Router) {}
+  goBackToDashboard(): void {
+  const userType = localStorage.getItem('type');
 
+  if (userType === 'supplier') {
+    this.router.navigateByUrl('/supplier-home'); // או הנתיב שלך
+  } else if (userType === 'customer') {
+    this.router.navigateByUrl('/my-events'); // או הנתיב שלך ללקוחות
+  } else {
+    this.router.navigateByUrl('/login'); // ברירת מחדל אם אין מידע
+  }
+}
   extraFieldsForm!: FormGroup;
   supplierType: string = '';
   

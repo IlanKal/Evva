@@ -61,12 +61,14 @@ export const registerUser = async ({
   email,
   password,
   phone,
+  role,
   rememberMe,
 }: {
   full_name: string;
   email: string;
   password: string;
   phone: string;
+  role: string;
   rememberMe: boolean;
 }) => {
   const existingUser = await authRepository.findUserByEmail(email);
@@ -81,6 +83,7 @@ export const registerUser = async ({
     email,
     password: hashedPassword,
     phone,
+    role,
   });
 
   const payload = { id: newUser.user_id, type: 'user' as const };
@@ -89,7 +92,7 @@ export const registerUser = async ({
   const refreshToken = generateRefreshToken(payload);
 
   return {
-    user_id: newUser.user_id,
+    id: newUser.user_id,
     role: 'user',
     accessToken,
     refreshToken,

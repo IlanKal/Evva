@@ -6,24 +6,38 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
+import { HeaderComponent } from './././../shared/header/header.component';
 
 @Component({
   selector: 'app-supplier-home',
   standalone: true,
   templateUrl: './supplier-home.component.html',
   styleUrls: ['./supplier-home.component.scss'],
-  imports: [CommonModule, MatCardModule, MatIconModule, MatButtonModule, MatChipsModule] 
+  imports: [CommonModule, MatCardModule, MatIconModule, MatButtonModule, MatChipsModule,HeaderComponent] 
 })
 export class SupplierHomeComponent implements OnInit {
-  supplierId = 7; // שימי את זה דינמי לפי כניסת הספק בהמשך
+  supplierId = Number(localStorage.getItem('supplierId'));
   activeEvents: any[] = [];
   futureEvents: any[] = [];
   declinedEvents: any[] = [];
   pastEvents: any[] = [];
 
+   user: any = null; 
+
   constructor(private eventService: EventSupplierService) {}
 
   ngOnInit(): void {
+    // שליפת פרטי הספק מה־localStorage
+    this.user = {
+      name: localStorage.getItem('name'),
+      email: localStorage.getItem('email'),
+      phone: localStorage.getItem('phone')
+    };
+
+    // שליפת ה־ID
+    this.supplierId = Number(localStorage.getItem('userId'));
+
+    // טעינת האירועים
     this.eventService.getDashboard(this.supplierId).subscribe((data) => {
       this.activeEvents = data.active.filter((e: any) => e.status === 'CHOSEN');
       this.futureEvents = data.active.filter((e: any) => e.status === 'APPROVED');

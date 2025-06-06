@@ -66,7 +66,19 @@ export class LoginComponent {
   onSubmit() {
     if (this.loginForm.valid) {
       this.authService.login(this.loginForm.value).subscribe({
-        next: () => this.router.navigate(['/my-events']),
+        next: (user) => {
+  // שומרים את המידע בלוקאל סטורג' לשימוש בהמשך
+        localStorage.setItem('userId', user.id.toString());
+        localStorage.setItem('type', user.type);
+
+        if (user.type === 'supplier') {
+          this.router.navigate(['/supplier-home']);
+        } else if (user.type === 'user') {
+          this.router.navigate(['/my-events']);
+        } else {
+          this.router.navigate(['/']);
+        }
+      },
         error: (err) => {
           console.error('❌ Login error:', err);
           this.loginError = err.status === 401

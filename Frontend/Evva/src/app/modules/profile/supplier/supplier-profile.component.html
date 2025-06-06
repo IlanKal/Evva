@@ -4,9 +4,9 @@
       <mat-icon>{{ isEditMode ? 'close' : 'edit' }}</mat-icon>
     </button>
   
-    <button mat-raised-button color="primary" [routerLink]="'/my-events'">
-      Back to My Events
-    </button>
+    <button mat-raised-button color="primary" (click)="goBackToDashboard()">
+  Back to Events
+</button>
   </div>
   
   <form [formGroup]="supplierForm" (ngSubmit)="onSubmit()" class="profile-form">

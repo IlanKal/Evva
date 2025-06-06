@@ -52,17 +52,20 @@ export const createUser = async ({
   email,
   password,
   phone,
+  role,
 }: {
   full_name: string;
   email: string;
   password: string;
   phone: string;
+  role: string;
 }): Promise<{ user_id: number }> => {
   const user = await User.create({
     full_name,
     email,
     password,
     phone,
+    role,
   });
 
   return user.get({ plain: true }) as { user_id: number };
