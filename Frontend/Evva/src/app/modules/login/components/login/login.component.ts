@@ -5,12 +5,15 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormField, MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../../../services/auth.service';
 import { Router } from '@angular/router';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 
 @Component({
   selector: 'app-login',
+  standalone: true,
   imports: [
     ReactiveFormsModule,
     CommonModule,
@@ -19,19 +22,28 @@ import { Router } from '@angular/router';
     MatButtonModule,
     MatCardModule,
     MatRadioModule,
-    FormsModule],
+    MatIconModule,
+    FormsModule,
+    MatCheckboxModule
+  ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
   loginForm: FormGroup;
+  loginError = '';
+  hidePassword = true;
 
-
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router
+  ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      role: ['', Validators.required] // <--- new control
+      type: ['user', Validators.required],
+      rememberMe: [false] 
     });
   }
 
@@ -43,31 +55,29 @@ export class LoginComponent {
     return this.loginForm.get('password');
   }
 
-  get role() {
-    return this.loginForm.get('role');
+  get type() {
+    return this.loginForm.get('type');
+  }
+
+  togglePasswordVisibility(): void {
+    this.hidePassword = !this.hidePassword;
   }
 
   onSubmit() {
     if (this.loginForm.valid) {
-      const loginData = this.loginForm.value;
-      this.authService.login(loginData).subscribe({
-        next: (res) => {
-          console.log('Login success:', res);
-          this.router.navigate([`/my-events`]);
-          // שמור טוקן, נווט הלאה וכו'
-        },
+      this.authService.login(this.loginForm.value).subscribe({
+        next: () => this.router.navigate(['/my-events']),
         error: (err) => {
-          console.error('Login failed:', err);
-          // הצג הודעת שגיאה למשתמש
+          console.error('❌ Login error:', err);
+          this.loginError = err.status === 401
+            ? 'Invalid email or password'
+            : 'An unexpected error occurred. Please try again.';
         }
       });
-      console.log(this.loginForm.value);
-      // Perform login logic here
     }
   }
 
   onRegister() {
-    this.router.navigate([`/register`]);
+    this.router.navigate(['/register']);
   }
-
 }

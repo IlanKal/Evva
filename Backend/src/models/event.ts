@@ -1,6 +1,9 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import { sequelize } from '../config/db';
 
+import { EVENT_STATUS, EventStatus } from '../constants/EventStatus';
+import { EVENT_TYPES, EventType } from '../constants/eventTypes';
+
 interface EventAttributes {
   event_id: number;
   user_id: number;
@@ -9,6 +12,9 @@ interface EventAttributes {
   guest_count?: number;
   location?: string;
   event_request_id?: number;
+  status: EventStatus;
+  title: string;
+  event_type: EventType;
 }
 
 type EventCreationAttributes = Optional<EventAttributes, 'event_id'>;
@@ -22,6 +28,9 @@ class Event extends Model<EventAttributes, EventCreationAttributes>
   public guest_count?: number;
   public location?: string;
   public event_request_id?: number;
+  public status!: EventStatus;
+  public title!: string;
+  public event_type!: EventType;
 }
 
 Event.init(
@@ -58,6 +67,26 @@ Event.init(
         model: 'event_requests',
         key: 'request_id',
       },
+    },
+    status: {
+      type: DataTypes.STRING(20),
+      allowNull: false,
+      validate: {
+        isIn: [EVENT_STATUS],
+      },
+      defaultValue: 'PLANNING',
+    },
+    title: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
+    },
+    event_type: {
+      type: DataTypes.STRING(50),
+      allowNull: false,
+      validate: {
+        isIn: [EVENT_TYPES],
+      },
+      defaultValue: 'Conference',
     },
   },
   {

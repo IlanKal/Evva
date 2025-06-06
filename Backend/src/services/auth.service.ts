@@ -6,13 +6,21 @@ import {
 } from '../utils/jwt';
 import * as authRepository from '../repositories/auth.repository';
 
+type EnrichedAuthUser = {
+  id: number;
+  email: string;
+  password: string;
+  full_name: string;
+  phone: string;
+};
+
 export const login = async (
   email: string,
   password: string,
   type: 'user' | 'supplier',
   rememberMe: boolean
 ) => {
-  const user = await authRepository.findUserByEmailAndType(email, type);
+  const user = await authRepository.findUserByEmailAndType(email, type) as EnrichedAuthUser;
 
   if (!user) {
     throw new Error('User not found');
@@ -23,7 +31,7 @@ export const login = async (
     throw new Error('Invalid password');
   }
 
-  const payload = { id: user.id, type: type as 'user' | 'supplier' };
+  const payload = { id: user.id, type };
 
   const accessToken = generateAccessToken(payload, rememberMe);
   const refreshToken = generateRefreshToken(payload);
@@ -33,6 +41,9 @@ export const login = async (
     type,
     accessToken,
     refreshToken,
+    full_name: user.full_name,
+    phone: user.phone,
+    email: user.email,
   };
 };
 
@@ -153,5 +164,3 @@ export const registerSupplierDetails = async ({
 
   return { message: 'Supplier details saved successfully' };
 };
-
-

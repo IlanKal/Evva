@@ -1,0 +1,137 @@
+<mat-card class="info-card">
+    <h2 class="info-title">Invite Your Guests</h2>
+    <p class="info-step">
+      To invite guests to your event, please follow these steps:
+    </p>
+    <ol class="info-list">
+      <li>Download the Excel template and fill in your guest list (name, phone, email).</li>
+      <li>Upload the completed file below to send automatic email invitations.</li>
+      <li>You can upload more guests later — they will be added to your list.</li>
+    </ol>
+  
+    <a href="assets/files/guests_exmple.xlsx" download>
+      <button mat-raised-button color="primary">
+        Download Excel Template
+      </button>
+    </a>
+  </mat-card>
+  
+  <!-- אזור העלאה -->
+  <div class="upload-section">
+    <h3>Upload Guest List</h3>
+  
+    <label for="excelUpload" class="upload-label">Upload Excel: </label>
+    <input type="file" id="excelUpload" (change)="onGuestFileSelected($event)" accept=".xlsx,.xls" />
+  
+    <button mat-raised-button color="primary" (click)="confirmGuests()" class="mt-2">
+      Confirm Guests
+    </button>
+  </div>
+
+
+  <ng-container *ngIf="guests.length > 0">
+    <div class="mt-6">
+      <!-- חיפוש + פאגינציה בשורה אחת -->
+      <div class="search-pagination-row">
+        <mat-form-field appearance="outline" class="search-field">
+          <mat-label>Search Guests 🔍</mat-label>
+          <input
+            matInput
+            [(ngModel)]="searchTerm"
+            (ngModelChange)="applyFilter()"
+            placeholder="Search by name, email or phone"
+          />
+        </mat-form-field>
+      
+        <mat-paginator
+          [pageSizeOptions]="[10, 25, 50]"
+          [pageSize]="10"
+          showFirstLastButtons
+          aria-label="Guests pagination">
+        </mat-paginator>
+      </div>
+
+      <!-- טבלה -->
+      <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 full-width">
+  
+        <!-- Full Name -->
+        <ng-container matColumnDef="full_name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Full Name </th>
+          <td mat-cell *matCellDef="let guest">
+            <ng-container *ngIf="editingGuest?.guest_id === guest.guest_id; else viewName">
+              <input [(ngModel)]="editingGuest!.full_name" class="editable-field" />
+            </ng-container>
+            <ng-template #viewName>{{ guest.full_name }}</ng-template>
+          </td>
+        </ng-container>
+  
+        <!-- Email -->
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef> Email </th>
+          <td mat-cell *matCellDef="let guest">
+            <ng-container *ngIf="editingGuest?.guest_id === guest.guest_id; else viewEmail">
+              <input [(ngModel)]="editingGuest!.email" class="editable-field" />
+            </ng-container>
+            <ng-template #viewEmail>{{ guest.email }}</ng-template>
+          </td>
+        </ng-container>
+  
+        <!-- Phone -->
+        <ng-container matColumnDef="phone">
+          <th mat-header-cell *matHeaderCellDef> Phone </th>
+          <td mat-cell *matCellDef="let guest">
+            <ng-container *ngIf="editingGuest?.guest_id === guest.guest_id; else viewPhone">
+              <input [(ngModel)]="editingGuest!.phone" class="editable-field" />
+            </ng-container>
+            <ng-template #viewPhone>{{ guest.phone }}</ng-template>
+          </td>
+        </ng-container>
+  
+        <!-- RSVP -->
+        <ng-container matColumnDef="rsvp">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> RSVP Status </th>
+          <td mat-cell *matCellDef="let guest">
+            <ng-container *ngIf="editingGuest?.guest_id === guest.guest_id; else viewRsvp">
+              <select [(ngModel)]="editingGuest!.rsvp" class="editable-field edit-mode">
+                <option value="PENDING">PENDING</option>
+                <option value="APPROVED">APPROVED</option>
+                <option value="REJECTED">REJECTED</option>
+              </select>
+            </ng-container>
+            <ng-template #viewRsvp>
+              <span class="rsvp-badge" [ngClass]="getRsvpClass(guest.rsvp)">
+                {{ guest.rsvp }}
+              </span>
+            </ng-template>
+          </td>
+        </ng-container>
+  
+        <!-- Actions -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef> Actions </th>
+          <td mat-cell *matCellDef="let guest">
+            <ng-container *ngIf="editingGuest?.guest_id === guest.guest_id; else editButtons">
+              <button mat-icon-button color="primary" (click)="saveGuest(guest)">
+                <mat-icon>check</mat-icon>
+              </button>
+              <button mat-icon-button color="warn" (click)="cancelEdit()">
+                <mat-icon>close</mat-icon>
+              </button>
+            </ng-container>
+            <ng-template #editButtons>
+              <button mat-icon-button color="primary" (click)="startEdit(guest)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button color="warn" (click)="deleteGuest(guest)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </ng-template>
+          </td>
+        </ng-container>
+  
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsWithActions"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumnsWithActions;"></tr>
+      </table>
+    </div>
+  </ng-container>
+  

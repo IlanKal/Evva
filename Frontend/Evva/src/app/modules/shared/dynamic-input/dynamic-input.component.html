@@ -1,36 +1,55 @@
 <div [ngSwitch]="inputType">
 
-    <!-- Text Input -->
-    <mat-form-field *ngSwitchCase="'text'" appearance="outline" style="width: 100%;">
-      <mat-label>Your answer</mat-label>
-      <input matInput [value]="model" (input)="onChange($any($event.target).value)">
-    </mat-form-field>
-  
-    <!-- Radio Buttons -->
-    <mat-radio-group *ngSwitchCase="'radio'" [value]="model" (change)="onChange($event.value)">
-      <mat-radio-button *ngFor="let option of options" [value]="option">
+  <!-- Text Input -->
+  <mat-form-field *ngSwitchCase="'text'" appearance="outline" style="width: 100%;">
+    <mat-label>Your answer</mat-label>
+    <input matInput [value]="model" (input)="onChange($any($event.target).value)">
+  </mat-form-field>
+
+  <!-- Number Input -->
+  <mat-form-field *ngSwitchCase="'number'" appearance="outline" style="width: 100%;">
+    <mat-label>Enter a number</mat-label>
+    <input matInput type="number" [value]="model" (input)="onChange($any($event.target).valueAsNumber)">
+  </mat-form-field>
+
+  <!-- Date Input -->
+  <mat-form-field *ngSwitchCase="'date'" appearance="outline" style="width: 100%;">
+    <mat-label>Select a date</mat-label>
+    <input matInput [matDatepicker]="picker" [value]="model" (dateChange)="onChange($event.value)">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+
+  <!-- Time Input -->
+  <mat-form-field *ngSwitchCase="'time'" appearance="outline" style="width: 100%;">
+    <mat-label>Enter time (HH:MM)</mat-label>
+    <input matInput type="time" [value]="model" (input)="onChange($any($event.target).value)">
+  </mat-form-field>
+
+  <!-- Radio Buttons -->
+  <mat-radio-group *ngSwitchCase="'radio'" [value]="model" (change)="onChange($event.value)">
+    <mat-radio-button [value]="true">Yes</mat-radio-button>
+    <mat-radio-button [value]="false">No</mat-radio-button>
+  </mat-radio-group>
+
+  <!-- Multiple Select Dropdown -->
+  <mat-form-field *ngSwitchCase="'checkbox'" appearance="outline" style="width: 100%;">
+    <mat-label>Select one or more</mat-label>
+    <mat-select [value]="model" multiple (selectionChange)="onChange($event.value)">
+      <mat-option *ngFor="let option of options" [value]="option">
         {{ option }}
-      </mat-radio-button>
-    </mat-radio-group>
-  
-    <!-- Checkboxes -->
-    <div *ngSwitchCase="'checkbox'">
-      <mat-checkbox *ngFor="let option of options"
-                    [checked]="model?.[option]"
-                    (change)="onCheckboxChange(option, $event)">
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <!-- Select Dropdown -->
+  <mat-form-field *ngSwitchCase="'select'" appearance="outline" style="width: 100%;">
+    <mat-label>Select an option</mat-label>
+    <mat-select [value]="model" (selectionChange)="onChange($event.value)">
+      <mat-option *ngFor="let option of options" [value]="option">
         {{ option }}
-      </mat-checkbox>
-    </div>
-  
-    <!-- Select Dropdown -->
-    <mat-form-field *ngSwitchCase="'select'" appearance="outline" style="width: 100%;">
-      <mat-label>Select an option</mat-label>
-      <mat-select [value]="model" (selectionChange)="onChange($event.value)">
-        <mat-option *ngFor="let option of options" [value]="option">
-          {{ option }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  
-  </div>
-  
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+</div>

@@ -17,18 +17,15 @@
         {{ msg.text }}
       </div>
     </div>
+    <div #chatBottom></div>
   </div>
 
   <!-- Dynamic Input for current question -->
-  <div class="chat-input-section" *ngIf="currentStep?.inputType !== 'end'">
-
-    <app-dynamic-input [inputType]="safeInputType" [options]="currentStep.options || []" [(model)]="userAnswer">
+  <form class="chat-input-section" *ngIf="currentStep?.inputType !== 'end'" (ngSubmit)="sendAnswer()">
+    <app-dynamic-input *ngIf="currentStep" [inputType]="safeInputType" [options]="currentStep.options || []"
+      [(model)]="userAnswer">
     </app-dynamic-input>
 
-
-
-
-    <button class="send-button" (click)="sendAnswer()">Send</button>
-  </div>
-
+    <button class="send-button" type="submit">Send</button>
+  </form>
 </div>

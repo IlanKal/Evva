@@ -10,6 +10,46 @@ export const getAllEvents = async (_req: Request, res: Response): Promise<void> 
   }
 };
 
+export const getEventsByUserId = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const userId = Number(req.params.userId);
+    if (isNaN(userId)) {
+      res.status(400).json({ error: "Invalid user ID" });
+      return;
+    }
+
+    const events = await eventService.getEventsByUserId(userId);
+    res.json(events);
+  } catch (error) {
+    console.error("Failed to fetch user events:", error);
+    res.status(500).json({ error: "Failed to fetch user events" });
+  }
+};
+
+export const getEventByRequestId = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const requestId = Number(req.params.id); // לתאם עם שם הפרמטר בנתיב
+    if (isNaN(requestId)) {
+      res.status(400).json({ error: "Invalid requestId" });
+      return;
+    }
+
+    const eventId = await eventService.getEventByRequestId(requestId);
+
+    if (!eventId) {
+      res.status(404).json({ error: "Event not found" });
+      return;
+    }
+
+    res.json({ event_id: eventId });
+  } catch (error) {
+    console.error("Failed to fetch event by requestId:", error);
+    res.status(500).json({ error: "Failed to fetch event" });
+  }
+};
+
+
+
 export const getEventById = async (req: Request, res: Response): Promise<void> => {
   try {
     const event = await eventService.getEventById(req.params.id.trim());

@@ -1,3 +1,8 @@
 <div class="events-grid">
-    <app-event-card *ngFor="let event of events" [event]="event"></app-event-card>
-</div>
+    <app-event-card
+      *ngFor="let event of events"
+      [event]="event"
+      (deleteEvent)="onDeleteEvent($event)">
+    </app-event-card>
+  </div>
+  

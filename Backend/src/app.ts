@@ -1,5 +1,6 @@
 import express from 'express';
 import qs from 'qs';
+import cors from 'cors';
 import eventRequestRoutes from './routes/eventRequestRoutes';
 import userRoutes from './routes/userRoutes';
 import eventRoutes from './routes/eventRoutes';
@@ -30,11 +31,10 @@ app.use(express.urlencoded({
 }));
 
 app.use(cors({
-  origin: 'http://localhost:4200',
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  origin: process.env.CLIENT_BASE_URL,
   credentials: true
 }));
+
 
 app.use((req, res, next) => {
   if (req.is('application/x-www-form-urlencoded') && typeof req.body === 'string') {

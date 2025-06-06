@@ -39,3 +39,7 @@ export const bulkCreateGuests = async (guests: any[]) => {
   }
   return Guest.bulkCreate(guests);
 };
+
+export const getGuestsByEventId = async (eventId: number) => {
+  return Guest.findAll({ where: { event_id: eventId } });
+};

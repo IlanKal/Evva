@@ -15,6 +15,21 @@ export const createEvent = async (data: any) => {
   return await Event.create(data);
 };
 
+export const getEventsByUserId = async (userId: number) => {
+  return await Event.findAll({
+    where: { user_id: userId },
+  });
+};
+
+export const getEventIdByRequestId = async (requestId: number): Promise<number | null> => {
+  const event = await Event.findOne({
+    where: { event_request_id: requestId },
+    attributes: ['event_id'],
+  });
+
+  return event?.event_id || null;
+};
+
 export const updateEvent = async (id: string, data: any) => {
   const event = await Event.findByPk(id.trim());
   if (!event) return null;

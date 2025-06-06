@@ -1,0 +1,38 @@
+<div class="rate-container" *ngIf="!errorMessage; else errorTpl">
+    <h2>Rate the suppliers</h2>
+  
+    <form [formGroup]="rateForm" (ngSubmit)="onSubmit()">
+      <div *ngFor="let supplier of suppliers" class="supplier-card">
+        <img [src]="supplier.image_url" alt="{{ supplier.name }}" class="supplier-image" />
+        <div class="supplier-info">
+          <h3>{{ supplier.name }}</h3>
+          <p class="type">{{ supplier.supplier_type }}</p>
+  
+          <div class="stars">
+            <ng-container *ngFor="let star of [1,2,3,4,5]">
+              <span
+                class="star"
+                [ngClass]="getStarClass(supplier.supplier_id, star)"
+                (click)="handleStarClick($event, supplier.supplier_id, star)">
+                ★
+              </span>
+            </ng-container>
+            <span class="current-rating">({{ getRatingValue(supplier.supplier_id) || 0 }})</span>
+          </div>
+        </div>
+      </div>
+  
+      <button type="submit" class="submit-btn" [disabled]="rateForm.invalid">Submit Ratings</button>
+    </form>
+  
+    <p class="success" *ngIf="successMessage">{{ successMessage }}</p>
+  </div>
+  
+  <ng-template #errorTpl>
+    <div class="error-box">
+      <h3>We're Sorry 😕</h3>
+      <p>{{ errorMessage }}</p>
+      <p>If you believe this is an error, please contact support or try again later.</p>
+    </div>
+  </ng-template>
+  

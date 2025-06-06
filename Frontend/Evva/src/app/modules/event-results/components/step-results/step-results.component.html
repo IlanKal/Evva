@@ -1,0 +1,48 @@
+<div *ngIf="suppliers.length > 0" class="step-results-container">
+  <!-- אזור הבחירה -->
+  <div class="supplier-selection">
+    <!-- כרטיס ראשי -->
+    <div
+      class="main-supplier-card selectable"
+      [class.selected]="selectedSupplierId === suppliers[0].id"
+      (click)="selectSupplier(suppliers[0].id!)"
+    >
+      <img [src]="suppliers[0].imageUrl" alt="{{ suppliers[0].name }}" />
+      <h3>{{ suppliers[0].name }}</h3>
+      <p>{{ suppliers[0].city }}</p>
+      <div class="price">${{ suppliers[0].price }}</div>
+      <p class="desc">{{ suppliers[0].description }}</p>
+    </div>
+
+    <!-- ספקים נוספים -->
+    <div class="alternative-suppliers">
+      <div
+        class="mini-card selectable"
+        *ngFor="let s of suppliers.slice(1)"
+        [class.selected]="selectedSupplierId === s.id"
+        (click)="selectSupplier(s.id)"
+      >
+        <img [src]="s.imageUrl" alt="{{ s.name }}" />
+        <h4>{{ s.name }}</h4>
+        <p>{{ s.city }}</p>
+        <div class="price">${{ s.price }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- כפתורים בצד ימין -->
+  <div class="action-panel">
+    <button
+      mat-raised-button
+      color="primary"
+      [disabled]="!selectedSupplierId"
+      (click)="confirmSelection()"
+    >
+      i want this {{ category }}
+    </button>
+
+    <button mat-stroked-button color="accent" (click)="rejectAll()">
+      this is not what I want
+    </button>
+  </div>
+</div>

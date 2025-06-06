@@ -1,0 +1,140 @@
+:host {
+    height: 100%;
+    display: block;
+    font-family: 'Inter', 'Roboto', sans-serif;
+    background: #f2f4f7;
+}
+
+.layout {
+    display: flex;
+    align-items: flex-start;
+    height: calc(100% - 75px);
+}
+
+app-milestone {
+    width: 250px;
+    height: 100%;
+    padding: 0 20px;
+    box-shadow: 5px 13px 10px rgba(0, 0, 0, 0.06);
+    background: #fff;
+}
+
+.content {
+    flex: 1;
+    padding: 32px;
+    transition: all 0.2s ease-in-out;
+    height: calc(100% - 80px);
+    overflow: auto;
+}
+
+.static-step h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 32px;
+    color: #222;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 12px;
+    font-family: cursive;
+}
+
+.additional-notes-block {
+    padding: 16px;
+    border-radius: 8px;
+    background-color: #fafafa;
+    border: 1px solid #e0e0e0;
+    margin-top: 24px;
+  }
+  
+  .additional-notes-block p {
+    margin: 8px 0 0;
+  }
+  
+
+mat-card {
+    margin-bottom: 24px;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: none;
+    border: 1px solid #e2e8f0;
+    background-color: #fefefe;
+}
+
+mat-card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 8px;
+}
+
+.mat-divider {
+    margin: 24px 0;
+}
+
+.inline-edit-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin: 8px 0;
+}
+
+.inline-edit-row span {
+    font-size: 16px;
+    color: #374151;
+    flex: 1;
+    word-break: break-word;
+}
+
+mat-form-field {
+    flex: 1;
+    min-width: 200px;
+}
+
+.section-title {
+    display: block;
+    margin: 24px 0 10px;
+    font-weight: 600;
+    font-size: 16px;
+    color: #1f2937;
+}
+
+button[mat-icon-button] {
+    margin-left: 8px;
+}
+
+.action-buttons {
+    margin-top: 40px;
+    text-align: center;
+}
+
+.not-selected-box {
+    border: 2px dashed #cbd5e1;
+    background: #f8fafc;
+    padding: 1.5rem;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-top: 1.75rem;
+    transition: background 0.3s;
+}
+
+.not-selected-box:hover {
+    background: #f1f5f9;
+}
+
+.not-selected-box mat-icon {
+    font-size: 30px;
+    color: #94a3b8;
+}
+
+.not-selected-box p {
+    margin: 0;
+    flex: 1;
+    font-size: 15px;
+    color: #475569;
+}
+
+.not-selected-box button {
+    white-space: nowrap;
+}

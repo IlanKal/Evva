@@ -1,19 +1,27 @@
-<mat-toolbar  class="header-toolbar">
-    <div class="left-section">
+<mat-toolbar class="header-toolbar">
+  <div class="left-section">
+    <a [routerLink]="'/my-events'">
       <img src="assets/images/logo.svg" alt="EVVA Logo" class="logo" />
+    </a>
+  </div>
+
+  <span class="spacer"></span>
+
+  <div *ngIf="user" class="right-section">
+    <button mat-icon-button aria-label="Notifications">
+      <mat-icon>notifications</mat-icon>
+    </button>
+
+    <div class="user-info">
+      <span class="user-name">Welcome, {{ user.name }}</span>
     </div>
-  
-    <span class="spacer"></span>
-  
-    <div class="right-section">
-      <button mat-icon-button aria-label="Notifications">
-        <mat-icon  >notifications</mat-icon>
-      </button>
-  
-      <div class="user-info" *ngIf="user">
-        <span class="user-name">Welcome, {{ user.name }}</span>
-        <img [src]="user.avatarUrl" alt="User Avatar" class="avatar" />
-      </div>
-    </div>
-  </mat-toolbar>
-  
+
+    <button mat-icon-button [routerLink]="getProfileLink()" aria-label="Profile">
+      <mat-icon>account_circle</mat-icon>
+    </button>
+
+    <button mat-icon-button (click)="logout()" aria-label="Logout">
+      <mat-icon>logout</mat-icon>
+    </button>
+  </div>
+</mat-toolbar>

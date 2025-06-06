@@ -1,0 +1,68 @@
+.top-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 800px;
+    margin: 2rem auto 1.5rem;
+    padding: 0 1rem;
+  }
+  
+  .profile-form {
+    max-width: 800px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  
+  .full-width {
+    width: 100%;
+  }
+  
+  .checkbox-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .checkbox-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 10px 16px;
+    padding-top: 8px;
+  }
+  
+  button[mat-raised-button] {
+    align-self: flex-end;
+  }
+  
+  .error,
+  .success {
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  .error {
+    color: #d32f2f;
+  }
+  
+  .success {
+    color: #388e3c;
+  }
+  
+  mat-checkbox {
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  

@@ -39,6 +39,12 @@ class RatingService {
     }
 
   }
+
+  static async checkIfGuestRated(guestId: number, eventId: number): Promise<boolean> {
+    return await RatingRepository.checkGuestRatingStatus(guestId, eventId);
+  }
 }
+
+
 
 export default RatingService;

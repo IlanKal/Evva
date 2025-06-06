@@ -20,3 +20,22 @@ export const submitRatings = async (req: Request, res: Response): Promise<void> 
     res.status(500).json({ message: 'Internal server error.' });
   }
 };
+
+export const hasGuestRated = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const guestId = Number(req.query.guest_id);
+    const eventId = Number(req.query.event_id);
+
+    if (!guestId || !eventId) {
+      res.status(400).json({ message: 'Missing parameters' });
+      return;
+    }
+
+    const hasRated = await RatingService.checkIfGuestRated(guestId, eventId);
+    res.status(200).json(hasRated);
+  } catch (error) {
+    console.error('Error in hasGuestRated controller:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+

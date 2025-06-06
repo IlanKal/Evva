@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MockUserService, User } from '../../services/mock-user.service';
-import { MockEventService, Event } from '../../services/mock-event.service';
 import { Router } from '@angular/router';
 import { HeaderComponent } from '../shared/header/header.component';
 import { EventsListComponent } from './events-list/events-list.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { Event, EventService } from '../../services/event.service';
+import { UserStateService } from '../../services/user-state.service';
+import { IUser } from '../../models/IUser';
 
 @Component({
   selector: 'app-my-events',
@@ -17,40 +18,38 @@ import { MatButtonModule } from '@angular/material/button';
 })
 export class MyEventsComponent implements OnInit {
 
-  user: User | null = null;
   events: Event[] = [];
   loading: boolean = true;
+  user!: IUser | null;
 
   constructor(
-    private userService: MockUserService,
-    private eventService: MockEventService,
-    private router: Router
+    private eventService: EventService,
+    private router: Router,
+    private userState: UserStateService
   ) { }
 
   ngOnInit(): void {
-    this.loadData();
+    this.user = this.userState.currentUser;
+
+    if (!this.user) {
+      // אין משתמש בזיכרון — נניח שפג התוקף של הטוקן או הרענון נכשל
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    this.loadData(this.user.user_id);
   }
 
-  loadData(): void {
+  loadData(userId: number): void {
     this.loading = true;
 
-    this.userService.getCurrentUser().subscribe({
-      next: (user) => {
-        this.user = user;
-
-        this.eventService.getUserEvents().subscribe({
-          next: (events) => {
-            this.events = events;
-            this.loading = false;
-          },
-          error: (err) => {
-            console.error('Error loading events', err);
-            this.loading = false;
-          }
-        });
+    this.eventService.getUserEvents(userId).subscribe({
+      next: (events) => {
+        this.events = events;
+        this.loading = false;
       },
       error: (err) => {
-        console.error('Error loading user', err);
+        console.error('Error loading events', err);
         this.loading = false;
       }
     });
@@ -58,6 +57,5 @@ export class MyEventsComponent implements OnInit {
 
   navigateToCreateEvent() {
     this.router.navigate(['/chat']);
-
   }
 }

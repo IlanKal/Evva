@@ -1,12 +1,31 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { HttpClient } from '@angular/common/http';
+import { Observable, tap } from 'rxjs';
+import { UserStateService } from './user-state.service';
 
 interface LoginPayload {
   email: string;
   password: string;
-  role: string;
+  type: 'user' | 'supplier';
+  rememberMe: boolean;
+}
+
+interface LoginResponse {
+  id: number;
+  type: 'user' | 'supplier';
+  accessToken: string;
+  refreshToken: string;
+  email: string;
+  full_name: string;
+  phone: string;
+}
+
+interface RegisterUserPayload {
+  full_name: string;
+  email: string;
+  password: string;
+  phone: string;
 }
 
 interface RegisterUserPayload {
@@ -22,25 +41,44 @@ interface RegisterUserPayload {
 export class AuthService {
   private baseUrl = `${environment.apiUrl}/api/auth`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private userState: UserStateService) { }
 
-  login(payload: LoginPayload): Observable<any> {
-    return this.http.post(`${this.baseUrl}/login`, payload);
+  login(payload: LoginPayload): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(`${this.baseUrl}/login`, payload).pipe(
+      tap((res) => {
+        // Save tokens in localStorage
+        localStorage.setItem('accessToken', res.accessToken);
+        localStorage.setItem('refreshToken', res.refreshToken);
+        localStorage.setItem('userId', res.id.toString());
+        localStorage.setItem('type', res.type);
+
+
+        // Update in-memory user state
+        this.userState.setUser({
+          user_id: res.id,
+          email: res.email,
+          name: res.full_name,
+          phone: res.phone,
+        });
+      })
+    );
   }
 
-  registerUser(payload: RegisterUserPayload): Observable<any> {
-    return this.http.post(`${this.baseUrl}/register-user`, payload);
+  logout() {
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('type');
+
+    this.userState.clearUser();
   }
 
-  registerSupplier(payload: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/register-supplier`, payload);
+  getAccessToken(): string | null {
+    return localStorage.getItem('accessToken');
   }
 
-  registerSupplierDetails(payload: {
-  supplier_id: number;
-  supplier_type: string;
-  details: any;
-}): Observable<any> {
-  return this.http.post(`${this.baseUrl}/register-supplier-details`, payload);
-}
+  refreshAccessToken(): Observable<{ accessToken: string }> {
+    const refreshToken = localStorage.getItem('refreshToken');
+    return this.http.post<{ accessToken: string }>(`${this.baseUrl}/refresh`, { refreshToken });
+  }
 }

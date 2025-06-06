@@ -1,4 +1,5 @@
 import * as userRepository from "../repositories/userRepository";
+import bcrypt from 'bcryptjs';
 import * as yup from "yup";
 import { Event, EventSupplier, EventRequest } from "../models";
 
@@ -35,7 +36,15 @@ export const createUser = async (data: any) => {
 
 export const updateUser = async (id: string, data: any) => {
   await userUpdateSchema.validate(data, { abortEarly: false });
-  return userRepository.updateUser(id, data);
+
+  const updatedData = { ...data };
+
+  if (data.password) {
+    const hashedPassword = await bcrypt.hash(data.password, 10);
+    updatedData.password = hashedPassword;
+  }
+
+  return userRepository.updateUser(id, updatedData);
 };
 
 export const deleteUser = async (id: string) => {
