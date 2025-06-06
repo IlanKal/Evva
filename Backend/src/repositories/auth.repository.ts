@@ -82,6 +82,8 @@ export const createSupplier = async ({
   region,
   contact_info,
   supplier_type,
+  image_url,
+  additional_info,
 }: {
   name: string;
   email: string;
@@ -90,6 +92,8 @@ export const createSupplier = async ({
   region: string;
   contact_info: string;
   supplier_type: 'catering' | 'dj' | 'photographer' | 'speaker' | 'location';
+  image_url?: string;
+  additional_info?: string;
 }): Promise<{ supplier_id: number }> => {
   const validDays = available_days.filter((day): day is Weekday =>
     ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].includes(day)
@@ -107,6 +111,8 @@ export const createSupplier = async ({
     region: validRegion,
     contact_info,
     supplier_type,
+    image_url,          
+    additional_info
   });
 
   return supplier.get({ plain: true }) as { supplier_id: number };

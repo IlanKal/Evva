@@ -15,6 +15,10 @@ import rsvpRoutes from './routes/rsvpRoutes';
 import ratingRoutes from './routes/ratingRoutes';
 import supplierRoutes from './routes/supplierRoutes';
 import createEventFromRequest from "./routes/createEventFromRequest";
+import getUserEvents from './routes/userRoutes';
+import cors from 'cors';
+
+
 
 const app = express();
 
@@ -23,6 +27,13 @@ app.use(express.urlencoded({
   extended: true,
   parameterLimit: 10000,
   limit: '10mb',
+}));
+
+app.use(cors({
+  origin: 'http://localhost:4200',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
 }));
 
 app.use((req, res, next) => {
@@ -35,7 +46,7 @@ app.use((req, res, next) => {
 app.use('/api', eventRequestRoutes);
 app.use('/api', userRoutes);
 app.use('/api', eventRoutes);
-app.use('/api', eventSupplierRoutes);
+app.use('/api/event-suppliers', eventSupplierRoutes);
 app.use('/api', guestRoutes);
 app.use('/api', photographerRoutes);
 app.use('/api', locationRoutes);
@@ -47,5 +58,7 @@ app.use('/rsvp', rsvpRoutes);
 app.use('/api', ratingRoutes);
 app.use('/api', supplierRoutes);
 app.use('/api',createEventFromRequest);
+app.use('/api/:userId/events',getUserEvents);
+
 
 export default app;

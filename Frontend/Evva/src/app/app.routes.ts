@@ -22,4 +22,13 @@ export const routes: Routes = [
       import('./modules/my-events/my-events.component').then((m) => m.MyEventsComponent),
   },
   { path: '', redirectTo: 'login', pathMatch: 'full' },
+
+  {
+  path: 'supplier-home',
+  loadComponent: () =>
+    import('./modules/supplier-home/supplier-home.component').then((m) => m.SupplierHomeComponent),
+}
+ 
+
+ 
 ];

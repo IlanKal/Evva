@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import * as userService from "../services/userService";
+import { fetchUserEvents } from "../services/userService";
 
 export const getAllUsers = async (_req: Request, res: Response): Promise<void> => {
   try {
@@ -55,5 +56,22 @@ export const deleteUser = async (req: Request, res: Response): Promise<void> => 
     res.json({ message: "User deleted" });
   } catch {
     res.status(500).json({ error: "Failed to delete user" });
+  }
+};
+
+
+export const getUserEvents = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const userId = Number(req.params.userId);
+    if (isNaN(userId)) {
+      res.status(400).json({ error: "Invalid userId" });
+      return;
+    }
+
+    const events = await fetchUserEvents(userId);
+    res.status(200).json(events);
+  } catch (error) {
+    console.error("❌ Error fetching user events:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };

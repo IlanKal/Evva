@@ -18,7 +18,6 @@ interface EventRequestAttributes {
   lecturer_preferences?: object;
 
   additional_notes?: string;
-  status?: "draft" | "finalized" ;
   event_id?: number;
 }
 
@@ -37,7 +36,6 @@ class EventRequest extends Model<EventRequestAttributes> implements EventRequest
   public location_preferences?: object;
   public lecturer_preferences?: object;
   public additional_notes?: string;
-  public status?: "draft" | "finalized" ;
   public event_id?: number;
 }
 
@@ -96,13 +94,6 @@ EventRequest.init(
     },
     additional_notes: {
       type: DataTypes.TEXT,
-    },
-    status: {
-      type: DataTypes.STRING,
-      allowNull: true,
-      validate: {
-        isIn: [['draft', 'finalized']],
-      },
     },
     event_id: {
       type: DataTypes.INTEGER,

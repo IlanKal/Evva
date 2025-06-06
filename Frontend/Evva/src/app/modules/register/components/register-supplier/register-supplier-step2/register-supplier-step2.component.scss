@@ -7,6 +7,7 @@
 .field-group {
   display: flex;
   flex-direction: column;
+  margin-bottom: 1rem;
 }
 
 .field-title {
@@ -25,6 +26,13 @@ mat-form-field input,
 mat-form-field textarea {
   padding: 0.3rem 0.75rem;
   font-size: 0.9rem;
+}
+
+mat-checkbox {
+  margin-top: 8px;
+  font-size: 0.9rem;
+  color: #444;
+  align-self: start;
 }
 
 .button-container {
@@ -55,4 +63,8 @@ mat-form-field textarea {
   height: 40px;
   display: flex;
   align-items: center;
+}
+
+mat-form-field.full-width:hover {
+  background-color: #eaeaea;
 }

@@ -52,9 +52,9 @@ Supplier.init(
       type: DataTypes.STRING,
       allowNull: false,
       defaultValue: "All",
-      //validate: {
-      //  isIn: [REGIONS as unknown as string[]], 
-      //},
+      validate: {
+        isIn: [REGIONS as unknown as string[]], 
+      },
     },
     rating: DataTypes.FLOAT,
     image_url: DataTypes.STRING(255),
