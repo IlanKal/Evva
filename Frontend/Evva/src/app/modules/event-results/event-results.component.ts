@@ -58,11 +58,11 @@ export class EventResultsComponent implements OnInit {
   guestList: string[] = [];
   guestInput: string = '';
   user!: IUser | null;
+  disablesMilestones: boolean = true;
 
   constructor(
     private route: ActivatedRoute,
     private eventResultsService: EventResultsService,
-    private http: HttpClient,
     private fb: FormBuilder
   ) { }
 
@@ -201,6 +201,7 @@ export class EventResultsComponent implements OnInit {
   }
 
   onSubmitOverview(): void {
+    this.disablesMilestones = false;
     const payload = { ...this.overviewForm.value };
 
     if (payload.lecturer_preferences && payload.lecturer_preferences.required === false) {
