@@ -1,6 +1,6 @@
 <app-header [user]="user"></app-header>
 <div class="layout">
-  <app-milestone [milestones]="milestones" [activeCategory]="activeCategory"
+  <app-milestone [disablesMilestones]="disablesMilestones" [milestones]="milestones" [activeCategory]="activeCategory"
     (milestoneClicked)="onMilestoneClick($event)"></app-milestone>
 
   <div class="content" [ngSwitch]="activeCategory">
@@ -21,10 +21,11 @@
         <div class="additional-notes-block">
           <mat-card-title>Additional Notes:</mat-card-title>
           <div class="inline-edit-row" *ngIf="editingField !== 'additional_notes'; else editNotes">
-              <p>{{ overviewForm.value.additional_notes || 'No notes provided.' }}</p>
-              <button mat-icon-button type="button" (click)="startEdit('additional_notes')">
-                <mat-icon>edit</mat-icon>
-              </button>
+            <p>{{ overviewForm.value.additional_notes || 'No notes provided.' }}</p>
+            <button *ngIf="disablesMilestones" mat-icon-button type="button"
+              (click)="startEdit('additional_notes')">
+              <mat-icon>edit</mat-icon>
+            </button>
           </div>
           <ng-template #editNotes>
             <mat-form-field appearance="outline" class="w-100">
@@ -42,7 +43,7 @@
 
 
 
-        <div class="action-buttons">
+        <div *ngIf="disablesMilestones" class="action-buttons">
           <button mat-raised-button color="primary" (click)="onSubmitOverview()">
             Save & Continue
           </button>
@@ -65,7 +66,7 @@
   <div class="info-block">
     <div class="inline-edit-row" *ngIf="editingField !== 'company_name'; else editCompany">
       <div><strong class="m-r-10">Company Name:</strong> {{ overviewForm.value.company_name || 'Not provided' }}</div>
-      <button mat-icon-button type="button" (click)="startEdit('company_name')">
+      <button mat-icon-button type="button" *ngIf="disablesMilestones" (click)="startEdit('company_name')">
         <mat-icon>edit</mat-icon>
       </button>
     </div>
@@ -84,7 +85,7 @@
 
         <strong class="m-r-10">Title:</strong> {{ overviewForm.value.title || 'Not provided' }}
       </div>
-      <button mat-icon-button type="button" (click)="startEdit('title')">
+      <button mat-icon-button type="button" *ngIf="disablesMilestones" (click)="startEdit('title')">
         <mat-icon>edit</mat-icon>
       </button>
     </div>
@@ -102,7 +103,7 @@
 
         <strong class="m-r-10">Event Type:</strong> {{ overviewForm.value.event_type || 'Not selected' }}
       </div>
-      <button mat-icon-button type="button" (click)="startEdit('event_type')">
+      <button mat-icon-button type="button" *ngIf="disablesMilestones" (click)="startEdit('event_type')">
         <mat-icon>edit</mat-icon>
       </button>
     </div>
@@ -128,7 +129,7 @@
   <div *ngIf="overviewForm.value.need_dj; else noDJ">
     <div class="inline-edit-row" *ngIf="editingField !== 'music_styles'; else editDJ">
       <span>DJ Styles: {{ overviewForm.value.dj_preferences?.music_styles?.join(', ') || 'None' }}</span>
-      <button mat-icon-button type="button" (click)="startEdit('music_styles')">
+      <button mat-icon-button type="button" *ngIf="disablesMilestones" (click)="startEdit('music_styles')">
         <mat-icon>edit</mat-icon>
       </button>
     </div>
@@ -162,7 +163,8 @@
           <ng-container *ngIf="overviewForm.value.catering_preferences.gluten_free">✔ Gluten-Free </ng-container>
         </ng-container>
       </span>
-      <button mat-icon-button type="button" (click)="startEdit('catering_preferences')">
+      <button mat-icon-button type="button" *ngIf="disablesMilestones"
+        (click)="startEdit('catering_preferences')">
         <mat-icon>edit</mat-icon>
       </button>
     </div>
@@ -206,7 +208,8 @@
           <ng-container *ngIf="overviewForm.value.photographer_preferences.has_magnets">✔ Magnets </ng-container>
         </ng-container>
       </span>
-      <button mat-icon-button type="button" (click)="startEdit('photographer_preferences')">
+      <button mat-icon-button type="button" *ngIf="disablesMilestones"
+        (click)="startEdit('photographer_preferences')">
         <mat-icon>edit</mat-icon>
       </button>
     </div>
@@ -244,7 +247,8 @@
         {{ overviewForm.value.location_preferences?.area }}
         <ng-container *ngIf="overviewForm.value.location_preferences?.parking">✔ Parking</ng-container>
       </span>
-      <button mat-icon-button type="button" (click)="startEdit('location_preferences')">
+      <button mat-icon-button type="button" *ngIf="disablesMilestones"
+        (click)="startEdit('location_preferences')">
         <mat-icon>edit</mat-icon>
       </button>
     </div>
@@ -281,7 +285,8 @@
   <div *ngIf="overviewForm.value.need_lecturer; else noLecturer">
     <div class="inline-edit-row" *ngIf="editingField !== 'lecturer_preferences'; else editLecturer">
       <span>Lecturer: {{ overviewForm.value.lecturer_preferences?.required ? '✔ Required' : 'Not Required' }}</span>
-      <button mat-icon-button type="button" (click)="startEdit('lecturer_preferences')">
+      <button mat-icon-button type="button" *ngIf="disablesMilestones"
+        (click)="startEdit('lecturer_preferences')">
         <mat-icon>edit</mat-icon>
       </button>
     </div>

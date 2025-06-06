@@ -16,6 +16,7 @@ import { IMilestone } from '../../../../models/IMilestone';
 export class MilestoneComponent {
   @Input() milestones!: IMilestone[];
   @Input() activeCategory!: string;
+  @Input() disablesMilestones: boolean = true;
 
   @Output() milestoneClicked = new EventEmitter<string>();
 

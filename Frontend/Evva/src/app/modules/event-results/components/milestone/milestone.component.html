@@ -4,7 +4,8 @@
   </span>
 </div>
 <mat-nav-list>
-  <mat-list-item class="milestone" *ngFor="let m of milestones" (click)="select(m.category)">
+  <mat-list-item [disabled]="disablesMilestones" class="milestone" *ngFor="let m of milestones"
+    (click)="select(m.category)">
     <mat-icon [style.color]="getColor(m.status)">
       {{ getIcon(m.status) }}
     </mat-icon>
