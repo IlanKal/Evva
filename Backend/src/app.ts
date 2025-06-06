@@ -16,9 +16,7 @@ import rsvpRoutes from './routes/rsvpRoutes';
 import ratingRoutes from './routes/ratingRoutes';
 import supplierRoutes from './routes/supplierRoutes';
 import createEventFromRequest from "./routes/createEventFromRequest";
-import getUserEvents from './routes/userRoutes';
-import cors from 'cors';
-
+//import getUserEvents from './routes/userRoutes';
 
 
 const app = express();
@@ -58,7 +56,7 @@ app.use('/rsvp', rsvpRoutes);
 app.use('/api', ratingRoutes);
 app.use('/api', supplierRoutes);
 app.use('/api',createEventFromRequest);
-app.use('/api/:userId/events',getUserEvents);
+//app.use('/api/:userId/events',getUserEvents);
 
 
 export default app;

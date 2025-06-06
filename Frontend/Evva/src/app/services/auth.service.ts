@@ -28,13 +28,6 @@ interface RegisterUserPayload {
   phone: string;
 }
 
-interface RegisterUserPayload {
-  full_name: string;
-  email: string;
-  password: string;
-  phone: string;
-}
-
 @Injectable({
   providedIn: 'root',
 })
@@ -81,4 +74,17 @@ export class AuthService {
     const refreshToken = localStorage.getItem('refreshToken');
     return this.http.post<{ accessToken: string }>(`${this.baseUrl}/refresh`, { refreshToken });
   }
+  registerUser(payload: RegisterUserPayload): Observable<any> {
+  return this.http.post<any>(`${this.baseUrl}/register-user`, payload);
+}
+
+registerSupplier(data: any): Observable<{ supplier_id: number }> {
+  return this.http.post<{ supplier_id: number }>(
+    `${this.baseUrl}/register-supplier`, data
+  );
+}
+
+registerSupplierDetails(data: any): Observable<any> {
+  return this.http.post<any>(`${this.baseUrl}/register-supplier-details`, data);
+}
 }

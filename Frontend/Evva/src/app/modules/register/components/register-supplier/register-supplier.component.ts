@@ -24,8 +24,13 @@ export class RegisterSupplierComponent {
     this.step1Data = data;
     this.supplierType = data.supplier_type;
     this.currentStep = 2;
+     const payload = {
+    ...data,
+    rememberMe: false // או true – תלוי אם את רוצה שהספק יישאר מחובר
+  };
 
-    this.authService.registerSupplier(data).subscribe({
+
+    this.authService.registerSupplier(payload).subscribe({
       next: (res) => {
         this.supplierId = res.supplier_id;
       },
