@@ -23,9 +23,11 @@ import { MatSelectModule } from '@angular/material/select';
   styleUrls: ['./register-supplier-step1.component.scss']
 })
 export class RegisterSupplierStep1Component {
-  @Output() supplierTypeSelected = new EventEmitter<string>();
+  @Output() formSubmitted = new EventEmitter<any>();
   form: FormGroup;
-  supplierTypes = ['dj', 'hall'];
+  supplierTypes = ['dj', 'catering', 'photographer', 'speaker', 'location'];
+  availableDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  regions = ['North', 'Center', 'South', 'All'];
 
 
   constructor(private fb: FormBuilder) {
@@ -43,8 +45,8 @@ export class RegisterSupplierStep1Component {
   }
 
   onSubmit() {
-    if (this.form.valid) {
-      this.supplierTypeSelected.emit(this.form.value.supplier_type);
-    }
+  if (this.form.valid) {
+    this.formSubmitted.emit(this.form.value);
   }
+}
 }

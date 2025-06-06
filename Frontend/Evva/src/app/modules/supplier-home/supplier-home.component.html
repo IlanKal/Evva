@@ -1,0 +1,94 @@
+<div class="dashboard">
+  <!-- Section: Pending Requests -->
+  <section class="section">
+    <h2 class="section-title">
+      <mat-icon class="section-icon">pending_actions</mat-icon>
+      Pending Requests
+    </h2>
+    <div class="event-list">
+      <ng-container *ngIf="activeEvents.length > 0; else noPending">
+        <mat-card class="event-card pending" *ngFor="let event of activeEvents">
+          <mat-card-title>{{ event.event_name || 'Event #' + event.event_id }}</mat-card-title>
+          <mat-card-content>
+            <p><strong>Date:</strong> {{ event.event_date | date }}</p>
+            <p><strong>Location:</strong> {{ event.location }}</p>
+            <p><strong>Guests:</strong> {{ event.guest_count }}</p>
+            <p><strong>Customer:</strong> {{ event.customer?.full_name }} ({{ event.customer?.phone }})</p>
+            <mat-chip color="warn" selected>⏳ Pending</mat-chip>
+          </mat-card-content>
+          <mat-card-actions>
+            <button mat-flat-button color="primary" (click)="approveEvent(event.event_id)">✅ Approve</button>
+            <button mat-flat-button color="warn" (click)="declineEvent(event.event_id)">❌ Decline</button>
+          </mat-card-actions>
+        </mat-card>
+      </ng-container>
+      <ng-template #noPending>
+        <p class="empty-message">📭 No pending requests at the moment.</p>
+      </ng-template>
+    </div>
+  </section>
+
+  <!-- Section: Upcoming Events -->
+  <section class="section">
+    <h2 class="section-title">
+      <mat-icon class="section-icon">event_available</mat-icon>
+      Upcoming Events
+    </h2>
+    <div class="event-list">
+      <ng-container *ngIf="futureEvents.length > 0; else noUpcoming">
+        <mat-card class="event-card approved" *ngFor="let event of futureEvents">
+          <mat-card-title>{{ event.event_name || 'Event #' + event.event_id }}</mat-card-title>
+          <mat-card-content>
+            <p><strong>Date:</strong> {{ event.event_date | date }}</p>
+            <p><strong>Location:</strong> {{ event.location }}</p>
+            <p><strong>Guests:</strong> {{ event.guest_count }}</p>
+            <mat-chip color="primary" selected>✅ Approved</mat-chip>
+          </mat-card-content>
+        </mat-card>
+      </ng-container>
+      <ng-template #noUpcoming>
+        <p class="empty-message">🗓️ No upcoming events scheduled.</p>
+      </ng-template>
+    </div>
+  </section>
+
+  <!-- Section: Past & Declined -->
+  <section class="section">
+    <h2 class="section-title">
+      <mat-icon class="section-icon">history</mat-icon>
+      Past & Declined Events
+    </h2>
+    <div class="dual-columns">
+      <div>
+        <h3>Past Events</h3>
+        <ng-container *ngIf="pastEvents.length > 0; else noPast">
+          <mat-card class="event-card" *ngFor="let event of pastEvents">
+            <mat-card-title>{{ event.event_name || 'Event #' + event.event_id }}</mat-card-title>
+            <mat-card-content>
+              <p><strong>Date:</strong> {{ event.event_date | date }}</p>
+              <mat-chip color="accent" selected>📅 Past</mat-chip>
+            </mat-card-content>
+          </mat-card>
+        </ng-container>
+        <ng-template #noPast>
+          <p class="empty-message">📅 No past events.</p>
+        </ng-template>
+      </div>
+      <div>
+        <h3>Declined Events</h3>
+        <ng-container *ngIf="declinedEvents.length > 0; else noDeclined">
+          <mat-card class="event-card declined" *ngFor="let event of declinedEvents">
+            <mat-card-title>{{ event.event_name || 'Event #' + event.event_id }}</mat-card-title>
+            <mat-card-content>
+              <p><strong>Date:</strong> {{ event.event_date | date }}</p>
+              <mat-chip color="warn" selected>❌ Declined</mat-chip>
+            </mat-card-content>
+          </mat-card>
+        </ng-container>
+        <ng-template #noDeclined>
+          <p class="empty-message">🚫 No declined events.</p>
+        </ng-template>
+      </div>
+    </div>
+  </section>
+</div>

@@ -53,4 +53,13 @@ export const routes: Routes = [
   },
   
   { path: '', redirectTo: 'login', pathMatch: 'full' },
+
+  {
+  path: 'supplier-home',
+  loadComponent: () =>
+    import('./modules/supplier-home/supplier-home.component').then((m) => m.SupplierHomeComponent),
+}
+ 
+
+ 
 ];

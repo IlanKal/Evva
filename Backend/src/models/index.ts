@@ -14,12 +14,15 @@ import EventRequest from "./EventRequest";
 
 
 
-Supplier.hasMany(Location, { foreignKey: "supplier_id" });
-Supplier.hasMany(Catering, { foreignKey: "supplier_id" });
-Supplier.hasMany(Photographer, { foreignKey: "supplier_id" });
-Supplier.hasMany(Speaker, { foreignKey: "supplier_id" });
-Supplier.hasMany(DJ, { foreignKey: "supplier_id" });
-
+Supplier.hasMany(Location, { foreignKey: "supplier_id",as: "locations"  });
+Supplier.hasMany(Catering, { foreignKey: "supplier_id",as: "caterings"  });
+Supplier.hasMany(Photographer, { foreignKey: "supplier_id",as: "photographers"  });
+Supplier.hasMany(Speaker, { foreignKey: "supplier_id" ,as: "speakers" });
+Supplier.hasMany(DJ, { foreignKey: "supplier_id",as: "djs"  });
+EventSupplier.belongsTo(Event, {
+  foreignKey: "event_id",
+  as: "event"
+});
 
 Location.belongsTo(Supplier, { foreignKey: "supplier_id" });
 Catering.belongsTo(Supplier, { foreignKey: "supplier_id" });
@@ -32,6 +35,14 @@ Guest.belongsTo(Event, { foreignKey: "event_id" });
 User.hasMany(Event, { foreignKey: "user_id" });
 Event.belongsTo(User, { foreignKey: "user_id" });
 
+Event.hasMany(EventSupplier, {
+  foreignKey: "event_id",
+  as: "EventSuppliers",
+});
+
+EventSupplier.belongsTo(Event, {
+  foreignKey: "event_id",
+});
 
 Event.belongsToMany(Supplier, {
   through: EventSupplier,
@@ -44,6 +55,29 @@ Supplier.belongsToMany(Event, {
 
 
 Event.hasMany(Guest, { foreignKey: "event_id" });
+
+// Event שייך ל־EventRequest (1:1)
+Event.belongsTo(EventRequest, {
+  foreignKey: "event_request_id",
+  as: "EventRequest",
+});
+
+// EventRequest מחזיק Event אחד (אם נוצר)
+EventRequest.hasOne(Event, {
+  foreignKey: "event_request_id",
+});
+
+
+// קשר בין EventSupplier ↔ Supplier
+EventSupplier.belongsTo(Supplier, {
+  foreignKey: "supplier_id",
+  as: "Supplier",
+});
+Supplier.hasMany(EventSupplier, {
+  foreignKey: "supplier_id",
+  as: "EventSuppliers",
+});
+
 
 export {
   sequelize,

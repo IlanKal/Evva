@@ -1,17 +1,38 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-grid-3">
   <div class="field-group" *ngFor="let field of fields">
-    <div class="field-title">{{ field.label }}</div>
-    <mat-form-field appearance="outline" class="full-width">
-      <input matInput *ngIf="field.type !== 'textarea'" [type]="field.type" [formControlName]="field.name"
-        [placeholder]="field.placeholder">
-      <textarea matInput *ngIf="field.type === 'textarea'" [formControlName]="field.name"
-        [placeholder]="field.placeholder"></textarea>
+    
+    <!-- DJ - סגנונות מוזיקה מרובים -->
+    <mat-form-field appearance="outline" class="full-width"
+      *ngIf="supplierType === 'dj' && field.name === 'music_styles'">
+      <mat-label>{{ field.label }}</mat-label>
+      <mat-select [formControlName]="field.name" multiple>
+        <mat-option *ngFor="let style of ['Pop', 'Rock', 'House','Techno', 'Hip-Hop', 'EDM', 'Jazz', 'Classical', 'Israeli', 'Dance',
+    'Latin','Salsa','Reggaeton']" [value]="style">
+          {{ style }}
+        </mat-option>
+      </mat-select>
     </mat-form-field>
+
+    <!-- שדות טקסט / מספר רגילים -->
+    <ng-container *ngIf="field.type !== 'checkbox' && !(supplierType === 'dj' && field.name === 'music_styles')">
+      <div class="field-title">{{ field.label }}</div>
+      <mat-form-field appearance="outline" class="full-width">
+        <input matInput *ngIf="field.type !== 'textarea'" [type]="field.type" [formControlName]="field.name"
+          [placeholder]="field.placeholder">
+        <textarea matInput *ngIf="field.type === 'textarea'" [formControlName]="field.name"
+          [placeholder]="field.placeholder"></textarea>
+      </mat-form-field>
+    </ng-container>
+
+    <!-- checkbox רגיל -->
+    <mat-checkbox *ngIf="field.type === 'checkbox'" [formControlName]="field.name">
+      {{ field.label }}
+    </mat-checkbox>
+  </div>
+
+  <div class="button-container">
+    <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
+      Submit →
+    </button>
   </div>
 </form>
-
-<div class="button-container">
-  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="form.invalid">
-    Submit →
-  </button>
-</div>

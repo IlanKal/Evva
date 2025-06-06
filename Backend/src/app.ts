@@ -16,6 +16,8 @@ import rsvpRoutes from './routes/rsvpRoutes';
 import ratingRoutes from './routes/ratingRoutes';
 import supplierRoutes from './routes/supplierRoutes';
 import createEventFromRequest from "./routes/createEventFromRequest";
+//import getUserEvents from './routes/userRoutes';
+
 
 const app = express();
 
@@ -42,7 +44,7 @@ app.use((req, res, next) => {
 app.use('/api', eventRequestRoutes);
 app.use('/api', userRoutes);
 app.use('/api', eventRoutes);
-app.use('/api', eventSupplierRoutes);
+app.use('/api/event-suppliers', eventSupplierRoutes);
 app.use('/api', guestRoutes);
 app.use('/api', photographerRoutes);
 app.use('/api', locationRoutes);
@@ -54,5 +56,7 @@ app.use('/rsvp', rsvpRoutes);
 app.use('/api', ratingRoutes);
 app.use('/api', supplierRoutes);
 app.use('/api',createEventFromRequest);
+//app.use('/api/:userId/events',getUserEvents);
+
 
 export default app;

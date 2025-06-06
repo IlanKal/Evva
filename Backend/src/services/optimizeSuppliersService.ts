@@ -26,8 +26,9 @@ export const optimizeSuppliers = async (
   suppliersByType: FilteredSuppliersByType
 ): Promise<OptimizationResult> => {
   const request = await EventRequest.findByPk(requestId);
-  if (!request) throw new Error("Event request not found");
+  if (!request|| !request.event_id) throw new Error("Event request not found");
 
+  const eventId = request.event_id;
   const budget = request.budget;
   const model: any = {
     optimize: "score",
@@ -122,12 +123,14 @@ for (const variable in results) {
     supplier_id: number;
     approval_status: 'SUGGESTED' | 'BACKUP';
   }[] = [];
+
+  
   
   // Suggested 
 for (const category in best_combination) {
   const supplier = best_combination[category];
   supplierEntriesToInsert.push({
-    event_id: requestId,
+    event_id: eventId,
     supplier_id: supplier.supplier_id,
     approval_status: 'SUGGESTED',
   });
@@ -144,7 +147,7 @@ for (const category in alternatives) {
     if (suggestedIds.has(supplier.supplier_id)) continue;
 
     supplierEntriesToInsert.push({
-      event_id: requestId,
+      event_id: eventId,
       supplier_id: supplier.supplier_id,
       approval_status: 'BACKUP',
     });

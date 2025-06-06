@@ -104,6 +104,8 @@ export const registerSupplier = async ({
   region,
   contact_info,
   supplier_type,
+  image_url,        
+  additional_info,  
   rememberMe,
 }: {
   name: string;
@@ -113,6 +115,8 @@ export const registerSupplier = async ({
   region: string;
   contact_info: string;
   supplier_type: 'catering' | 'dj' | 'photographer' | 'speaker' | 'location';
+  image_url?: string;
+  additional_info?: string;
   rememberMe: boolean;
 }) => {
   const existingSupplier = await authRepository.findSupplierByEmail(email);
@@ -130,6 +134,8 @@ export const registerSupplier = async ({
     region,
     contact_info,
     supplier_type,
+    image_url,         
+    additional_info,
   });
 
   const payload = { id: newSupplier.supplier_id, type: 'supplier' as const };

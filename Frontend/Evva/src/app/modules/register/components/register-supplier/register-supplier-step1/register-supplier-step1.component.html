@@ -22,19 +22,24 @@
     </div>
 
     <!-- שורה שנייה -->
-    <div class="field-group">
-        <div class="field-title">Available Days</div>
-        <mat-form-field appearance="outline" class="full-width">
-            <input matInput formControlName="available_days" placeholder="e.g., Sunday, Wednesday">
-        </mat-form-field>
-    </div>
+    <mat-form-field appearance="outline">
+  <mat-label>Available Days</mat-label>
+  <mat-select formControlName="available_days" multiple>
+    <mat-option *ngFor="let day of availableDays" [value]="day">
+      {{ day }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+    
 
-    <div class="field-group">
-        <div class="field-title">Region</div>
-        <mat-form-field appearance="outline" class="full-width">
-            <input matInput formControlName="region" placeholder="Region (e.g., Center)">
-        </mat-form-field>
-    </div>
+    <mat-form-field appearance="outline">
+  <mat-label>Region</mat-label>
+  <mat-select formControlName="region">
+    <mat-option *ngFor="let region of regions" [value]="region">
+      {{ region }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
 
 
 
