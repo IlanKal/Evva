@@ -1,132 +1,309 @@
 <app-header [user]="user"></app-header>
 <div class="layout">
-    <app-milestone [milestones]="milestones" [activeCategory]="activeCategory"
-      (milestoneClicked)="onMilestoneClick($event)"></app-milestone>
+  <app-milestone [milestones]="milestones" [activeCategory]="activeCategory"
+    (milestoneClicked)="onMilestoneClick($event)"></app-milestone>
 
   <div class="content" [ngSwitch]="activeCategory">
-
-    <!-- 📝 טופס אימות נתונים -->
     <ng-container *ngSwitchCase="'overview'">
       <div class="static-step" *ngIf="overviewForm">
-        <h2>Verify and Edit Event Details</h2>
+        <h2>Review and Edit Your Event</h2>
 
-        <form [formGroup]="overviewForm" (ngSubmit)="onSubmitOverview()">
+        <mat-card>
+          <mat-card-title>Basic Information</mat-card-title>
+          <ng-container *ngTemplateOutlet="basicFieldsBlock"></ng-container>
+        </mat-card>
 
-          <!-- פרטים בסיסיים -->
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Company Name</mat-label>
-            <input matInput formControlName="company_name">
-          </mat-form-field>
+        <mat-card>
+          <mat-card-title>Services & Preferences</mat-card-title>
+          <ng-container *ngTemplateOutlet="preferencesBlock"></ng-container>
+        </mat-card>
 
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Event Title</mat-label>
-            <input matInput formControlName="title">
-          </mat-form-field>
-
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Event Type</mat-label>
-            <mat-select formControlName="event_type">
-              <mat-option *ngFor="let type of EVENT_TYPES" [value]="type">{{ type }}</mat-option>
-            </mat-select>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Event Date</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName="event_date">
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Start Time</mat-label>
-            <input matInput type="time" formControlName="event_start_time">
-          </mat-form-field>
-
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Duration (hours)</mat-label>
-            <input matInput type="number" formControlName="event_duration_hours">
-          </mat-form-field>
-
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Budget</mat-label>
-            <input matInput type="number" formControlName="budget">
-          </mat-form-field>
-
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Guest Count</mat-label>
-            <input matInput type="number" formControlName="guest_count">
-          </mat-form-field>
-
-          <!-- 🍽 Need Catering -->
-          <mat-slide-toggle formControlName="need_catering">Need Catering?</mat-slide-toggle>
-          <div formGroupName="catering_preferences" *ngIf="overviewForm.get('need_catering')?.value">
-            <label class="section-title">Catering Preferences</label>
-            <mat-checkbox formControlName="vegan">Vegan</mat-checkbox>
-            <mat-checkbox formControlName="kosher">Kosher</mat-checkbox>
-            <mat-checkbox formControlName="vegetarian">Vegetarian</mat-checkbox>
-            <mat-checkbox formControlName="gluten_free">Gluten-Free</mat-checkbox>
+        <div class="additional-notes-block">
+          <mat-card-title>Additional Notes:</mat-card-title>
+          <div class="inline-edit-row" *ngIf="editingField !== 'additional_notes'; else editNotes">
+              <p>{{ overviewForm.value.additional_notes || 'No notes provided.' }}</p>
+              <button mat-icon-button type="button" (click)="startEdit('additional_notes')">
+                <mat-icon>edit</mat-icon>
+              </button>
           </div>
-
-          <!-- 📸 Need Photographer -->
-          <mat-slide-toggle formControlName="need_photographer">Need Photographer?</mat-slide-toggle>
-          <div formGroupName="photographer_preferences" *ngIf="overviewForm.get('need_photographer')?.value">
-            <label class="section-title">Photographer Preferences</label>
-            <mat-checkbox formControlName="has_stills">Stills</mat-checkbox>
-            <mat-checkbox formControlName="has_video">Video</mat-checkbox>
-            <mat-checkbox formControlName="has_magnets">Magnets</mat-checkbox>
-          </div>
-
-          <!-- 🎵 Need DJ -->
-          <mat-slide-toggle formControlName="need_dj">Need DJ?</mat-slide-toggle>
-          <div formGroupName="dj_preferences" *ngIf="overviewForm.get('need_dj')?.value">
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Music Styles</mat-label>
-              <mat-select formControlName="music_styles" multiple>
-                <mat-option *ngFor="let style of MUSIC_STYLES" [value]="style">{{ style }}</mat-option>
-              </mat-select>
+          <ng-template #editNotes>
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Additional Notes</mat-label>
+              <textarea matInput rows="4" #notesRef>{{ overviewForm.value.additional_notes }}</textarea>
             </mat-form-field>
-          </div>
+            <button mat-icon-button (click)="saveEdit('additional_notes', notesRef.value)">
+              <mat-icon>check</mat-icon>
+            </button>
+            <button mat-icon-button (click)="cancelEdit()">
+              <mat-icon>close</mat-icon>
+            </button>
+          </ng-template>
+        </div>
 
-          <!-- 🏢 Need Venue -->
-          <mat-slide-toggle formControlName="need_location">Need Venue?</mat-slide-toggle>
-          <div formGroupName="location_preferences" *ngIf="overviewForm.get('need_location')?.value">
-            <label class="section-title">Location Preferences</label>
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Region</mat-label>
-              <mat-select formControlName="area">
-                <mat-option *ngFor="let region of REGIONS" [value]="region">{{ region }}</mat-option>
-              </mat-select>
-            </mat-form-field>
-            <mat-checkbox formControlName="parking">Parking Required</mat-checkbox>
-          </div>
 
-          <!-- 👨‍🏫 Need Lecturer -->
-          <mat-slide-toggle formControlName="need_lecturer">Need Lecturer?</mat-slide-toggle>
-          <div formGroupName="lecturer_preferences" *ngIf="overviewForm.get('need_lecturer')?.value">
-            <mat-checkbox formControlName="required">Lecturer Required</mat-checkbox>
-          </div>
 
-          <!-- 📝 הערות -->
-          <mat-form-field appearance="outline" class="textarea-full">
-            <mat-label>Additional Notes</mat-label>
-            <textarea matInput formControlName="additional_notes" rows="4"></textarea>
-          </mat-form-field>
-
-          <button mat-raised-button color="primary" type="submit" [disabled]="overviewForm.invalid">
+        <div class="action-buttons">
+          <button mat-raised-button color="primary" (click)="onSubmitOverview()">
             Save & Continue
           </button>
-        </form>
+        </div>
       </div>
     </ng-container>
 
-    <!-- 👥 רשימת אורחים -->
     <div *ngSwitchCase="'guests'" class="static-step">
       <app-guest-upload (guestsConfirmed)="onGuestsConfirmed($event)"></app-guest-upload>
     </div>
 
-    <!-- 🧩 ספקים -->
     <app-step-results *ngSwitchDefault [category]="activeCategory" [suppliers]="suppliersMap[activeCategory]"
       (supplierChosen)="onChooseSupplier($event)" (rejectedAll)="onRejectAll()"></app-step-results>
-
   </div>
 </div>
+
+<!-- Blocks -->
+<!-- Basic Information -->
+<ng-template #basicFieldsBlock>
+  <div class="info-block">
+    <div class="inline-edit-row" *ngIf="editingField !== 'company_name'; else editCompany">
+      <div><strong class="m-r-10">Company Name:</strong> {{ overviewForm.value.company_name || 'Not provided' }}</div>
+      <button mat-icon-button type="button" (click)="startEdit('company_name')">
+        <mat-icon>edit</mat-icon>
+      </button>
+    </div>
+    <ng-template #editCompany>
+      <mat-form-field appearance="outline">
+        <mat-label>Company Name</mat-label>
+        <input matInput [value]="overviewForm.value.company_name" #companyNameRef />
+      </mat-form-field>
+      <button mat-icon-button
+        (click)="saveEdit('company_name', companyNameRef.value)"><mat-icon>check</mat-icon></button>
+      <button mat-icon-button (click)="cancelEdit()"><mat-icon>close</mat-icon></button>
+    </ng-template>
+
+    <div class="inline-edit-row" *ngIf="editingField !== 'title'; else editTitle">
+      <div>
+
+        <strong class="m-r-10">Title:</strong> {{ overviewForm.value.title || 'Not provided' }}
+      </div>
+      <button mat-icon-button type="button" (click)="startEdit('title')">
+        <mat-icon>edit</mat-icon>
+      </button>
+    </div>
+    <ng-template #editTitle>
+      <mat-form-field appearance="outline">
+        <mat-label>Event Title</mat-label>
+        <input matInput [value]="overviewForm.value.title" #titleRef />
+      </mat-form-field>
+      <button mat-icon-button (click)="saveEdit('title', titleRef.value)"><mat-icon>check</mat-icon></button>
+      <button mat-icon-button (click)="cancelEdit()"><mat-icon>close</mat-icon></button>
+    </ng-template>
+
+    <div class="inline-edit-row" *ngIf="editingField !== 'event_type'; else editEventType">
+      <div>
+
+        <strong class="m-r-10">Event Type:</strong> {{ overviewForm.value.event_type || 'Not selected' }}
+      </div>
+      <button mat-icon-button type="button" (click)="startEdit('event_type')">
+        <mat-icon>edit</mat-icon>
+      </button>
+    </div>
+    <ng-template #editEventType>
+      <mat-form-field appearance="outline">
+        <mat-label>Event Type</mat-label>
+        <mat-select #eventTypeRef [value]="overviewForm.value.event_type">
+          <mat-option *ngFor="let type of EVENT_TYPES" [value]="type">{{ type }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button mat-icon-button (click)="saveEdit('event_type', eventTypeRef.value)"><mat-icon>check</mat-icon></button>
+      <button mat-icon-button (click)="cancelEdit()"><mat-icon>close</mat-icon></button>
+    </ng-template>
+  </div>
+</ng-template>
+
+
+
+
+
+<ng-template #preferencesBlock>
+  <!-- DJ Preferences -->
+  <div *ngIf="overviewForm.value.need_dj; else noDJ">
+    <div class="inline-edit-row" *ngIf="editingField !== 'music_styles'; else editDJ">
+      <span>DJ Styles: {{ overviewForm.value.dj_preferences?.music_styles?.join(', ') || 'None' }}</span>
+      <button mat-icon-button type="button" (click)="startEdit('music_styles')">
+        <mat-icon>edit</mat-icon>
+      </button>
+    </div>
+    <ng-template #editDJ>
+      <mat-form-field appearance="fill">
+        <mat-select [value]="overviewForm.value.dj_preferences?.music_styles" multiple #djRef>
+          <mat-option *ngFor="let style of MUSIC_STYLES" [value]="style">{{ style }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button mat-icon-button (click)="saveEdit('music_styles', djRef.value)"><mat-icon>check</mat-icon></button>
+      <button mat-icon-button (click)="cancelEdit()"><mat-icon>close</mat-icon></button>
+    </ng-template>
+  </div>
+  <ng-template #noDJ>
+    <div class="not-selected-box">
+      <mat-icon>music_off</mat-icon>
+      <p>DJ not selected. Add if needed.</p>
+      <button mat-stroked-button type="button" (click)="toggleService('need_dj')">Add DJ</button>
+    </div>
+  </ng-template>
+
+  <!-- Catering Preferences -->
+  <div *ngIf="overviewForm.value.need_catering; else noCatering">
+    <div class="inline-edit-row" *ngIf="editingField !== 'catering_preferences'; else editCatering">
+      <span>
+        Catering:
+        <ng-container *ngIf="overviewForm.value.catering_preferences">
+          <ng-container *ngIf="overviewForm.value.catering_preferences.vegan">✔ Vegan </ng-container>
+          <ng-container *ngIf="overviewForm.value.catering_preferences.kosher">✔ Kosher </ng-container>
+          <ng-container *ngIf="overviewForm.value.catering_preferences.vegetarian">✔ Vegetarian </ng-container>
+          <ng-container *ngIf="overviewForm.value.catering_preferences.gluten_free">✔ Gluten-Free </ng-container>
+        </ng-container>
+      </span>
+      <button mat-icon-button type="button" (click)="startEdit('catering_preferences')">
+        <mat-icon>edit</mat-icon>
+      </button>
+    </div>
+    <ng-template #editCatering>
+      <mat-checkbox #veganRef [checked]="overviewForm.value.catering_preferences?.vegan">Vegan</mat-checkbox>
+      <mat-checkbox #kosherRef [checked]="overviewForm.value.catering_preferences?.kosher">Kosher</mat-checkbox>
+      <mat-checkbox #vegetarianRef
+        [checked]="overviewForm.value.catering_preferences?.vegetarian">Vegetarian</mat-checkbox>
+      <mat-checkbox #glutenFreeRef
+        [checked]="overviewForm.value.catering_preferences?.gluten_free">Gluten-Free</mat-checkbox>
+      <br />
+      <button mat-icon-button (click)="saveEdit('catering_preferences', {
+        vegan: veganRef.checked,
+        kosher: kosherRef.checked,
+        vegetarian: vegetarianRef.checked,
+        gluten_free: glutenFreeRef.checked
+      })">
+        <mat-icon>check</mat-icon>
+      </button>
+      <button mat-icon-button (click)="cancelEdit()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </ng-template>
+  </div>
+  <ng-template #noCatering>
+    <div class="not-selected-box">
+      <mat-icon>restaurant</mat-icon>
+      <p>Catering not selected.</p>
+      <button mat-stroked-button type="button" (click)="toggleService('need_catering')">Add Catering</button>
+    </div>
+  </ng-template>
+
+  <!-- Photographer Preferences -->
+  <div *ngIf="overviewForm.value.need_photographer; else noPhoto">
+    <div class="inline-edit-row" *ngIf="editingField !== 'photographer_preferences'; else editPhotographer">
+      <span>
+        Photographer:
+        <ng-container *ngIf="overviewForm.value.photographer_preferences">
+          <ng-container *ngIf="overviewForm.value.photographer_preferences.has_stills">✔ Stills </ng-container>
+          <ng-container *ngIf="overviewForm.value.photographer_preferences.has_video">✔ Video </ng-container>
+          <ng-container *ngIf="overviewForm.value.photographer_preferences.has_magnets">✔ Magnets </ng-container>
+        </ng-container>
+      </span>
+      <button mat-icon-button type="button" (click)="startEdit('photographer_preferences')">
+        <mat-icon>edit</mat-icon>
+      </button>
+    </div>
+    <ng-template #editPhotographer>
+      <mat-checkbox #stillsRef [checked]="overviewForm.value.photographer_preferences?.has_stills">Stills</mat-checkbox>
+      <mat-checkbox #videoRef [checked]="overviewForm.value.photographer_preferences?.has_video">Video</mat-checkbox>
+      <mat-checkbox #magnetsRef
+        [checked]="overviewForm.value.photographer_preferences?.has_magnets">Magnets</mat-checkbox>
+      <br />
+      <button mat-icon-button (click)="saveEdit('photographer_preferences', {
+        has_stills: stillsRef.checked,
+        has_video: videoRef.checked,
+        has_magnets: magnetsRef.checked
+      })">
+        <mat-icon>check</mat-icon>
+      </button>
+      <button mat-icon-button (click)="cancelEdit()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </ng-template>
+  </div>
+  <ng-template #noPhoto>
+    <div class="not-selected-box">
+      <mat-icon>photo_camera_back</mat-icon>
+      <p>Photographer not selected.</p>
+      <button mat-stroked-button type="button" (click)="toggleService('need_photographer')">Add Photographer</button>
+    </div>
+  </ng-template>
+
+  <!-- Venue Preferences -->
+  <div *ngIf="overviewForm.value.need_location; else noVenue">
+    <div class="inline-edit-row" *ngIf="editingField !== 'location_preferences'; else editVenue">
+      <span>
+        Venue:
+        {{ overviewForm.value.location_preferences?.area }}
+        <ng-container *ngIf="overviewForm.value.location_preferences?.parking">✔ Parking</ng-container>
+      </span>
+      <button mat-icon-button type="button" (click)="startEdit('location_preferences')">
+        <mat-icon>edit</mat-icon>
+      </button>
+    </div>
+    <ng-template #editVenue>
+      <mat-form-field appearance="fill">
+        <mat-label>Region</mat-label>
+        <mat-select #regionRef [value]="overviewForm.value.location_preferences?.area">
+          <mat-option *ngFor="let region of REGIONS" [value]="region">{{ region }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-checkbox #parkingRef [checked]="overviewForm.value.location_preferences?.parking">Parking
+        Required</mat-checkbox>
+      <br />
+      <button mat-icon-button (click)="saveEdit('location_preferences', {
+        area: regionRef.value,
+        parking: parkingRef.checked
+      })">
+        <mat-icon>check</mat-icon>
+      </button>
+      <button mat-icon-button (click)="cancelEdit()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </ng-template>
+  </div>
+  <ng-template #noVenue>
+    <div class="not-selected-box">
+      <mat-icon>location_off</mat-icon>
+      <p>Venue not selected.</p>
+      <button mat-stroked-button type="button" (click)="toggleService('need_location')">Add Venue</button>
+    </div>
+  </ng-template>
+
+  <!-- Lecturer Preferences -->
+  <div *ngIf="overviewForm.value.need_lecturer; else noLecturer">
+    <div class="inline-edit-row" *ngIf="editingField !== 'lecturer_preferences'; else editLecturer">
+      <span>Lecturer: {{ overviewForm.value.lecturer_preferences?.required ? '✔ Required' : 'Not Required' }}</span>
+      <button mat-icon-button type="button" (click)="startEdit('lecturer_preferences')">
+        <mat-icon>edit</mat-icon>
+      </button>
+    </div>
+    <ng-template #editLecturer>
+      <mat-checkbox #lecturerRef [checked]="overviewForm.value.lecturer_preferences?.required">Lecturer
+        Required</mat-checkbox>
+      <br />
+      <button mat-icon-button (click)="saveEdit('lecturer_preferences', {
+        required: lecturerRef.checked
+      })">
+        <mat-icon>check</mat-icon>
+      </button>
+      <button mat-icon-button (click)="cancelEdit()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </ng-template>
+  </div>
+  <ng-template #noLecturer>
+    <div class="not-selected-box">
+      <mat-icon>record_voice_over</mat-icon>
+      <p>Lecturer not selected.</p>
+      <button mat-stroked-button type="button" (click)="toggleService('need_lecturer')">Add Lecturer</button>
+    </div>
+  </ng-template>
+</ng-template>

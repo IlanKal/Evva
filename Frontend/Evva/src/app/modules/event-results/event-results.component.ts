@@ -16,12 +16,14 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
-import { MatCheckbox } from '@angular/material/checkbox';
+import { MatCheckbox, MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { HeaderComponent } from '../shared/header/header.component';
 import { IUser } from '../../models/IUser';
 import { GuestUploadComponent } from './guest-upload/guest-upload.component';
 import { IGuest } from '../../models/iGuest';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-event-results',
@@ -38,9 +40,11 @@ import { IGuest } from '../../models/iGuest';
     ReactiveFormsModule,
     MatSelectModule,
     MatOptionModule,
-    MatCheckbox,
     MatSlideToggleModule,
     HeaderComponent,
+    MatIconModule,
+    MatCheckboxModule,
+    MatCardModule,
     GuestUploadComponent],
   templateUrl: './event-results.component.html',
   styleUrls: ['./event-results.component.scss']
@@ -79,17 +83,17 @@ export class EventResultsComponent implements OnInit {
 
   loadEventIdIfExists(): void {
     this.eventResultsService.getEventByRequestId(this.requestId).subscribe({
-        next: (data) => {
-          if (data?.event_id) {
-            this.eventId = data.event_id;
-            this.fetchResults();
-            console.log('Event ID for this request is:', this.eventId);
-          }
-        },
-        error: (err) => {
-          console.warn('No event found for this request yet');
+      next: (data) => {
+        if (data?.event_id) {
+          this.eventId = data.event_id;
+          this.fetchResults();
+          console.log('Event ID for this request is:', this.eventId);
         }
-      });
+      },
+      error: (err) => {
+        console.warn('No event found for this request yet');
+      }
+    });
   }
 
   readonly EVENT_TYPES = [
@@ -295,4 +299,74 @@ export class EventResultsComponent implements OnInit {
     this.updateMilestoneStatus('guests', 'approved');
     this.moveToNextMilestone();
   }
+
+  editingField: string | null = null;
+
+  startEdit(field: string) {
+    this.editingField = field;
+  }
+
+  cancelEdit() {
+    this.editingField = null;
+  }
+
+  saveEdit(field: string, value: any) {
+    this.overviewForm.get(field)?.setValue(value);
+    this.editingField = null;
+  }
+  toggleService(controlName: string): void {
+    const control = this.overviewForm.get(controlName);
+    if (control) {
+      const newValue = !control.value;
+      control.setValue(newValue);
+
+      // Optional: initialize the relevant preference group if turned on
+      if (newValue) {
+        switch (controlName) {
+          case 'need_dj':
+            this.overviewForm.patchValue({
+              dj_preferences: { music_styles: [] }
+            });
+            break;
+          case 'need_catering':
+            this.overviewForm.patchValue({
+              catering_preferences: {
+                vegan: false,
+                kosher: false,
+                vegetarian: false,
+                gluten_free: false
+              }
+            });
+            break;
+          case 'need_photographer':
+            this.overviewForm.patchValue({
+              photographer_preferences: {
+                has_stills: false,
+                has_video: false,
+                has_magnets: false
+              }
+            });
+            break;
+          case 'need_location':
+            this.overviewForm.patchValue({
+              location_preferences: {
+                area: null,
+                parking: false
+              }
+            });
+            break;
+          case 'need_lecturer':
+            this.overviewForm.patchValue({
+              lecturer_preferences: {
+                required: false
+              }
+            });
+            break;
+        }
+      }
+    }
+  }
+
+
+
 }
