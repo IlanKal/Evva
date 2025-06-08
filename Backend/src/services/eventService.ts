@@ -1,6 +1,8 @@
 import * as eventRepository from "../repositories/eventRepository";
 import * as yup from "yup";
 import MailService from "./MailService";
+import { EVENT_STATUS } from "../constants/EventStatus";
+
 
 const eventSchema = yup.object({
   user_id: yup.number().required("User ID is required"),
@@ -8,6 +10,9 @@ const eventSchema = yup.object({
   budget: yup.number().positive().required("Budget is required"),
   guest_count: yup.number().integer().positive().required("Guest count is required"),
   location: yup.string().notRequired(),
+  status: yup.mixed<typeof EVENT_STATUS[number]>()
+  .oneOf(EVENT_STATUS)
+  .notRequired()
 });
 
 const eventUpdateSchema = yup.object({

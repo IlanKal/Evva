@@ -3,13 +3,13 @@ import { CommonModule } from '@angular/common';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { IMilestone } from '../../../../models/IMilestone';
-
-
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-milestone',
   standalone: true,
-  imports: [CommonModule, MatListModule, MatIconModule],
+  imports: [CommonModule, MatListModule, MatIconModule, MatTooltipModule, MatButtonModule],
   templateUrl: './milestone.component.html',
   styleUrls: ['./milestone.component.scss']
 })
@@ -17,8 +17,10 @@ export class MilestoneComponent {
   @Input() milestones!: IMilestone[];
   @Input() activeCategory!: string;
   @Input() disablesMilestones: boolean = true;
+  @Input() showFinishEvent: boolean = false;
 
   @Output() milestoneClicked = new EventEmitter<string>();
+  @Output() finishEventClicked = new EventEmitter<void>();
 
   getIcon(status: string): string {
     switch (status) {
@@ -40,5 +42,9 @@ export class MilestoneComponent {
 
   select(category: string) {
     this.milestoneClicked.emit(category);
+  }
+
+  onFinishClick() {
+    this.finishEventClicked.emit();
   }
 }

@@ -1,7 +1,12 @@
 <app-header [user]="user"></app-header>
 <div class="layout">
-  <app-milestone [disablesMilestones]="disablesMilestones" [milestones]="milestones" [activeCategory]="activeCategory"
-    (milestoneClicked)="onMilestoneClick($event)"></app-milestone>
+  <app-milestone 
+  [disablesMilestones]="disablesMilestones" 
+  [milestones]="milestones" 
+  [activeCategory]="activeCategory"
+  (milestoneClicked)="onMilestoneClick($event)"
+  (finishEventClicked)="finishEvent()">
+</app-milestone>
 
   <div class="content" [ngSwitch]="activeCategory">
     <ng-container *ngSwitchCase="'overview'">
@@ -40,8 +45,6 @@
             </button>
           </ng-template>
         </div>
-
-
 
         <div *ngIf="disablesMilestones" class="action-buttons">
           <button mat-raised-button color="primary" (click)="onSubmitOverview()">

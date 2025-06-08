@@ -3,6 +3,7 @@ import EventSupplier from '../models/EventSupplier';
 import Supplier from '../models/Supplier';
 import Guest from '../models/Guest';
 
+
 export const getAllEvents = async () => {
   return await Event.findAll();
 };

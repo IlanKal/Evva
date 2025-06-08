@@ -21,8 +21,9 @@ interface EventRequestAttributes {
   event_id?: number;
   title?: string;
   company_name?: string;
-  event_start_time?: string; // TIME in string format
-  event_duration_hours?: number; // float value (REAL)
+  event_start_time?: string; 
+  event_duration_hours?: number;
+  is_locked?: boolean; 
 }
 
 class EventRequest extends Model<EventRequestAttributes> implements EventRequestAttributes {
@@ -46,6 +47,7 @@ class EventRequest extends Model<EventRequestAttributes> implements EventRequest
   public company_name?: string;
   public event_start_time?: string;
   public event_duration_hours?: number;
+  public is_locked?: boolean;
 }
 
 EventRequest.init(
@@ -124,6 +126,11 @@ EventRequest.init(
     event_duration_hours: {
       type: DataTypes.REAL,
       allowNull: true,
+    },
+    is_locked: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      allowNull: false,
     },
   },
   {

@@ -61,4 +61,14 @@ export class EventResultsService {
   deleteGuest(guestId: number): Observable<any> {
     return this.http.delete(`${environment.apiUrl}/api/guests/${guestId}`);
   }
+
+  // end event 
+  finishEvent(eventId: number): Observable<any> {
+    return this.http.post(`${environment.apiUrl}/api/events/finish`, { event_id: eventId });
+  }
+
+  updateEventStatus(eventId: number, status: string) {
+    return this.http.put(`${environment.apiUrl}/api/events/${eventId}`, { status });
+  }
+  
 }
