@@ -1,0 +1,81 @@
+<h2 mat-dialog-title>{{ supplier['name'] }}</h2>
+<mat-dialog-content>
+  <img [src]="supplier['imageUrl']" alt="{{ supplier['name'] }}"
+       style="max-width: 100%; max-height: 180px; object-fit: cover; border-radius: 12px; margin-bottom: 16px;" />
+
+  <p><strong>Type:</strong> {{ supplier.supplier_type }}</p>
+  <p><strong>Region:</strong> {{ supplier.region }}</p>
+  <p><strong>Available Days:</strong> {{ supplier.available_days.join(', ') }}</p>
+  <p><strong>Rating:</strong> {{ supplier.rating }} ({{ supplier.rating_count }} reviews)</p>
+  <p><strong>Description:</strong> {{ supplier.additional_info }}</p>
+  <p><strong>Contact:</strong> {{ supplier.contact_info }}</p>
+
+  <ng-container [ngSwitch]="supplier.supplier_type">
+
+    <!-- DJ -->
+    <ng-container *ngSwitchCase="'dj'">
+      <ng-container *ngIf="supplier.djs?.[0] as dj">
+        <mat-divider class="my-4" />
+        <h3>DJ Details</h3>
+        <p><strong>Price per hour:</strong> ${{ dj.price_per_hour }}</p>
+        <p><strong>Music styles:</strong> {{ dj.music_styles?.join(', ') }}</p>
+      </ng-container>
+    </ng-container>
+
+    <!-- Photographer -->
+    <ng-container *ngSwitchCase="'photographer'">
+      <ng-container *ngIf="supplier.photographers?.[0] as photographer">
+        <mat-divider class="my-4" />
+        <h3>Photographer Details</h3>
+        <p><strong>Price per hour:</strong> ${{ photographer.price_per_hour }}</p>
+        <p><strong>Has video:</strong> {{ photographer.has_video ? 'Yes' : 'No' }}</p>
+        <p><strong>Has stills:</strong> {{ photographer.has_stills ? 'Yes' : 'No' }}</p>
+        <p><strong>Has magnets:</strong> {{ photographer.has_magnets ? 'Yes' : 'No' }}</p>
+      </ng-container>
+    </ng-container>
+
+    <!-- Catering -->
+    <ng-container *ngSwitchCase="'catering'">
+      <ng-container *ngIf="supplier.caterings?.[0] as catering">
+        <mat-divider class="my-4" />
+        <h3>Catering Details</h3>
+        <p><strong>Price per person:</strong> ${{ catering.price_per_person }}</p>
+        <p><strong>Menu:</strong> {{ catering.menu }}</p>
+        <p><strong>Vegetarian:</strong> {{ catering.vegetarian ? 'Yes' : 'No' }}</p>
+        <p><strong>Vegan:</strong> {{ catering.vegan ? 'Yes' : 'No' }}</p>
+        <p><strong>Kosher:</strong> {{ catering.kosher ? 'Yes' : 'No' }}</p>
+        <p><strong>Gluten free:</strong> {{ catering.gluten_free ? 'Yes' : 'No' }}</p>
+      </ng-container>
+    </ng-container>
+
+    <!-- Speaker -->
+    <ng-container *ngSwitchCase="'speaker'">
+      <ng-container *ngIf="supplier.speakers?.[0] as speaker">
+        <mat-divider class="my-4" />
+        <h3>Speaker Details</h3>
+        <p><strong>Price per lecture:</strong> ${{ speaker.price_per_lecture }}</p>
+        <p><strong>Lecture duration:</strong> {{ speaker.lecture_duration }} minutes</p>
+        <p><strong>Field:</strong> {{ speaker.lecture_field }}</p>
+      </ng-container>
+    </ng-container>
+
+    <!-- Location -->
+    <ng-container *ngSwitchCase="'location'">
+      <ng-container *ngIf="supplier.locations?.[0] as location">
+        <mat-divider class="my-4" />
+        <h3>Location Details</h3>
+        <p><strong>City:</strong> {{ location.city }}</p>
+        <p><strong>Address:</strong> {{ location.address }}</p>
+        <p><strong>Capacity:</strong> {{ location.capacity }}</p>
+        <p><strong>Price:</strong> ${{ location.price }}</p>
+        <p><strong>Has parking:</strong> {{ location.parking ? 'Yes' : 'No' }}</p>
+        <p><strong>Place type:</strong> {{ location.place_type }}</p>
+      </ng-container>
+    </ng-container>
+
+  </ng-container>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="close()">Close</button>
+</mat-dialog-actions>

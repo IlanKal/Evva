@@ -52,7 +52,7 @@
     align-self: flex-start;
 
     .bubble-content {
-      background: #f1f1f1;
+      background: #EEEEEE;
       color: #333;
     }
   }
@@ -62,8 +62,8 @@
     flex-direction: row-reverse;
 
     .bubble-content {
-      background: #d1e7dd;
-      color: #000;
+      background: #9B51FF;
+      color: #FFFFFF;
     }
   }
 
@@ -78,7 +78,7 @@
     border-radius: 16px;
     max-width: 70%;
     word-wrap: break-word;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 5px rgba(207, 13, 13, 0.05);
     font-size: 14px;
     line-height: 1.4;
   }

@@ -55,8 +55,21 @@
       <app-guest-upload (guestsConfirmed)="onGuestsConfirmed($event)"></app-guest-upload>
     </div>
 
-    <app-step-results *ngSwitchDefault [category]="activeCategory" [suppliers]="suppliersMap[activeCategory]"
-      (supplierChosen)="onChooseSupplier($event)" (rejectedAll)="onRejectAll()"></app-step-results>
+    <ng-container *ngIf="overviewForm">
+      <app-step-results
+        *ngSwitchDefault
+        [category]="activeCategory"
+        [suppliers]="suppliersMap[activeCategory]"
+        [guestCount]="overviewForm.get('guest_count')?.value"
+        [eventDurationHours]="overviewForm.get('event_duration_hours')?.value"
+        [selectedSupplierId]="selectedSupplierId"
+        [stepStatus]="supplier_status_by_type[activeCategory]?.status || 'PENDING'"
+        (supplierChosen)="onChooseSupplier($event)"
+        (rejectedAll)="onRejectAll()"
+      ></app-step-results>
+    </ng-container>
+    
+  
   </div>
 </div>
 
@@ -119,10 +132,6 @@
     </ng-template>
   </div>
 </ng-template>
-
-
-
-
 
 <ng-template #preferencesBlock>
   <!-- DJ Preferences -->

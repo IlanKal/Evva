@@ -1,48 +1,51 @@
-<div *ngIf="suppliers.length > 0" class="step-results-container">
-  <!-- אזור הבחירה -->
-  <div class="supplier-selection">
-    <!-- כרטיס ראשי -->
-    <div
-      class="main-supplier-card selectable"
-      [class.selected]="selectedSupplierId === suppliers[0].id"
-      (click)="selectSupplier(suppliers[0].id!)"
-    >
-      <img [src]="suppliers[0].imageUrl" alt="{{ suppliers[0].name }}" />
-      <h3>{{ suppliers[0].name }}</h3>
-      <p>{{ suppliers[0].city }}</p>
-      <div class="price">${{ suppliers[0].price }}</div>
-      <p class="desc">{{ suppliers[0].description }}</p>
-    </div>
+<div *ngIf="preferredSupplier" class="step-results-container">
+  <!-- ספק מועדף -->
+  <div class="main-supplier-card" [class.selected]="selectedSupplierId === preferredSupplier.id">
+    <img [src]="preferredSupplier.imageUrl" class="main-image" alt="{{ preferredSupplier.name }}" />
+    <div class="main-info">
+      <h2>{{ preferredSupplier.name }}</h2>
+      <p>{{ preferredSupplier.region || 'Unknown' }}</p>
+      <p class="price">${{ preferredSupplier.price }}</p>
+      <p class="description">{{ preferredSupplier.description }}</p>
 
-    <!-- ספקים נוספים -->
-    <div class="alternative-suppliers">
-      <div
-        class="mini-card selectable"
-        *ngFor="let s of suppliers.slice(1)"
-        [class.selected]="selectedSupplierId === s.id"
-        (click)="selectSupplier(s.id)"
-      >
-        <img [src]="s.imageUrl" alt="{{ s.name }}" />
-        <h4>{{ s.name }}</h4>
-        <p>{{ s.city }}</p>
-        <div class="price">${{ s.price }}</div>
+      <div class="main-actions">
+        <ng-container *ngIf="getSupplierButtonState(preferredSupplier) as btn">
+          <button
+            mat-raised-button
+            [disabled]="btn.disabled"
+            color="primary"
+            [ngClass]="btn.cssClass"
+            (click)="confirmSelection(preferredSupplier)">
+            {{ btn.label }}
+          </button>
+        </ng-container>
+        
+        
+        <button
+          mat-button
+          color="accent"
+          class="more-details-button"
+          (click)="openDetails($event, preferredSupplier)">
+          More details
+        </button>
       </div>
     </div>
   </div>
 
-  <!-- כפתורים בצד ימין -->
-  <div class="action-panel">
-    <button
-      mat-raised-button
-      color="primary"
-      [disabled]="!selectedSupplierId"
-      (click)="confirmSelection()"
-    >
-      i want this {{ category }}
-    </button>
-
-    <button mat-stroked-button color="accent" (click)="rejectAll()">
-      this is not what I want
-    </button>
+  <!-- ספקים נוספים -->
+  <div *ngIf="alternativeSuppliers.length > 0" class="alternative-suppliers-row">
+    <h3>More Options</h3>
+    <div class="mini-cards">
+      <div
+        class="mini-supplier-card"
+        *ngFor="let s of alternativeSuppliers"
+        (click)="selectSupplier(s.id)">
+        <img [src]="s.imageUrl" class="mini-thumbnail" alt="{{ s.name }}" />
+        <div class="mini-info">
+          <h4>{{ s.name }}</h4>
+          <p class="price">${{ s.price }}</p>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

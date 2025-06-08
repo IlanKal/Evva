@@ -13,7 +13,6 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { MatCheckbox, MatCheckboxModule } from '@angular/material/checkbox';
@@ -22,6 +21,8 @@ import { HeaderComponent } from '../shared/header/header.component';
 import { IUser } from '../../models/IUser';
 import { GuestUploadComponent } from './guest-upload/guest-upload.component';
 import { IGuest } from '../../models/iGuest';
+import { IEventSupplier } from '../../models/IEventSupplier';
+import { EventStep } from '../../services/event-results.service'; 
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 
@@ -73,28 +74,42 @@ export class EventResultsComponent implements OnInit {
         this.requestId = +requestId;
         this.loadOverview();
         this.loadEventIdIfExists();
-        this.fetchResults();
       }
     });
   }
 
   overviewForm!: FormGroup;
   requestId: number = Number(localStorage.getItem('requestId'));
+  selectedSupplierId?: number;
 
   loadEventIdIfExists(): void {
     this.eventResultsService.getEventByRequestId(this.requestId).subscribe({
       next: (data) => {
-        if (data?.event_id) {
-          this.eventId = data.event_id;
-          this.fetchResults();
-          console.log('Event ID for this request is:', this.eventId);
-        }
+        this.eventId = data.event_id;
+        console.log('Event ID for this request is:', this.eventId);
+        this.fetchResults();
       },
       error: (err) => {
-        console.warn('No event found for this request yet');
+        if (err.status === 404) {
+          console.warn('Event not found, creating new one...');
+          this.eventResultsService.createEventFromRequest(this.requestId).subscribe({
+            next: (created) => {
+              this.eventId = created.event_id;
+              console.log('New event created with ID:', this.eventId);
+              this.fetchResults();
+            },
+            error: (createErr) => {
+              console.error('Failed to create event from request:', createErr);
+            }
+          });
+        } else {
+          console.error('Failed to check event existence:', err);
+        }
       }
     });
   }
+
+  supplier_status_by_type: Record<string, { status: 'NOT_CHOSEN' | 'PENDING' | 'APPROVED' | 'DECLINED' }> = {};
 
   readonly EVENT_TYPES = [
     "Conference",
@@ -215,11 +230,82 @@ export class EventResultsComponent implements OnInit {
   }
 
   fetchResults() {
+    const previousCategory = this.activeCategory;
     this.eventResultsService.getEventResults(this.eventId).subscribe((data) => {
       const overviewMilestone: IMilestone = { category: 'overview', status: 'pending' };
       const guestsMilestone: IMilestone = { category: 'guests', status: 'pending' };
   
-      const dynamicMilestones: IMilestone[] = data.steps.map((step: any) => ({
+      const steps: EventStep[] = [];
+  
+      const guestCount = this.overviewForm?.get('guest_count')?.value ?? 1;
+      const duration = this.overviewForm?.get('event_duration_hours')?.value ?? 1;
+  
+      this.supplier_status_by_type = data.supplier_status_by_type || {};
+  
+      for (const category of Object.keys(data.supplier_status_by_type)) {
+        const entry = data.supplier_status_by_type[category];
+  
+        const suppliers = entry.suppliers.map((s: any) => {
+          let price = 0;
+  
+          const pricePerPerson = s.price_per_person 
+            ?? s.caterings?.[0]?.price_per_person 
+            ?? null;
+  
+          const pricePerHour = s.price_per_hour 
+            ?? s.djs?.[0]?.price_per_hour 
+            ?? s.photographers?.[0]?.price_per_hour 
+            ?? null;
+  
+          const pricePerLecture = s.price_per_lecture 
+            ?? s.speakers?.[0]?.price_per_lecture 
+            ?? null;
+  
+          const priceFlat = s.price ?? s.locations?.[0]?.price ?? null;
+  
+          if (category === 'catering' && pricePerPerson) {
+            price = +pricePerPerson * guestCount;
+          } else if (['dj', 'photographer'].includes(category) && pricePerHour) {
+            price = +pricePerHour * duration;
+          } else if (category === 'speaker' && pricePerLecture) {
+            price = +pricePerLecture;
+          } else if (category === 'location' && priceFlat) {
+            price = +priceFlat;
+          }
+  
+          return {
+            id: s.supplier_id,
+            name: s.name,
+            supplier_type: s.supplier_type,
+            price,
+            price_per_hour: +pricePerHour || null,
+            price_per_person: +pricePerPerson || null,
+            price_per_lecture: +pricePerLecture || null,
+            imageUrl: s.image_url,
+            description: s.additional_info || s.description || '',
+            approval_status: s.approval_status,
+            contact_info: s.contact_info ?? '',
+            region: s.region ?? '',
+            rating: s.rating ?? null,
+            rating_count: s.rating_count ?? 0,
+            available_days: s.available_days ?? [],
+  
+            djs: s.djs ?? [],
+            caterings: s.caterings ?? [],
+            photographers: s.photographers ?? [],
+            speakers: s.speakers ?? [],
+            locations: s.locations ?? []
+          };
+        });
+  
+        steps.push({
+          category,
+          status: entry.status || 'pending',
+          suppliers
+        });
+      }
+  
+      const dynamicMilestones: IMilestone[] = steps.map((step) => ({
         category: step.category,
         status: step.status
       }));
@@ -227,27 +313,38 @@ export class EventResultsComponent implements OnInit {
       this.milestones = [overviewMilestone, ...dynamicMilestones, guestsMilestone];
   
       this.suppliersMap = {};
-      for (let step of data.steps) {
+      for (let step of steps) {
         this.suppliersMap[step.category] = step.suppliers;
       }
   
-      this.activeCategory = this.milestones[0].category;
+      if (this.milestones.some(m => m.category === previousCategory)) {
+        this.activeCategory = previousCategory;
+      } else {
+        this.activeCategory = this.milestones[0].category;
+      }
     });
   }
   
-
+  
   onMilestoneClick(category: string) {
     this.activeCategory = category;
   }
 
   onChooseSupplier(supplierId: number) {
-    this.eventResultsService
-      .chooseSupplier(this.eventId, this.activeCategory, supplierId)
-      .subscribe(() => {
-        this.updateMilestoneStatus(this.activeCategory, 'waiting');
-      });
+    console.log('[EVENT RESULTS] Choosing supplier ID:', supplierId, 'for event:', this.eventId);
+  
+    this.eventResultsService.chooseSupplier(this.eventId, supplierId).subscribe({
+      next: () => {
+        console.log('[EVENT RESULTS] Supplier successfully chosen, re-fetching results');
+        this.fetchResults();
+      },
+      error: (err) => {
+        console.error('[EVENT RESULTS] Error choosing supplier:', err);
+      }
+    });
   }
-
+  
+  
   onRejectAll() {
     console.log('User rejected all suppliers for', this.activeCategory);
     this.updateMilestoneStatus(this.activeCategory, 'rejected');
