@@ -15,6 +15,9 @@ interface EventAttributes {
   status: EventStatus;
   title: string;
   event_type: EventType;
+  company_name?: string;
+  event_start_time?: string;
+  event_duration_hours?: number;
 }
 
 type EventCreationAttributes = Optional<EventAttributes, 'event_id'>;
@@ -31,6 +34,9 @@ class Event extends Model<EventAttributes, EventCreationAttributes>
   public status!: EventStatus;
   public title!: string;
   public event_type!: EventType;
+  public company_name?: string;
+  public event_start_time?: string;
+  public event_duration_hours?: number;
 }
 
 Event.init(
@@ -87,6 +93,18 @@ Event.init(
         isIn: [EVENT_TYPES],
       },
       defaultValue: 'Conference',
+    },
+    company_name: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
+    },
+    event_start_time: {
+      type: DataTypes.TIME,
+      allowNull: true,
+    },
+    event_duration_hours: {
+      type: DataTypes.REAL,
+      allowNull: true,
     },
   },
   {

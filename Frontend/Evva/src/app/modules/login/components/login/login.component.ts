@@ -64,13 +64,24 @@ export class LoginComponent {
   }
 
   onSubmit() {
-    if (this.loginForm.valid) {
-      this.authService.login(this.loginForm.value).subscribe({
-        next: (user) => {
-  // שומרים את המידע בלוקאל סטורג' לשימוש בהמשך
-        localStorage.setItem('userId', user.id.toString());
+  if (this.loginForm.valid) {
+    this.authService.login(this.loginForm.value).subscribe({
+      next: (user) => {
+        // 🧹 מנקים מזהים ישנים מה־localStorage
+        localStorage.removeItem('userId');
+        localStorage.removeItem('supplierId');
+
+        // 💾 שמירת מזהה לפי סוג המשתמש
+        if (user.type === 'supplier') {
+          localStorage.setItem('supplierId', user.id.toString());
+          
+        } else {
+          localStorage.setItem('userId', user.id.toString());
+        }
+
         localStorage.setItem('type', user.type);
 
+        // 🔀 ניווט לפי סוג
         if (user.type === 'supplier') {
           this.router.navigate(['/supplier-home']);
         } else if (user.type === 'user') {
@@ -79,16 +90,16 @@ export class LoginComponent {
           this.router.navigate(['/']);
         }
       },
-        error: (err) => {
-          console.error('❌ Login error:', err);
-          this.loginError = err.status === 401
+      error: (err) => {
+        console.error('❌ Login error:', err);
+        this.loginError =
+          err.status === 401
             ? 'Invalid email or password'
             : 'An unexpected error occurred. Please try again.';
-        }
-      });
-    }
+      }
+    });
   }
-
+}
   onRegister() {
     this.router.navigate(['/register']);
   }

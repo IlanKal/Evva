@@ -3,7 +3,7 @@ import { sequelize } from '../config/db';
 import RsvpStatus from '../types/RsvpStatus'; 
 import Supplier from './Supplier';
 import { APPROVAL_STATUS_VALUES, ApprovalSupplierStatus } from '../constants/approvalSupplierStatus';
-
+import Event from './event'; 
 
 interface EventSupplierAttributes {
   event_id: number;
@@ -24,6 +24,7 @@ export class EventSupplier extends Model {
   public declined_at?: Date;
   public Supplier?: Supplier;
   public is_final!:boolean;
+  public event?: Event;
 }
 //'suggested' - האופציה המושלמת
 //'backup' - האלטרנטיבות
@@ -65,6 +66,16 @@ EventSupplier.init(
     type: DataTypes.BOOLEAN,
     allowNull: false,
     defaultValue: false,
+},
+was_notified_to_supplier: {
+  type: DataTypes.BOOLEAN,
+  allowNull: false,
+  defaultValue: false
+},
+was_notified_to_user: {
+  type: DataTypes.BOOLEAN,
+  allowNull: false,
+  defaultValue: false
 },
   
   },

@@ -1,80 +1,87 @@
 import { Component, OnInit } from '@angular/core';
 import { EventSupplierService } from '../../services/event-supplier.service';
-import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common'; 
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
-import { HeaderComponent } from './././../shared/header/header.component';
+import { HeaderComponent } from './../shared/header/header.component';
 
 @Component({
   selector: 'app-supplier-home',
   standalone: true,
   templateUrl: './supplier-home.component.html',
   styleUrls: ['./supplier-home.component.scss'],
-  imports: [CommonModule, MatCardModule, MatIconModule, MatButtonModule, MatChipsModule,HeaderComponent] 
+  imports: [CommonModule, MatCardModule, MatIconModule, MatButtonModule, MatChipsModule, HeaderComponent] 
 })
 export class SupplierHomeComponent implements OnInit {
-  supplierId = Number(localStorage.getItem('supplierId'));
+  supplierId: number = 0;
   activeEvents: any[] = [];
   futureEvents: any[] = [];
   declinedEvents: any[] = [];
   pastEvents: any[] = [];
 
-   user: any = null; 
+  user: any = null; 
 
   constructor(private eventService: EventSupplierService) {}
 
   ngOnInit(): void {
-    // שליפת פרטי הספק מה־localStorage
+    // שליפת פרטי המשתמש מה־localStorage
     this.user = {
       name: localStorage.getItem('name'),
       email: localStorage.getItem('email'),
       phone: localStorage.getItem('phone')
     };
 
-    // שליפת ה־ID
-    this.supplierId = Number(localStorage.getItem('userId'));
+    // טעינת מזהה הספק
+    this.supplierId = Number(localStorage.getItem('supplierId'));
+    console.log('📦 Loaded supplierId:', this.supplierId);
 
-    // טעינת האירועים
-    this.eventService.getDashboard(this.supplierId).subscribe((data) => {
-      this.activeEvents = data.active.filter((e: any) => e.status === 'CHOSEN');
-      this.futureEvents = data.active.filter((e: any) => e.status === 'APPROVED');
-      this.declinedEvents = data.rejected;
-      this.pastEvents = data.past;
+    if (!this.supplierId || isNaN(this.supplierId)) {
+      console.error('❌ supplierId is missing or invalid in localStorage');
+      return;
+    }
+
+    // שליפת האירועים לדשבורד
+    this.eventService.getDashboard(this.supplierId).subscribe({
+      next: (data) => {
+        console.log('✅ Fetched dashboard events:', data);
+        this.activeEvents = data.active.filter((e: any) => e.status === 'CHOSEN');
+        this.futureEvents = data.active.filter((e: any) => e.status === 'APPROVED');
+        this.declinedEvents = data.rejected;
+        this.pastEvents = data.past;
+      },
+      error: (err) => {
+        console.error('❌ Failed to fetch dashboard events:', err);
+      }
     });
   }
 
   approveEvent(eventId: number): void {
-  this.eventService.confirmSupplier(eventId, this.supplierId).subscribe({
-    next: (res) => {
-      console.log('אושר:', res.message);
-      this.ngOnInit();
-      // אופציונלי: הסתרת האירוע מהרשימה או סימון כמאושר
-      this.activeEvents = this.activeEvents.filter(e => e.event_id !== eventId);
-      alert('✔️ האירוע אושר בהצלחה');
-    },
-    error: (err) => {
-      console.error('שגיאה באישור:', err);
-      alert('❌ שגיאה באישור האירוע');
-    }
-  });
-}
+    this.eventService.confirmSupplier(eventId, this.supplierId).subscribe({
+      next: (res) => {
+        console.log('✔️ האירוע אושר:', res.message);
+        this.ngOnInit(); // טוען מחדש את האירועים
+        alert('✔️ האירוע אושר בהצלחה');
+      },
+      error: (err) => {
+        console.error('❌ שגיאה באישור:', err);
+        alert('שגיאה באישור האירוע');
+      }
+    });
+  }
 
-declineEvent(eventId: number): void {
-  this.eventService.declineSupplier(eventId, this.supplierId).subscribe({
-    next: (res) => {
-      console.log('נדחה:', res.message);
-      this.ngOnInit();
-      this.activeEvents = this.activeEvents.filter(e => e.event_id !== eventId);
-      alert('⚠️ האירוע נדחה');
-    },
-    error: (err) => {
-      console.error('שגיאה בדחייה:', err);
-      alert('❌ שגיאה בדחיית האירוע');
-    }
-  });
-}
-
+  declineEvent(eventId: number): void {
+    this.eventService.declineSupplier(eventId, this.supplierId).subscribe({
+      next: (res) => {
+        console.log('⚠️ האירוע נדחה:', res.message);
+        this.ngOnInit(); // טוען מחדש את האירועים
+        alert('⚠️ האירוע נדחה');
+      },
+      error: (err) => {
+        console.error('❌ שגיאה בדחייה:', err);
+        alert('שגיאה בדחיית האירוע');
+      }
+    });
+  }
 }

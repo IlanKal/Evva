@@ -23,7 +23,7 @@ export const prepareSuppliersForOptimization = async (
   if (!eventRequest) throw new Error("Event request not found");
 
   const guestCount = eventRequest.guest_count || 1;
-  const eventDuration = /*eventRequest.event_duration||*/ 4;
+  const eventDuration = eventRequest.event_duration_hours|| 4;
   const djPreferences: DJPreferences = eventRequest.dj_preferences || { music_styles: [] };
 
   const prepared: { [key: string]: SupplierInput[] } = {};

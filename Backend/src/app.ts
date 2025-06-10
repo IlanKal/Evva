@@ -17,6 +17,9 @@ import ratingRoutes from './routes/ratingRoutes';
 import supplierRoutes from './routes/supplierRoutes';
 import createEventFromRequest from "./routes/createEventFromRequest";
 //import getUserEvents from './routes/userRoutes';
+import notificationRoutes from './routes/notificationRoutes';
+
+
 
 
 const app = express();
@@ -57,6 +60,7 @@ app.use('/api', ratingRoutes);
 app.use('/api', supplierRoutes);
 app.use('/api',createEventFromRequest);
 //app.use('/api/:userId/events',getUserEvents);
+app.use('/api', notificationRoutes);
 
 
 export default app;

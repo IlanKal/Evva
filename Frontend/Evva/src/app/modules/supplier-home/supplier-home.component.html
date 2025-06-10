@@ -12,9 +12,12 @@
     <div class="event-list">
       <ng-container *ngIf="activeEvents.length > 0; else noPending">
         <mat-card class="event-card pending" *ngFor="let event of activeEvents">
-          <mat-card-title>{{ event.event_name || 'Event #' + event.event_id }}</mat-card-title>
+          <mat-card-title>{{ event.title || 'Event #' + event.event_id }}</mat-card-title>
           <mat-card-content>
+            <p><strong>Company:</strong> {{ event.company_name || 'N/A' }}</p>
             <p><strong>Date:</strong> {{ event.event_date | date }}</p>
+            <strong>Time:</strong> {{ event.event_start_time }}
+            <p><strong>Duration:</strong> {{ event.event_duration_hours || 'Unknown' }} hours</p>
             <p><strong>Location:</strong> {{ event.location }}</p>
             <p><strong>Guests:</strong> {{ event.guest_count }}</p>
             <p><strong>Customer:</strong> {{ event.customer?.full_name }} ({{ event.customer?.phone }})</p>
@@ -41,11 +44,15 @@
     <div class="event-list">
       <ng-container *ngIf="futureEvents.length > 0; else noUpcoming">
         <mat-card class="event-card approved" *ngFor="let event of futureEvents">
-          <mat-card-title>{{ event.event_name || 'Event #' + event.event_id }}</mat-card-title>
+          <mat-card-title>{{ event.title || 'Event #' + event.event_id }}</mat-card-title>
           <mat-card-content>
+            <p><strong>Company:</strong> {{ event.company_name || 'N/A' }}</p>
             <p><strong>Date:</strong> {{ event.event_date | date }}</p>
+            <strong>Time:</strong> {{ event.event_start_time }}
+            <p><strong>Duration:</strong> {{ event.event_duration_hours || 'Unknown' }} hours</p>
             <p><strong>Location:</strong> {{ event.location }}</p>
             <p><strong>Guests:</strong> {{ event.guest_count }}</p>
+            <p><strong>Customer:</strong> {{ event.customer?.full_name }} ({{ event.customer?.phone }})</p>
             <mat-chip color="primary" selected>✅ Approved</mat-chip>
           </mat-card-content>
         </mat-card>
@@ -67,9 +74,12 @@
         <h3>Past Events</h3>
         <ng-container *ngIf="pastEvents.length > 0; else noPast">
           <mat-card class="event-card" *ngFor="let event of pastEvents">
-            <mat-card-title>{{ event.event_name || 'Event #' + event.event_id }}</mat-card-title>
+            <mat-card-title>{{ event.title || 'Event #' + event.event_id }}</mat-card-title>
             <mat-card-content>
               <p><strong>Date:</strong> {{ event.event_date | date }}</p>
+              <p><strong>Location:</strong> {{ event.location }}</p>
+            <p><strong>Guests:</strong> {{ event.guest_count }}</p>
+            <p><strong>Customer:</strong> {{ event.customer?.full_name }} ({{ event.customer?.phone }})</p>
               <mat-chip color="accent" selected>📅 Past</mat-chip>
             </mat-card-content>
           </mat-card>
@@ -82,9 +92,12 @@
         <h3>Declined Events</h3>
         <ng-container *ngIf="declinedEvents.length > 0; else noDeclined">
           <mat-card class="event-card declined" *ngFor="let event of declinedEvents">
-            <mat-card-title>{{ event.event_name || 'Event #' + event.event_id }}</mat-card-title>
+            <mat-card-title>{{ event.title || 'Event #' + event.event_id }}</mat-card-title>
             <mat-card-content>
               <p><strong>Date:</strong> {{ event.event_date | date }}</p>
+              <p><strong>Location:</strong> {{ event.location }}</p>
+            <p><strong>Guests:</strong> {{ event.guest_count }}</p>
+            <p><strong>Customer:</strong> {{ event.customer?.full_name }} ({{ event.customer?.phone }})</p>
               <mat-chip color="warn" selected>❌ Declined</mat-chip>
             </mat-card-content>
           </mat-card>

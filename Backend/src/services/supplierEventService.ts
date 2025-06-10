@@ -9,7 +9,17 @@ export const getSupplierDashboardEvents = async (supplierId: number) => {
     include: [
   {
     model: Event,
-    attributes: ["event_id", "title", "event_date", "guest_count", "location", "user_id"],
+    attributes: [
+        "event_id",
+        "title",
+        "event_date",
+        "guest_count",
+        "location",
+        "user_id",
+        "company_name",
+        "event_start_time",
+        "event_duration_hours"
+    ],
     include: [
       {
         model: User,   // ייבוא של מודל המשתמש
@@ -35,22 +45,25 @@ export const getSupplierDashboardEvents = async (supplierId: number) => {
     const isPast = dayjs(event.event_date).isBefore(now, "day");
 
     const base = {
-      event_id: event.event_id,
-      event_name: event.event_name,
-      event_date: event.event_date,
-      guest_count: event.guest_count,
-      location: event.location,
-      status: item.approval_status,
-      chosen_at: item.chosen_at,
-      approved_at: item.approved_at,
-      declined_at: item.declined_at,
-      customer: user ? {
-        full_name: user.full_name,
-        email: user.email,
-        phone: user.phone,
-        role: user.role,
+  event_id: event.event_id,
+  title: event.title,
+  event_date: event.event_date,
+  guest_count: event.guest_count,
+  location: event.location,
+  company_name: event.company_name,
+  event_start_time: event.event_start_time,
+  event_duration_hours: event.event_duration_hours,
+  status: item.approval_status,
+  chosen_at: item.chosen_at,
+  approved_at: item.approved_at,
+  declined_at: item.declined_at,
+  customer: user ? {
+    full_name: user.full_name,
+    email: user.email,
+    phone: user.phone,
+    role: user.role,
   } : null
-    };
+};
 
     if (isPast) {
       past.push(base);

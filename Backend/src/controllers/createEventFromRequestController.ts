@@ -30,9 +30,12 @@ export const createEventFromRequest = async (
       budget: request.budget,
       location: request.location,
       event_request_id: request.request_id,
-      title: `Just for now!!`, 
+      title: request.title || "Untitled Event",
       status: 'PLANNING',
-      event_type: 'Conference',
+      event_type: request.event_type || 'Conference',
+      company_name: request.company_name || undefined,
+      event_start_time: request.event_start_time || undefined,
+      event_duration_hours: request.event_duration_hours || undefined,
     });
 
     // 3. עדכון בקשת האירוע עם ID
@@ -49,10 +52,6 @@ export const createEventFromRequest = async (
     res.status(201).json({
       message: "Event created successfully",
       event_id: newEvent.event_id,
-      suppliers: {
-        best_combination,
-        alternatives,
-      },
     });
   } catch (error) {
     console.error("❌ Error creating event from request:", error);
