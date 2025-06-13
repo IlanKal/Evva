@@ -46,6 +46,11 @@ export class MilestoneComponent {
     }
   }
 
+  get isFinishDisabled(): boolean {
+    return this.milestones?.some(m => m.status.toLowerCase() !== 'approved');
+  }
+
+
   select(category: string) {
     this.milestoneClicked.emit(category);
   }
@@ -53,4 +58,6 @@ export class MilestoneComponent {
   onFinishClick() {
     this.finishEventClicked.emit();
   }
+
+
 }

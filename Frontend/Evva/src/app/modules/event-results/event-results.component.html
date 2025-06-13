@@ -50,7 +50,8 @@
     </ng-container>
 
     <div *ngSwitchCase="'guests'" class="static-step">
-      <app-guest-upload (guestsConfirmed)="onGuestsConfirmed($event)"></app-guest-upload>
+      <app-guest-upload (allGuestsApproved)="markMilestoneApproved('guests')"
+        (guestsConfirmed)="onGuestsConfirmed($event)"></app-guest-upload>
     </div>
 
     <ng-container *ngIf="overviewForm">
