@@ -1,59 +1,58 @@
 <!-- אייקון עיפרון + כפתור חזרה -->More actions
 <div class="top-actions">
-    <button mat-icon-button (click)="toggleEdit()" aria-label="Edit">
-      <mat-icon>{{ isEditMode ? 'close' : 'edit' }}</mat-icon>
-    </button>
+  <button mat-icon-button (click)="toggleEdit()" aria-label="Edit">
+    <mat-icon>{{ isEditMode ? 'close' : 'edit' }}</mat-icon>
+  </button>
 
-    <button mat-raised-button color="primary" (click)="goBackToDashboard()">
-  Back to Events
-</button>
-  </div>
+  <button mat-raised-button color="primary" (click)="goBackToDashboard()">
+    Back to Events
+  </button>
+</div>
 
-  <form [formGroup]="supplierForm" (ngSubmit)="onSubmit()" class="profile-form">
-    <!-- Basic Info -->
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Name</mat-label>
-      <input matInput formControlName="name" />
-    </mat-form-field>
+<form [formGroup]="supplierForm" (ngSubmit)="onSubmit()" class="profile-form">
+  <!-- Basic Info -->
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Name</mat-label>
+    <input matInput formControlName="name" />
+  </mat-form-field>
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Email</mat-label>
-      <input matInput type="email" formControlName="email" />
-    </mat-form-field>
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Email</mat-label>
+    <input matInput type="email" formControlName="email" />
+  </mat-form-field>
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Contact Info</mat-label>
-      <input matInput formControlName="contact_info" />
-    </mat-form-field>
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Contact Info</mat-label>
+    <input matInput formControlName="contact_info" />
+  </mat-form-field>
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Region</mat-label>
-      <mat-select formControlName="region">
-        <mat-option *ngFor="let region of regions" [value]="region">{{ region }}</mat-option>
-      </mat-select>
-    </mat-form-field>
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Region</mat-label>
+    <mat-select formControlName="region">
+      <mat-option *ngFor="let region of regions" [value]="region">{{ region }}</mat-option>
+    </mat-select>
+  </mat-form-field>
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Additional Info</mat-label>
-      <textarea matInput formControlName="additional_info"></textarea>
-    </mat-form-field>
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Additional Info</mat-label>
+    <textarea matInput formControlName="additional_info"></textarea>
+  </mat-form-field>
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Available Days</mat-label>
-      <mat-select formControlName="available_days" multiple>
-        <mat-option *ngFor="let day of weekdays" [value]="day">{{ day }}</mat-option>
-      </mat-select>
-    </mat-form-field>
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Available Days</mat-label>
+    <mat-select formControlName="available_days" multiple>
+      <mat-option *ngFor="let day of weekdays" [value]="day">{{ day }}</mat-option>
+    </mat-select>
+  </mat-form-field>
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Supplier Type</mat-label>
-      <input matInput formControlName="supplier_type" />
-    </mat-form-field>
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Supplier Type</mat-label>
+    <input matInput formControlName="supplier_type" />
+  </mat-form-field>
 
- <!-- Fields by Supplier Type -->
-<ng-container *ngIf="extraFieldsForm instanceof FormGroup">
-  <div [formGroup]="extraFieldsForm">
-  <div [formGroup]="extraFieldsForm">
+  <!-- Fields by Supplier Type -->
+  <!-- Fields by Supplier Type -->
+  <ng-container *ngIf="extraFieldsForm" [formGroup]="extraFieldsForm">
     <ng-container [ngSwitch]="supplierType">
       <!-- CATERING -->
       <ng-container *ngSwitchCase="'catering'">
@@ -83,7 +82,9 @@
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Music Styles</mat-label>
           <mat-select formControlName="music_styles" multiple>
-            <mat-option *ngFor="let style of ['Pop', 'Rock', 'House', 'Techno', 'Hip-hop', 'Jazz', 'Classical', 'Israeli', 'EDM', 'Dance', 'Latin', 'Salsa', 'Reggaeton']" [value]="style">
+            <mat-option
+              *ngFor="let style of ['Pop', 'Rock', 'House', 'Techno', 'Hip-hop', 'Jazz', 'Classical', 'Israeli', 'EDM', 'Dance', 'Latin', 'Salsa', 'Reggaeton']"
+              [value]="style">
               {{ style }}
             </mat-option>
           </mat-select>
@@ -150,48 +151,30 @@
         </mat-form-field>
       </ng-container>
     </ng-container>
+  </ng-container>
+
+
+  <!-- Password & Submit -->
+  <div *ngIf="isEditMode">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>New Password</mat-label>
+      <input matInput [type]="showPassword ? 'text' : 'password'" formControlName="newPassword" />
+      <button mat-icon-button matSuffix (click)="showPassword = !showPassword" type="button">
+        <mat-icon>{{ showPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+      </button>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Confirm Password</mat-label>
+      <input matInput [type]="showConfirmPassword ? 'text' : 'password'" formControlName="confirmPassword" />
+      <button mat-icon-button matSuffix (click)="showConfirmPassword = !showConfirmPassword" type="button">
+        <mat-icon>{{ showConfirmPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+      </button>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit">Save</button>
   </div>
-</ng-container>
 
-    <!-- Password & Submit -->
-    <div *ngIf="isEditMode">
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>New Password</mat-label>
-        <input
-          matInput
-          [type]="showPassword ? 'text' : 'password'"
-          formControlName="newPassword"
-        />
-        <button
-          mat-icon-button
-          matSuffix
-          (click)="showPassword = !showPassword"
-          type="button"
-        >
-          <mat-icon>{{ showPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
-        </button>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Confirm Password</mat-label>
-        <input
-          matInput
-          [type]="showConfirmPassword ? 'text' : 'password'"
-          formControlName="confirmPassword"
-        />
-        <button
-          mat-icon-button
-          matSuffix
-          (click)="showConfirmPassword = !showConfirmPassword"
-          type="button"
-        >
-          <mat-icon>{{ showConfirmPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
-        </button>
-      </mat-form-field>
-
-      <button mat-raised-button color="primary" type="submit">Save</button>
-    </div>
-
-    <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
-    <p *ngIf="successMessage" class="success">{{ successMessage }}</p>
-  </form>
+  <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+  <p *ngIf="successMessage" class="success">{{ successMessage }}</p>
+</form>

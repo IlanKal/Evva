@@ -34,6 +34,8 @@ import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
 })
 export class GuestUploadComponent implements OnInit, AfterViewInit {
   @Output() guestsConfirmed = new EventEmitter<IGuest[]>();
+  @Output() allGuestsApproved = new EventEmitter<void>();
+
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -49,7 +51,7 @@ export class GuestUploadComponent implements OnInit, AfterViewInit {
   constructor(
     private eventResultsService: EventResultsService,
     private route: ActivatedRoute
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     const paramId = this.route.snapshot.paramMap.get('requestId');
@@ -142,6 +144,7 @@ export class GuestUploadComponent implements OnInit, AfterViewInit {
       next: () => {
         Object.assign(originalGuest, this.editingGuest);
         this.editingGuest = null;
+        this.checkAllGuestsApproved();
         this.applyFilter();
       },
       error: (err) => console.error('❌ Failed to update guest:', err)
@@ -209,4 +212,12 @@ export class GuestUploadComponent implements OnInit, AfterViewInit {
       default: return 'rsvp-pending';
     }
   }
+
+  checkAllGuestsApproved() {
+    const allApproved = this.guests.length > 0 && this.guests.every(g => g.rsvp === 'APPROVED');
+    if (allApproved) {
+      this.allGuestsApproved.emit();
+    }
+  }
+
 }

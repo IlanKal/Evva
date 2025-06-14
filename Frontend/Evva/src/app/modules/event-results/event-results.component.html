@@ -1,12 +1,8 @@
 <app-header [user]="user"></app-header>
 <div class="layout">
-  <app-milestone 
-  [disablesMilestones]="disablesMilestones" 
-  [milestones]="milestones" 
-  [activeCategory]="activeCategory"
-  (milestoneClicked)="onMilestoneClick($event)"
-  (finishEventClicked)="finishEvent()">
-</app-milestone>
+  <app-milestone [disablesMilestones]="disablesMilestones" [milestones]="milestones" [activeCategory]="activeCategory"
+    (milestoneClicked)="onMilestoneClick($event)" (finishEventClicked)="finishEvent()">
+  </app-milestone>
 
   <div class="content" [ngSwitch]="activeCategory">
     <ng-container *ngSwitchCase="'overview'">
@@ -27,8 +23,7 @@
           <mat-card-title>Additional Notes:</mat-card-title>
           <div class="inline-edit-row" *ngIf="editingField !== 'additional_notes'; else editNotes">
             <p>{{ overviewForm.value.additional_notes || 'No notes provided.' }}</p>
-            <button *ngIf="disablesMilestones" mat-icon-button type="button"
-              (click)="startEdit('additional_notes')">
+            <button *ngIf="disablesMilestones" mat-icon-button type="button" (click)="startEdit('additional_notes')">
               <mat-icon>edit</mat-icon>
             </button>
           </div>
@@ -55,24 +50,19 @@
     </ng-container>
 
     <div *ngSwitchCase="'guests'" class="static-step">
-      <app-guest-upload (guestsConfirmed)="onGuestsConfirmed($event)"></app-guest-upload>
+      <app-guest-upload (allGuestsApproved)="markMilestoneApproved('guests')"
+        (guestsConfirmed)="onGuestsConfirmed($event)"></app-guest-upload>
     </div>
 
     <ng-container *ngIf="overviewForm">
-      <app-step-results
-        *ngSwitchDefault
-        [category]="activeCategory"
-        [suppliers]="suppliersMap[activeCategory]"
+      <app-step-results *ngSwitchDefault [category]="activeCategory" [suppliers]="suppliersMap[activeCategory]"
         [guestCount]="overviewForm.get('guest_count')?.value"
-        [eventDurationHours]="overviewForm.get('event_duration_hours')?.value"
-        [selectedSupplierId]="selectedSupplierId"
-        [stepStatus]="supplier_status_by_type[activeCategory]?.status || 'PENDING'"
-        (supplierChosen)="onChooseSupplier($event)"
-        (rejectedAll)="onRejectAll()"
-      ></app-step-results>
+        [eventDurationHours]="overviewForm.get('event_duration_hours')?.value" [selectedSupplierId]="selectedSupplierId"
+        [stepStatus]="supplier_status_by_type[activeCategory].status || 'PENDING'"
+        (supplierChosen)="onChooseSupplier($event)" (rejectedAll)="onRejectAll()"></app-step-results>
     </ng-container>
-    
-  
+
+
   </div>
 </div>
 
@@ -175,8 +165,7 @@
           <ng-container *ngIf="overviewForm.value.catering_preferences.gluten_free">✔ Gluten-Free </ng-container>
         </ng-container>
       </span>
-      <button mat-icon-button type="button" *ngIf="disablesMilestones"
-        (click)="startEdit('catering_preferences')">
+      <button mat-icon-button type="button" *ngIf="disablesMilestones" (click)="startEdit('catering_preferences')">
         <mat-icon>edit</mat-icon>
       </button>
     </div>
@@ -220,8 +209,7 @@
           <ng-container *ngIf="overviewForm.value.photographer_preferences.has_magnets">✔ Magnets </ng-container>
         </ng-container>
       </span>
-      <button mat-icon-button type="button" *ngIf="disablesMilestones"
-        (click)="startEdit('photographer_preferences')">
+      <button mat-icon-button type="button" *ngIf="disablesMilestones" (click)="startEdit('photographer_preferences')">
         <mat-icon>edit</mat-icon>
       </button>
     </div>
@@ -259,8 +247,7 @@
         {{ overviewForm.value.location_preferences?.area }}
         <ng-container *ngIf="overviewForm.value.location_preferences?.parking">✔ Parking</ng-container>
       </span>
-      <button mat-icon-button type="button" *ngIf="disablesMilestones"
-        (click)="startEdit('location_preferences')">
+      <button mat-icon-button type="button" *ngIf="disablesMilestones" (click)="startEdit('location_preferences')">
         <mat-icon>edit</mat-icon>
       </button>
     </div>
@@ -297,8 +284,7 @@
   <div *ngIf="overviewForm.value.need_lecturer; else noLecturer">
     <div class="inline-edit-row" *ngIf="editingField !== 'lecturer_preferences'; else editLecturer">
       <span>Lecturer: {{ overviewForm.value.lecturer_preferences?.required ? '✔ Required' : 'Not Required' }}</span>
-      <button mat-icon-button type="button" *ngIf="disablesMilestones"
-        (click)="startEdit('lecturer_preferences')">
+      <button mat-icon-button type="button" *ngIf="disablesMilestones" (click)="startEdit('lecturer_preferences')">
         <mat-icon>edit</mat-icon>
       </button>
     </div>

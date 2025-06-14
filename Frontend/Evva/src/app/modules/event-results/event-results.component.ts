@@ -22,7 +22,7 @@ import { IUser } from '../../models/IUser';
 import { GuestUploadComponent } from './guest-upload/guest-upload.component';
 import { IGuest } from '../../models/iGuest';
 import { IEventSupplier } from '../../models/IEventSupplier';
-import { EventStep } from '../../services/event-results.service'; 
+import { EventStep } from '../../services/event-results.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import confetti from 'canvas-confetti';
@@ -87,7 +87,7 @@ export class EventResultsComponent implements OnInit {
   loadOverviewAndThen(callback: () => void): void {
     this.eventResultsService.getEventRequestOverview(this.requestId).subscribe((data) => {
       this.isLocked = data.is_locked;
-  
+
       this.overviewForm = this.fb.group({
         company_name: [data.company_name || ''],
         title: [data.title || ''],
@@ -98,7 +98,7 @@ export class EventResultsComponent implements OnInit {
         event_start_time: [data.event_start_time || ''],
         event_duration_hours: [data.event_duration_hours || null],
         additional_notes: [data.additional_notes || ''],
-  
+
         need_catering: [!!data.catering_preferences],
         catering_preferences: this.fb.group({
           vegan: [data.catering_preferences?.vegan ?? false],
@@ -106,71 +106,71 @@ export class EventResultsComponent implements OnInit {
           vegetarian: [data.catering_preferences?.vegetarian ?? false],
           gluten_free: [data.catering_preferences?.gluten_free ?? false],
         }),
-  
+
         need_photographer: [!!data.photographer_preferences],
         photographer_preferences: this.fb.group({
           has_stills: [data.photographer_preferences?.has_stills ?? false],
           has_video: [data.photographer_preferences?.has_video ?? false],
           has_magnets: [data.photographer_preferences?.has_magnets ?? false],
         }),
-  
+
         need_dj: [!!data.dj_preferences],
         dj_preferences: this.fb.group({
           music_styles: [data.dj_preferences?.music_styles || []],
         }),
-  
+
         need_location: [!!data.location_preferences],
         location_preferences: this.fb.group({
           area: [data.location_preferences?.area || ''],
           parking: [data.location_preferences?.parking ?? false],
         }),
-  
+
         need_lecturer: [!!data.lecturer_preferences],
         lecturer_preferences: this.fb.group({
           required: [data.lecturer_preferences?.required ?? false],
         }),
       });
-  
+
       if (this.isLocked) {
         this.overviewForm.disable();
         this.disablesMilestones = false;
       }
-  
+
       // ניקוי שדות כשכיבוי שירותים
       this.overviewForm.get('need_catering')?.valueChanges.subscribe(val => {
         if (!val) this.overviewForm.get('catering_preferences')?.reset({
           vegan: false, kosher: false, vegetarian: false, gluten_free: false
         });
       });
-  
+
       this.overviewForm.get('need_photographer')?.valueChanges.subscribe(val => {
         if (!val) this.overviewForm.get('photographer_preferences')?.reset({
           has_stills: false, has_video: false, has_magnets: false
         });
       });
-  
+
       this.overviewForm.get('need_dj')?.valueChanges.subscribe(val => {
         if (!val) this.overviewForm.get('dj_preferences')?.reset({
           music_styles: []
         });
       });
-  
+
       this.overviewForm.get('need_location')?.valueChanges.subscribe(val => {
         if (!val) this.overviewForm.get('location_preferences')?.reset({
           area: '', parking: false
         });
       });
-  
+
       this.overviewForm.get('need_lecturer')?.valueChanges.subscribe(val => {
         if (!val) this.overviewForm.get('lecturer_preferences')?.reset({
           required: false
         });
       });
-  
+
       callback();
     });
   }
-  
+
 
   overviewForm!: FormGroup;
   requestId: number = Number(localStorage.getItem('requestId'));
@@ -243,7 +243,7 @@ export class EventResultsComponent implements OnInit {
         event_start_time: [data.event_start_time || ''],
         event_duration_hours: [data.event_duration_hours || null],
         additional_notes: [data.additional_notes || ''],
-  
+
         need_catering: [!!data.catering_preferences],
         catering_preferences: this.fb.group({
           vegan: [data.catering_preferences?.vegan ?? false],
@@ -251,56 +251,56 @@ export class EventResultsComponent implements OnInit {
           vegetarian: [data.catering_preferences?.vegetarian ?? false],
           gluten_free: [data.catering_preferences?.gluten_free ?? false],
         }),
-  
+
         need_photographer: [!!data.photographer_preferences],
         photographer_preferences: this.fb.group({
           has_stills: [data.photographer_preferences?.has_stills ?? false],
           has_video: [data.photographer_preferences?.has_video ?? false],
           has_magnets: [data.photographer_preferences?.has_magnets ?? false],
         }),
-  
+
         need_dj: [!!data.dj_preferences],
         dj_preferences: this.fb.group({
           music_styles: [data.dj_preferences?.music_styles || []],
         }),
-  
+
         need_location: [!!data.location_preferences],
         location_preferences: this.fb.group({
           area: [data.location_preferences?.area || ''],
           parking: [data.location_preferences?.parking ?? false],
         }),
-  
+
         need_lecturer: [!!data.lecturer_preferences],
         lecturer_preferences: this.fb.group({
           required: [data.lecturer_preferences?.required ?? false],
         }),
       });
-  
+
       // מנקים ערכים כשמשתמש מכבה שירותים
       this.overviewForm.get('need_catering')?.valueChanges.subscribe(val => {
         if (!val) this.overviewForm.get('catering_preferences')?.reset({
           vegan: false, kosher: false, vegetarian: false, gluten_free: false
         });
       });
-  
+
       this.overviewForm.get('need_photographer')?.valueChanges.subscribe(val => {
         if (!val) this.overviewForm.get('photographer_preferences')?.reset({
           has_stills: false, has_video: false, has_magnets: false
         });
       });
-  
+
       this.overviewForm.get('need_dj')?.valueChanges.subscribe(val => {
         if (!val) this.overviewForm.get('dj_preferences')?.reset({
           music_styles: []
         });
       });
-  
+
       this.overviewForm.get('need_location')?.valueChanges.subscribe(val => {
         if (!val) this.overviewForm.get('location_preferences')?.reset({
           area: '', parking: false
         });
       });
-  
+
       this.overviewForm.get('need_lecturer')?.valueChanges.subscribe(val => {
         if (!val) this.overviewForm.get('lecturer_preferences')?.reset({
           required: false
@@ -312,27 +312,27 @@ export class EventResultsComponent implements OnInit {
   onSubmitOverview(): void {
     this.disablesMilestones = false;
     const payload = { ...this.overviewForm.value };
-  
+
     if (!payload.need_dj || payload.dj_preferences?.music_styles?.length === 0) {
       payload.dj_preferences = null;
     }
-  
+
     if (!payload.need_catering || !Object.values(payload.catering_preferences || {}).some(v => v)) {
       payload.catering_preferences = null;
     }
-  
+
     if (!payload.need_photographer || !Object.values(payload.photographer_preferences || {}).some(v => v)) {
       payload.photographer_preferences = null;
     }
-  
+
     if (!payload.need_location || !payload.location_preferences?.area) {
       payload.location_preferences = null;
     }
-  
+
     if (!payload.need_lecturer || payload.lecturer_preferences?.required === false) {
       payload.lecturer_preferences = null;
     }
-  
+
     payload.is_locked = true;
 
     this.eventResultsService.updateEventRequestOverview(this.requestId, payload).subscribe(() => {
@@ -340,7 +340,7 @@ export class EventResultsComponent implements OnInit {
       this.moveToNextMilestone();
     });
   }
-  
+
 
   fetchResults() {
     const previousCategory = this.activeCategory;
@@ -348,37 +348,37 @@ export class EventResultsComponent implements OnInit {
       const overviewMilestone: IMilestone = {
         category: 'overview',
         status: this.isLocked ? 'approved' : 'pending'
-      };      
-      
+      };
+
       const guestsMilestone: IMilestone = { category: 'guests', status: 'pending' };
       const steps: EventStep[] = [];
-  
+
       const guestCount = this.overviewForm?.get('guest_count')?.value ?? 1;
       const duration = this.overviewForm?.get('event_duration_hours')?.value ?? 1;
-  
+
       this.supplier_status_by_type = data.supplier_status_by_type || {};
-  
+
       for (const category of Object.keys(data.supplier_status_by_type)) {
         const entry = data.supplier_status_by_type[category];
-  
+
         const suppliers = entry.suppliers.map((s: any) => {
           let price = 0;
-  
-          const pricePerPerson = s.price_per_person 
-            ?? s.caterings?.[0]?.price_per_person 
+
+          const pricePerPerson = s.price_per_person
+            ?? s.caterings?.[0]?.price_per_person
             ?? null;
-  
-          const pricePerHour = s.price_per_hour 
-            ?? s.djs?.[0]?.price_per_hour 
-            ?? s.photographers?.[0]?.price_per_hour 
+
+          const pricePerHour = s.price_per_hour
+            ?? s.djs?.[0]?.price_per_hour
+            ?? s.photographers?.[0]?.price_per_hour
             ?? null;
-  
-          const pricePerLecture = s.price_per_lecture 
-            ?? s.speakers?.[0]?.price_per_lecture 
+
+          const pricePerLecture = s.price_per_lecture
+            ?? s.speakers?.[0]?.price_per_lecture
             ?? null;
-  
+
           const priceFlat = s.price ?? s.locations?.[0]?.price ?? null;
-  
+
           if (category === 'catering' && pricePerPerson) {
             price = +pricePerPerson * guestCount;
           } else if (['dj', 'photographer'].includes(category) && pricePerHour) {
@@ -388,7 +388,7 @@ export class EventResultsComponent implements OnInit {
           } else if (category === 'location' && priceFlat) {
             price = +priceFlat;
           }
-  
+
           return {
             id: s.supplier_id,
             name: s.name,
@@ -405,7 +405,7 @@ export class EventResultsComponent implements OnInit {
             rating: s.rating ?? null,
             rating_count: s.rating_count ?? 0,
             available_days: s.available_days ?? [],
-  
+
             djs: s.djs ?? [],
             caterings: s.caterings ?? [],
             photographers: s.photographers ?? [],
@@ -413,26 +413,26 @@ export class EventResultsComponent implements OnInit {
             locations: s.locations ?? []
           };
         });
-  
+
         steps.push({
           category,
           status: entry.status || 'pending',
           suppliers
         });
       }
-  
+
       const dynamicMilestones: IMilestone[] = steps.map((step) => ({
         category: step.category,
         status: step.status
       }));
-  
+
       this.milestones = [overviewMilestone, ...dynamicMilestones, guestsMilestone];
-  
+
       this.suppliersMap = {};
       for (let step of steps) {
         this.suppliersMap[step.category] = step.suppliers;
       }
-  
+
       if (this.milestones.some(m => m.category === previousCategory)) {
         this.activeCategory = previousCategory;
       } else {
@@ -440,15 +440,15 @@ export class EventResultsComponent implements OnInit {
       }
     });
   }
-  
-  
+
+
   onMilestoneClick(category: string) {
     this.activeCategory = category;
   }
 
   onChooseSupplier(supplierId: number) {
     console.log('[EVENT RESULTS] Choosing supplier ID:', supplierId, 'for event:', this.eventId);
-  
+
     this.eventResultsService.chooseSupplier(this.eventId, supplierId).subscribe({
       next: () => {
         console.log('[EVENT RESULTS] Supplier successfully chosen, re-fetching results');
@@ -459,8 +459,8 @@ export class EventResultsComponent implements OnInit {
       }
     });
   }
-  
-  
+
+
   onRejectAll() {
     console.log('User rejected all suppliers for', this.activeCategory);
     this.updateMilestoneStatus(this.activeCategory, 'rejected');
@@ -581,12 +581,12 @@ export class EventResultsComponent implements OnInit {
 
   onFinishEvent(): void {
     const userId = Number(localStorage.getItem('userId')); // או מהמשתמש המחובר
-  
+
     if (!this.eventId || !userId) {
       console.error('Missing eventId or userId');
       return;
     }
-  
+
     this.eventResultsService.finishEvent(this.eventId).subscribe({
       next: () => {
         console.log('✅ Event marked as finished');
@@ -601,7 +601,7 @@ export class EventResultsComponent implements OnInit {
   finishEvent(): void {
     const confirmed = confirm("Are you sure you want to finish the event? Please make sure the event has already taken place.");
     if (!confirmed) return;
-  
+
     this.eventResultsService.finishEvent(this.eventId).subscribe({
       next: () => {
         // === רקע לבן עם fade-in ===
@@ -619,7 +619,7 @@ export class EventResultsComponent implements OnInit {
         requestAnimationFrame(() => {
           overlay.style.opacity = '0.95';
         });
-  
+
         // === הודעה ===
         const message = document.createElement('div');
         message.innerText = '🎊 Event successfully finished! 🎊';
@@ -640,7 +640,7 @@ export class EventResultsComponent implements OnInit {
         requestAnimationFrame(() => {
           message.style.opacity = '1';
         });
-  
+
         // === קונפטי בקנבס ===
         const canvas = document.createElement('canvas');
         canvas.style.position = 'fixed';
@@ -651,18 +651,18 @@ export class EventResultsComponent implements OnInit {
         canvas.style.pointerEvents = 'none';
         canvas.style.zIndex = '10000';
         document.body.appendChild(canvas);
-  
+
         const myConfetti = confetti.create(canvas, { resize: true });
         myConfetti({
           particleCount: 150,
           spread: 70,
           origin: { y: 0.6 }
         });
-  
+
         // === סאונד 🎵 ===
         const audio = new Audio('assets/sounds/Confetti _Sound_ effect.mp3');
         audio.play().catch(err => console.warn('Audio play failed:', err));
-  
+
         // === אחרי שנייה - עדכון DB + ניווט
         setTimeout(() => {
           this.eventResultsService.updateEventStatus(this.eventId, 'COMPLETED').subscribe({
@@ -677,7 +677,7 @@ export class EventResultsComponent implements OnInit {
             error: (err) => {
               console.error('❌ Failed to update event status:', err);
               alert('Failed to update event status. Please try again.');
-            } 
+            }
           });
         }, 3000);
       },
@@ -687,5 +687,13 @@ export class EventResultsComponent implements OnInit {
       }
     });
   }
-  
+
+  markMilestoneApproved(category: string) {
+    const milestone = this.milestones.find(m => m.category === category);
+    if (milestone) {
+      milestone.status = 'approved';
+    }
+  }
+
+
 }

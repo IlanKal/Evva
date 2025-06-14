@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
@@ -25,8 +25,11 @@ export class MilestoneComponent {
   getIcon(status: string): string {
     switch (status) {
       case 'approved': return 'check_circle';
-      case 'waiting': return 'hourglass_empty';
-      case 'rejected': return 'cancel';
+      case 'APPROVED': return 'check_circle';
+      case 'PENDING': return 'hourglass_empty';
+      case 'pending': return 'hourglass_empty';
+      case 'DECLINED': return 'cancel';
+      case 'declined': return 'cancel';
       default: return 'radio_button_unchecked';
     }
   }
@@ -34,11 +37,19 @@ export class MilestoneComponent {
   getColor(status: string): string {
     switch (status) {
       case 'approved': return 'green';
-      case 'waiting': return 'orange';
-      case 'rejected': return 'red';
+      case 'APPROVED': return 'green';
+      case 'PENDING': return 'orange';
+      case 'pending': return 'orange';
+      case 'DECLINED': return 'red';
+      case 'declined': return 'red';
       default: return 'gray';
     }
   }
+
+  get isFinishDisabled(): boolean {
+    return this.milestones?.some(m => m.status.toLowerCase() !== 'approved');
+  }
+
 
   select(category: string) {
     this.milestoneClicked.emit(category);
@@ -47,4 +58,6 @@ export class MilestoneComponent {
   onFinishClick() {
     this.finishEventClicked.emit();
   }
+
+
 }

@@ -21,8 +21,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
     MatIconModule,
     MatDividerModule,
     MatMenuModule,
-    MatDialogModule,
-    SupplierDetailsDialogComponent
+    MatDialogModule
   ],
   templateUrl: './step-results.component.html',
   styleUrls: ['./step-results.component.scss']
@@ -41,7 +40,7 @@ export class StepResultsComponent implements OnChanges {
   preferredSupplier: IEventResultSupplier | null = null;
   alternativeSuppliers: IEventResultSupplier[] = [];
 
-  constructor(private dialog: MatDialog) {}
+  constructor(private dialog: MatDialog) { }
 
   ngOnChanges(changes: SimpleChanges): void {
     if ('suppliers' in changes && this.suppliers?.length) {
@@ -69,18 +68,18 @@ export class StepResultsComponent implements OnChanges {
     switch (supplier.approval_status) {
       case 'APPROVED':
         return { disabled: true, label: 'Supplier approved ✔️', cssClass: 'approved-button' };
-  
+
       case 'CHOSEN':
         return { disabled: true, label: 'Waiting for approval ⌛', cssClass: 'pending-button' };
-  
+
       case 'DECLINED':
         return { disabled: true, label: 'Request declined ✖️', cssClass: 'declined-button' };
-  
+
       default:
         return { disabled: false, label: 'Choose this supplier', cssClass: 'default-button' };
     }
   }
-  
+
 
   openDetails(event: MouseEvent, supplier: IEventResultSupplier): void {
     event.stopPropagation();
@@ -90,7 +89,7 @@ export class StepResultsComponent implements OnChanges {
       autoFocus: false
     });
   }
-  
+
 
   selectSupplier(id: number) {
     const selected = this.suppliers.find(s => s.id === id);
@@ -103,20 +102,20 @@ export class StepResultsComponent implements OnChanges {
 
   confirmSelection(supplier: IEventResultSupplier) {
     console.log('[STEP] Confirming selection for supplier:', supplier.id, supplier.approval_status, 'Step status:', this.stepStatus);
-  
+
     if (supplier.approval_status === 'APPROVED') {
       console.log('[STEP] Supplier is already approved – cannot change selection');
       return;
     }
-  
+
     this.selectedSupplierId = supplier.id;
     this.preferredSupplier = supplier;
     this.alternativeSuppliers = this.suppliers.filter(s => s.id !== supplier.id);
-  
+
     this.supplierChosen.emit(supplier.id);
   }
-  
-  
+
+
 
   rejectAll() {
     this.rejectedAll.emit();

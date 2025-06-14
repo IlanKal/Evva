@@ -28,7 +28,7 @@
 </div>
 
 <div class="finish-button-container" style="text-align: center; margin-top: 0.5rem;">
-  <button mat-raised-button color="primary" (click)="onFinishClick()">
+  <button mat-raised-button color="primary" (click)="onFinishClick()" [disabled]="isFinishDisabled">
     Finish Event
   </button>
 </div>
