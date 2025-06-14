@@ -12,7 +12,9 @@
     <div class="event-list">
       <ng-container *ngIf="activeEvents.length > 0; else noPending">
         <mat-card class="event-card pending" *ngFor="let event of activeEvents">
-          <mat-card-title>{{ event.title || 'Event #' + event.event_id }}</mat-card-title>
+          <mat-card-title class="event-title">
+  {{ event.title || 'Event #' + event.event_id }}
+</mat-card-title>
           <mat-card-content>
             <p><strong>Company:</strong> {{ event.company_name || 'N/A' }}</p>
             <p><strong>Date:</strong> {{ event.event_date | date }}</p>
@@ -35,6 +37,7 @@
     </div>
   </section>
 
+
   <!-- Section: Upcoming Events -->
   <section class="section">
     <h2 class="section-title">
@@ -44,7 +47,9 @@
     <div class="event-list">
       <ng-container *ngIf="futureEvents.length > 0; else noUpcoming">
         <mat-card class="event-card approved" *ngFor="let event of futureEvents">
-          <mat-card-title>{{ event.title || 'Event #' + event.event_id }}</mat-card-title>
+          <mat-card-title class="event-title">
+  {{ event.title || 'Event #' + event.event_id }}
+</mat-card-title>
           <mat-card-content>
             <p><strong>Company:</strong> {{ event.company_name || 'N/A' }}</p>
             <p><strong>Date:</strong> {{ event.event_date | date }}</p>
@@ -74,7 +79,9 @@
         <h3>Past Events</h3>
         <ng-container *ngIf="pastEvents.length > 0; else noPast">
           <mat-card class="event-card" *ngFor="let event of pastEvents">
-            <mat-card-title>{{ event.title || 'Event #' + event.event_id }}</mat-card-title>
+            <mat-card-title class="event-title">
+  {{ event.title || 'Event #' + event.event_id }}
+</mat-card-title>
             <mat-card-content>
               <p><strong>Date:</strong> {{ event.event_date | date }}</p>
               <p><strong>Location:</strong> {{ event.location }}</p>

@@ -52,7 +52,7 @@
   
     <!-- Fields by Supplier Type -->
     <!-- Fields by Supplier Type -->
-<ng-container *ngIf="extraFieldsForm" [formGroup]="extraFieldsForm">
+<div *ngIf="extraFieldsForm" [formGroup]="extraFieldsForm">
     <ng-container [ngSwitch]="supplierType">
       <!-- CATERING -->
       <ng-container *ngSwitchCase="'catering'">
@@ -149,7 +149,7 @@
         </mat-form-field>
       </ng-container>
     </ng-container>
-  </ng-container>
+</div>
   
   
     <!-- Password & Submit -->
