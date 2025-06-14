@@ -49,8 +49,8 @@ export const getUserNotifications = async (userId: number) => {
   return updatedSuppliers.map(item => ({
     message:
       item.approval_status === 'APPROVED' 
-        ? `✅ ${item.Supplier?.name} confirmed your request`
-        : `❌ ${item.Supplier?.name} rejected your request`,
+        ? `✅ ${item.Supplier?.name} confirmed your request for "${item.event?.title}"`
+        : `❌ ${item.Supplier?.name} rejected your request for "${item.event?.title}"`,
     eventId: item.event_id
   }));
 };

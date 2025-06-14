@@ -1,58 +1,59 @@
-<!-- אייקון עיפרון + כפתור חזרה -->
+<!-- אייקון עיפרון + כפתור חזרה -->More actions
 <div class="top-actions">
     <button mat-icon-button (click)="toggleEdit()" aria-label="Edit">
       <mat-icon>{{ isEditMode ? 'close' : 'edit' }}</mat-icon>
     </button>
-  
+
     <button mat-raised-button color="primary" (click)="goBackToDashboard()">
   Back to Events
 </button>
   </div>
-  
+
   <form [formGroup]="supplierForm" (ngSubmit)="onSubmit()" class="profile-form">
     <!-- Basic Info -->
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Name</mat-label>
       <input matInput formControlName="name" />
     </mat-form-field>
-  
+
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Email</mat-label>
       <input matInput type="email" formControlName="email" />
     </mat-form-field>
-  
+
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Contact Info</mat-label>
       <input matInput formControlName="contact_info" />
     </mat-form-field>
-  
+
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Region</mat-label>
       <mat-select formControlName="region">
         <mat-option *ngFor="let region of regions" [value]="region">{{ region }}</mat-option>
       </mat-select>
     </mat-form-field>
-  
+
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Additional Info</mat-label>
       <textarea matInput formControlName="additional_info"></textarea>
     </mat-form-field>
-  
+
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Available Days</mat-label>
       <mat-select formControlName="available_days" multiple>
         <mat-option *ngFor="let day of weekdays" [value]="day">{{ day }}</mat-option>
       </mat-select>
     </mat-form-field>
-  
+
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Supplier Type</mat-label>
       <input matInput formControlName="supplier_type" />
     </mat-form-field>
-  
-    <!-- Fields by Supplier Type -->
-    <!-- Fields by Supplier Type -->
-<div *ngIf="extraFieldsForm" [formGroup]="extraFieldsForm">
+
+ <!-- Fields by Supplier Type -->
+<ng-container *ngIf="extraFieldsForm instanceof FormGroup">
+  <div [formGroup]="extraFieldsForm">
+  <div [formGroup]="extraFieldsForm">
     <ng-container [ngSwitch]="supplierType">
       <!-- CATERING -->
       <ng-container *ngSwitchCase="'catering'">
@@ -60,25 +61,25 @@
           <mat-label>Price Per Person</mat-label>
           <input matInput formControlName="price_per_person" />
         </mat-form-field>
-  
+
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Menu</mat-label>
           <textarea matInput formControlName="menu"></textarea>
         </mat-form-field>
-  
+
         <mat-checkbox formControlName="kosher">Kosher</mat-checkbox>
         <mat-checkbox formControlName="vegetarian">Vegetarian</mat-checkbox>
         <mat-checkbox formControlName="vegan">Vegan</mat-checkbox>
         <mat-checkbox formControlName="gluten_free">Gluten Free</mat-checkbox>
       </ng-container>
-  
+
       <!-- DJ -->
       <ng-container *ngSwitchCase="'dj'">
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Price Per Hour</mat-label>
           <input matInput formControlName="price_per_hour" />
         </mat-form-field>
-  
+
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Music Styles</mat-label>
           <mat-select formControlName="music_styles" multiple>
@@ -88,70 +89,70 @@
           </mat-select>
         </mat-form-field>
       </ng-container>
-  
+
       <!-- PHOTOGRAPHER -->
       <ng-container *ngSwitchCase="'photographer'">
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Price Per Hour</mat-label>
           <input matInput formControlName="price_per_hour" />
         </mat-form-field>
-  
+
         <mat-checkbox formControlName="has_magnets">Has Magnets</mat-checkbox>
         <mat-checkbox formControlName="has_stills">Has Stills</mat-checkbox>
         <mat-checkbox formControlName="has_video">Has Video</mat-checkbox>
       </ng-container>
-  
+
       <!-- SPEAKER -->
       <ng-container *ngSwitchCase="'speaker'">
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Price Per Lecture</mat-label>
           <input matInput formControlName="price_per_lecture" />
         </mat-form-field>
-  
+
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Lecture Duration (minutes)</mat-label>
           <input matInput formControlName="lecture_duration" />
         </mat-form-field>
-  
+
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Lecture Field</mat-label>
           <input matInput formControlName="lecture_field" />
         </mat-form-field>
       </ng-container>
-  
+
       <!-- LOCATION -->
       <ng-container *ngSwitchCase="'location'">
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Address</mat-label>
           <input matInput formControlName="address" />
         </mat-form-field>
-  
+
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>City</mat-label>
           <input matInput formControlName="city" />
         </mat-form-field>
-  
+
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Capacity</mat-label>
           <input matInput formControlName="capacity" />
         </mat-form-field>
-  
+
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Price</mat-label>
           <input matInput formControlName="price" />
         </mat-form-field>
-  
+
         <mat-checkbox formControlName="parking">Parking Available</mat-checkbox>
-  
+
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Place Type</mat-label>
           <input matInput formControlName="place_type" />
         </mat-form-field>
       </ng-container>
     </ng-container>
-</div>
-  
-  
+  </div>
+</ng-container>
+
     <!-- Password & Submit -->
     <div *ngIf="isEditMode">
       <mat-form-field appearance="outline" class="full-width">
@@ -170,7 +171,7 @@
           <mat-icon>{{ showPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
         </button>
       </mat-form-field>
-  
+
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Confirm Password</mat-label>
         <input
@@ -187,11 +188,10 @@
           <mat-icon>{{ showConfirmPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
         </button>
       </mat-form-field>
-  
+
       <button mat-raised-button color="primary" type="submit">Save</button>
     </div>
-  
+
     <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
     <p *ngIf="successMessage" class="success">{{ successMessage }}</p>
   </form>
-  
