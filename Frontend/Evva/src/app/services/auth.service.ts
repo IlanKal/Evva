@@ -87,4 +87,12 @@ registerSupplier(data: any): Observable<{ supplier_id: number }> {
 registerSupplierDetails(data: any): Observable<any> {
   return this.http.post<any>(`${this.baseUrl}/register-supplier-details`, data);
 }
+
+refreshToken(refreshToken: string): Observable<{ accessToken: string, refreshToken: string }> {
+  return this.http.post<{ accessToken: string, refreshToken: string }>(
+    '/api/refresh-token',
+    { refreshToken }
+  );
+}
+
 }
