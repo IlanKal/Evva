@@ -18,7 +18,7 @@ export class MilestoneComponent {
   @Input() activeCategory!: string;
   @Input() disablesMilestones: boolean = true;
   @Input() showFinishEvent: boolean = false;
-
+  @Input() isCompleted: boolean = false;
   @Output() milestoneClicked = new EventEmitter<string>();
   @Output() finishEventClicked = new EventEmitter<void>();
 
@@ -47,9 +47,18 @@ export class MilestoneComponent {
   }
 
   get isFinishDisabled(): boolean {
-    return this.milestones?.some(m => m.status.toLowerCase() !== 'approved');
-  }
+  return this.isCompleted || this.milestones?.some(m => m.status.toLowerCase() !== 'approved');
+  } 
 
+  get finishButtonTooltip(): string {
+    if (this.isCompleted) {
+      return 'This event has already been completed';
+    } else if (this.milestones?.some(m => m.status.toLowerCase() !== 'approved')) {
+      return 'Please complete all milestones first';
+    } else {
+      return '';
+    }
+  }
 
   select(category: string) {
     this.milestoneClicked.emit(category);
@@ -58,6 +67,9 @@ export class MilestoneComponent {
   onFinishClick() {
     this.finishEventClicked.emit();
   }
+
+
+
 
 
 }

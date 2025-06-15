@@ -17,17 +17,36 @@
   </mat-card>
   
   <!-- אזור העלאה -->
-  <div class="upload-section">
-    <h3>Upload Guest List</h3>
-  
-    <label for="excelUpload" class="upload-label">Upload Excel: </label>
-    <input type="file" id="excelUpload" (change)="onGuestFileSelected($event)" accept=".xlsx,.xls" />
-  
-    <button mat-raised-button color="primary" (click)="confirmGuests()" class="mt-2">
+  <!-- אזור העלאה -->
+<div class="upload-section">
+  <h3>Upload Guest List</h3>
+
+  <label for="excelUpload" class="upload-label">Upload Excel: </label>
+  <input
+    type="file"
+    id="excelUpload"
+    (change)="onGuestFileSelected($event)"
+    accept=".xlsx,.xls"
+    [disabled]="isCompleted"
+  />
+
+  <!-- כפתור Confirm עם tooltip -->
+  <span
+    [matTooltip]="isCompleted ? 'You cannot upload guests to a completed event' : null"
+    matTooltipPosition="above"
+    style="display: inline-block;"
+  >
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="confirmGuests()"
+      [disabled]="isCompleted"
+      class="mt-2"
+    >
       Confirm Guests
     </button>
-  </div>
-
+  </span>
+</div>
 
   <ng-container *ngIf="guests.length > 0">
     <div class="mt-6">

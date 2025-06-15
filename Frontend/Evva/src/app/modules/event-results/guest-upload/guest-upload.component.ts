@@ -12,6 +12,7 @@ import { IGuest } from '../../../models/iGuest';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSortModule, MatSort } from '@angular/material/sort';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
 
 @Component({
@@ -27,7 +28,8 @@ import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
     MatFormFieldModule,
     MatInputModule,
     MatSortModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatTooltipModule
   ],
   templateUrl: './guest-upload.component.html',
   styleUrls: ['./guest-upload.component.scss']
@@ -40,6 +42,7 @@ export class GuestUploadComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   requestId!: number;
+  eventId!: number;
   guests: IGuest[] = [];
   dataSource!: MatTableDataSource<IGuest>;
   selectedFile: File | null = null;
@@ -47,6 +50,7 @@ export class GuestUploadComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['full_name', 'email', 'phone', 'rsvp'];
   displayedColumnsWithActions = [...this.displayedColumns, 'actions'];
   searchTerm: string = '';
+  isCompleted: boolean = false;
 
   constructor(
     private eventResultsService: EventResultsService,
@@ -57,7 +61,24 @@ export class GuestUploadComponent implements OnInit, AfterViewInit {
     const paramId = this.route.snapshot.paramMap.get('requestId');
     if (paramId) {
       this.requestId = Number(paramId);
-      this.loadGuests();
+
+      // שלב 1: שלוף את event_id
+      this.eventResultsService.getEventByRequestId(this.requestId).subscribe({
+        next: (event) => {
+          this.eventId = event.event_id;
+
+          // שלב 2: שלוף את סטטוס האירוע לפי event_id
+          this.eventResultsService.getEventStatus(this.eventId).subscribe({
+            next: (eventStatus) => {
+              this.isCompleted = eventStatus.status === 'COMPLETED';
+              console.log('✅ Event status:', eventStatus.status);
+              this.loadGuests(this.eventId);
+            },
+            error: (err) => console.error('❌ Failed to get event status:', err)
+          });
+        },
+        error: (err) => console.error('❌ Failed to get eventId from requestId:', err)
+      });
     } else {
       console.error('❌ requestId not found in route');
     }
@@ -94,34 +115,26 @@ export class GuestUploadComponent implements OnInit, AfterViewInit {
     }
   }
 
-  loadGuests(): void {
-    this.eventResultsService.getEventByRequestId(this.requestId).subscribe({
-      next: (event) => {
-        this.eventResultsService.getGuestsByEventId(event.event_id).subscribe({
-          next: (guests: IGuest[]) => {
-            this.guests = guests;
-            this.dataSource = new MatTableDataSource(this.guests);
-
-            setTimeout(() => {
-              this.dataSource.paginator = this.paginator;
-              this.dataSource.sort = this.sort;
-              this.initializeSorting();
-            });
-
-            this.dataSource.filterPredicate = (data: IGuest, filter: string) => {
-              return (
-                data.full_name.toLowerCase().includes(filter) ||
-                data.email.toLowerCase().includes(filter) ||
-                data.phone.includes(filter)
-              );
-            };
-
-            this.applyFilter();
-          },
-          error: (err) => console.error('❌ Failed to fetch guests:', err)
+  loadGuests(eventId: number): void {
+    this.eventResultsService.getGuestsByEventId(eventId).subscribe({
+      next: (guests: IGuest[]) => {
+        this.guests = guests;
+        this.dataSource = new MatTableDataSource(this.guests);
+        setTimeout(() => {
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
+          this.initializeSorting();
         });
+        this.dataSource.filterPredicate = (data: IGuest, filter: string) => {
+          return (
+            data.full_name.toLowerCase().includes(filter) ||
+            data.email.toLowerCase().includes(filter) ||
+            data.phone.includes(filter)
+          );
+        };
+        this.applyFilter();
       },
-      error: (err) => console.error('❌ Failed to get eventId from requestId:', err)
+      error: (err) => console.error('❌ Failed to fetch guests:', err)
     });
   }
 
@@ -186,21 +199,17 @@ export class GuestUploadComponent implements OnInit, AfterViewInit {
 
   confirmGuests(): void {
     if (!this.selectedFile) return;
-    this.eventResultsService.getEventByRequestId(this.requestId).subscribe({
-      next: (event) => {
-        this.eventResultsService.uploadGuestsFile(event.event_id, this.selectedFile!).subscribe({
-          next: () => {
-            this.loadGuests();
-            this.selectedFile = null;
-            setTimeout(() => this.guestsConfirmed.emit(this.guests), 500);
-          },
-          error: (err) => {
-            console.error('❌ Failed to upload guest file:', err);
-            alert('Failed to upload guest list');
-          }
-        });
+
+    this.eventResultsService.uploadGuestsFile(this.eventId, this.selectedFile).subscribe({
+      next: () => {
+        this.loadGuests(this.eventId);
+        this.selectedFile = null;
+        setTimeout(() => this.guestsConfirmed.emit(this.guests), 500);
       },
-      error: (err) => console.error('❌ Failed to get eventId:', err)
+      error: (err) => {
+        console.error('❌ Failed to upload guest file:', err);
+        alert('Failed to upload guest list');
+      }
     });
   }
 
@@ -219,5 +228,4 @@ export class GuestUploadComponent implements OnInit, AfterViewInit {
       this.allGuestsApproved.emit();
     }
   }
-
 }

@@ -65,7 +65,7 @@ export class EventResultsComponent implements OnInit {
   user!: IUser | null;
   disablesMilestones: boolean = true;
   isLocked: boolean = false;
-
+  isCompleted: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -201,6 +201,8 @@ export class EventResultsComponent implements OnInit {
         }
       }
     });
+
+    this.checkIfAllMilestonesApprovedAndUpdate();
   }
 
   supplier_status_by_type: Record<string, { status: 'NOT_CHOSEN' | 'PENDING' | 'APPROVED' | 'DECLINED' }> = {};
@@ -350,6 +352,10 @@ export class EventResultsComponent implements OnInit {
         status: this.isLocked ? 'approved' : 'pending'
       };
 
+    this.eventResultsService.getEventStatus(this.eventId).subscribe((event) => {
+      this.isCompleted = event.status === 'COMPLETED';
+    });
+
       const guestsMilestone: IMilestone = { category: 'guests', status: 'pending' };
       const steps: EventStep[] = [];
 
@@ -438,6 +444,15 @@ export class EventResultsComponent implements OnInit {
       } else {
         this.activeCategory = this.milestones[0].category;
       }
+
+      this.eventResultsService.getGuestsByEventId(this.eventId).subscribe((guests) => {
+      if (guests.length > 0) {
+        const guestMilestone = this.milestones.find(m => m.category === 'guests');
+        if (guestMilestone) {
+          guestMilestone.status = 'approved';
+        }
+      }
+      });
     });
   }
 
@@ -470,7 +485,19 @@ export class EventResultsComponent implements OnInit {
     this.milestones = this.milestones.map(m =>
       m.category === category ? { ...m, status: newStatus } : m
     );
+
+     this.checkIfAllMilestonesApprovedAndUpdate();
   }
+
+  checkIfAllMilestonesApprovedAndUpdate(): void {
+  const allApproved = this.milestones.every(m => m.status.toLowerCase() === 'approved');
+  if (allApproved && this.eventId) {
+    this.eventResultsService.updateEventStatus(this.eventId, 'SCHEDULED').subscribe({
+      next: () => console.log('✅ Event status updated to SCHEDULED'),
+      error: (err) => console.error('❌ Failed to update event status to SCHEDULED:', err)
+    });
+  }
+}
 
   isCategoryWithSuppliers(category: string): boolean {
     return !!this.suppliersMap[category];

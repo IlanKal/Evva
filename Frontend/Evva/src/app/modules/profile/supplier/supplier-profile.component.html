@@ -1,4 +1,4 @@
-<!-- אייקון עיפרון + כפתור חזרה -->More actions
+<!-- אייקון עיפרון + כפתור חזרה -->
 <div class="top-actions">
   <button mat-icon-button (click)="toggleEdit()" aria-label="Edit">
     <mat-icon>{{ isEditMode ? 'close' : 'edit' }}</mat-icon>
@@ -51,8 +51,7 @@
   </mat-form-field>
 
   <!-- Fields by Supplier Type -->
-  <!-- Fields by Supplier Type -->
-  <ng-container *ngIf="extraFieldsForm" [formGroup]="extraFieldsForm">
+  <div *ngIf="isFormReady" [formGroup]="extraFieldsForm">
     <ng-container [ngSwitch]="supplierType">
       <!-- CATERING -->
       <ng-container *ngSwitchCase="'catering'">
@@ -151,8 +150,7 @@
         </mat-form-field>
       </ng-container>
     </ng-container>
-  </ng-container>
-
+  </div>
 
   <!-- Password & Submit -->
   <div *ngIf="isEditMode">

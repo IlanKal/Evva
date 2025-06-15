@@ -50,7 +50,7 @@ export class SupplierProfileComponent implements OnInit {
 
   if (userType === 'supplier') {
     this.router.navigateByUrl('/supplier-home'); // או הנתיב שלך
-  } else if (userType === 'customer') {
+  } else if (userType === 'user') {
     this.router.navigateByUrl('/my-events'); // או הנתיב שלך ללקוחות
   } else {
     this.router.navigateByUrl('/login'); // ברירת מחדל אם אין מידע
@@ -58,20 +58,11 @@ export class SupplierProfileComponent implements OnInit {
 }
 
   extraFieldsForm!: FormGroup;
+  isFormReady = false;
   supplierType: string = '';
   
-  
   ngOnInit(): void {
-  this.supplierId = Number(localStorage.getItem('userId'));
-
-  if (!this.supplierId || isNaN(this.supplierId)) {
-    this.errorMessage = 'Missing or invalid supplier ID';
-    return;
-  }
-
-  // אתחול ריק מראש כדי למנוע שגיאה
-  this.extraFieldsForm = this.fb.group({});
-
+  // אתחול מיידי של supplierForm כדי למנוע שגיאת formGroup לפני הזמן
   this.supplierForm = this.fb.group({
     name: this.fb.control({ value: '', disabled: true }, Validators.required),
     email: this.fb.control({ value: '', disabled: true }, [Validators.required, Validators.email]),
@@ -84,6 +75,18 @@ export class SupplierProfileComponent implements OnInit {
     supplier_type: this.fb.control({ value: '', disabled: true })
   });
 
+  // אתחול מיידי של extraFieldsForm ריק
+  this.extraFieldsForm = this.fb.group({});
+
+  // קבלת מזהה הספק
+  this.supplierId = Number(localStorage.getItem('supplierId'));
+
+  if (!this.supplierId || isNaN(this.supplierId)) {
+    this.errorMessage = 'Missing or invalid supplier ID';
+    return;
+  }
+
+  // שליפת נתונים מהשרת
   this.profileService.getSupplierById(this.supplierId).subscribe({
     next: (supplier) => {
       this.supplierForm.patchValue({
@@ -140,6 +143,7 @@ export class SupplierProfileComponent implements OnInit {
 
       this.extraFieldsForm = this.fb.group(dynamicControls);
       this.extraFieldsForm.disable();
+      this.isFormReady = true;
 
       // דיבוג
       console.log('supplierType:', this.supplierType);
@@ -150,6 +154,7 @@ export class SupplierProfileComponent implements OnInit {
     }
   });
 }
+
 
   
 

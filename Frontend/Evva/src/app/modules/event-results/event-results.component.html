@@ -1,7 +1,13 @@
 <app-header [user]="user"></app-header>
 <div class="layout">
-  <app-milestone [disablesMilestones]="disablesMilestones" [milestones]="milestones" [activeCategory]="activeCategory"
-    (milestoneClicked)="onMilestoneClick($event)" (finishEventClicked)="finishEvent()">
+  <app-milestone
+    [disablesMilestones]="disablesMilestones"
+    [milestones]="milestones"
+    [activeCategory]="activeCategory"
+    [isCompleted]="isCompleted"
+    (milestoneClicked)="onMilestoneClick($event)"
+    (finishEventClicked)="finishEvent()"
+  >
   </app-milestone>
 
   <div class="content" [ngSwitch]="activeCategory">
@@ -58,7 +64,7 @@
       <app-step-results *ngSwitchDefault [category]="activeCategory" [suppliers]="suppliersMap[activeCategory]"
         [guestCount]="overviewForm.get('guest_count')?.value"
         [eventDurationHours]="overviewForm.get('event_duration_hours')?.value" [selectedSupplierId]="selectedSupplierId"
-        [stepStatus]="supplier_status_by_type[activeCategory].status || 'PENDING'"
+        [stepStatus]="supplier_status_by_type[activeCategory]?.status || 'PENDING'"
         (supplierChosen)="onChooseSupplier($event)" (rejectedAll)="onRejectAll()"></app-step-results>
     </ng-container>
 

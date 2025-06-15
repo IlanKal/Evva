@@ -43,6 +43,10 @@ export class EventResultsService {
     return this.http.get(`${environment.apiUrl}/api/event-suppliers/status/${eventId}`);
   }
 
+  getEventStatus(eventId: number): Observable<any> {
+    return this.http.get(`${environment.apiUrl}/api/events/${eventId}`);
+  }
+
   // guests part
   uploadGuestsFile(eventId: number, file: File): Observable<any> {
     const formData = new FormData();
