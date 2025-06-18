@@ -6,6 +6,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
 import { HeaderComponent } from './../shared/header/header.component';
+import { MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-supplier-home',
@@ -23,7 +26,16 @@ export class SupplierHomeComponent implements OnInit {
 
   user: any = null; 
 
-  constructor(private eventService: EventSupplierService) {}
+  constructor(
+    private eventService: EventSupplierService,
+    private iconRegistry: MatIconRegistry,
+    private sanitizer: DomSanitizer
+  ) {
+    this.iconRegistry.addSvgIcon(
+      'whatsapp',
+      this.sanitizer.bypassSecurityTrustResourceUrl('assets/images/whatsapp.svg')
+    );
+  }
 
   ngOnInit(): void {
     // שליפת פרטי המשתמש מה־localStorage
@@ -84,4 +96,11 @@ export class SupplierHomeComponent implements OnInit {
       }
     });
   }
+
+    getWhatsappLink(phone: string): string {
+    if (!phone) return '';
+    const clean = phone.replace(/[^0-9]/g, '');
+    return `https://wa.me/${clean}`;
+  }
+
 }

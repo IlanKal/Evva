@@ -8,7 +8,18 @@
   <p><strong>Available Days:</strong> {{ supplier.available_days.join(', ') }}</p>
   <p><strong>Rating:</strong> {{ supplier.rating }} ({{ supplier.rating_count }} reviews)</p>
   <p><strong>Description:</strong> {{ supplier.additional_info }}</p>
-  <p><strong>Contact:</strong> {{ supplier.contact_info }}</p>
+  <p style="display: flex;">
+    <strong>Contact:</strong>
+    <a
+      *ngIf="whatsappLink"
+      [href]="whatsappLink"
+      target="_blank"
+      rel="noopener"
+      style="text-decoration: none; display: flex; align-items: center; gap: 6px; margin-left: 10px;"
+    >   {{ supplier.contact_info }}
+      <mat-icon svgIcon="whatsapp" style="width: 20px; height: 20px; "></mat-icon>
+    </a>
+  </p>
 
   <ng-container [ngSwitch]="supplier.supplier_type">
 

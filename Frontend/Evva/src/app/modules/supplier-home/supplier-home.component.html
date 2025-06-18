@@ -22,7 +22,21 @@
             <p><strong>Duration:</strong> {{ event.event_duration_hours || 'Unknown' }} hours</p>
             <p><strong>Location:</strong> {{ event.location }}</p>
             <p><strong>Guests:</strong> {{ event.guest_count }}</p>
-            <p><strong>Customer:</strong> {{ event.customer?.full_name }} ({{ event.customer?.phone }})</p>
+            <p style="direction: rtl; justify-content: end;  display: flex; align-items: center; gap: 8px;">
+              <mat-icon svgIcon="whatsapp" style="width: 20px; height: 20px; color: #25D366;"></mat-icon>
+              <a
+                *ngIf="event.customer?.phone"
+                [href]="getWhatsappLink(event.customer.phone)"
+                target="_blank"
+                rel="noopener"
+                style="color: #25D366; text-decoration: none; font-weight: bold;"
+              >
+                {{ event.customer.phone }}
+              </a>
+              <span style="color: #333;">
+                <strong>Customer:</strong> {{ event.customer?.full_name }}
+              </span>
+            </p>
             <mat-chip color="warn" selected>⏳ Pending</mat-chip>
           </mat-card-content>
           <mat-card-actions>
@@ -57,8 +71,21 @@
             <p><strong>Duration:</strong> {{ event.event_duration_hours || 'Unknown' }} hours</p>
             <p><strong>Location:</strong> {{ event.location }}</p>
             <p><strong>Guests:</strong> {{ event.guest_count }}</p>
-            <p><strong>Customer:</strong> {{ event.customer?.full_name }} ({{ event.customer?.phone }})</p>
-            <mat-chip color="primary" selected>✅ Approved</mat-chip>
+            <p style="direction: rtl; justify-content: end;  display: flex; align-items: center; gap: 8px;">
+              <mat-icon svgIcon="whatsapp" style="width: 20px; height: 20px; color: #25D366;"></mat-icon>
+              <a
+                *ngIf="event.customer?.phone"
+                [href]="getWhatsappLink(event.customer.phone)"
+                target="_blank"
+                rel="noopener"
+                style="color: #25D366; text-decoration: none; font-weight: bold;"
+              >
+                {{ event.customer.phone }}
+              </a>
+              <span style="color: #333;">
+                <strong>Customer:</strong> {{ event.customer?.full_name }}
+              </span>
+            </p>            <mat-chip color="primary" selected>✅ Approved</mat-chip>
           </mat-card-content>
         </mat-card>
       </ng-container>
