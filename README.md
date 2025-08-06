@@ -6,8 +6,6 @@
 
 ## 📸 Screenshots
 
-> Add screenshots of different screens here (e.g., chat interface, event overview, supplier selection, rating page):
-
 ![Chat Screen](https://github.com/user-attachments/assets/82de5641-c631-4d40-9dc4-679deba34830)
 ![Home Screen](https://github.com/user-attachments/assets/70f161eb-c1ef-4648-a04b-04fe1ba7f1ff)
 ![Supplier Results](https://github.com/user-attachments/assets/08c9c089-c11a-46ed-9c83-913c25beed19)
